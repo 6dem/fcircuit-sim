@@ -1,0 +1,19 @@
+[
+    {
+      "format": "fcircuit",
+      "number": 1,
+      "countInputs": 3,
+      "countFE": 7,
+      "outputsNums": [9],
+      "instancesFE": [
+        { "id": 4, "inputsFE": [1, 2], "mincode": 1 },
+        { "id": 5, "inputsFE": [2], "mincode": 2 },
+        { "id": 6, "inputsFE": [1, 2, 3], "mincode": 23 },
+        { "id": 7, "inputsFE": [4, 5], "mincode": 7 },
+        { "id": 8, "inputsFE": [5, 6], "mincode": 7 },
+        { "id": 9, "inputsFE": [7, 2], "mincode": 7 },
+        { "id": 10, "inputsFE": [3, 2], "mincode": 7 }
+      ]
+    }
+  ]
+  
