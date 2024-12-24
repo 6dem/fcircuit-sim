@@ -8,8 +8,9 @@ class Circuit {
         this.countInputs = 0
         this.countFE = 0
         this.instancesFE = {}
-        this.outputsNums = []
+        this.outputNums = []
         this.inputsNums = []
+        this.outputValues = {}
         this.delay = undefined
 
         this.allPaths = []
@@ -33,7 +34,7 @@ class Circuit {
         this.number = circuit.number
         this.countInputs = circuit.countInputs
         this.countFE = circuit.countFE
-        this.outputsNums = circuit.outputsNums
+        this.outputNums = circuit.outputNums
 
         for (let i = 1; i < this.countInputs + 1; i++) {
             this.inputsNums.push(i)
@@ -288,6 +289,18 @@ class Circuit {
         return stateHistory
     }
 
+    calculateOutput() {
+        const outputElements = Object.values(this.instancesFE).filter(
+            (element) => this.outputNums.includes(element.index)
+        )
+        outputElements.forEach((fe) => {
+            const feIndex = fe.index
+            this.outputValues[feIndex] = this.instancesFE[feIndex].outputValue
+        })
+
+        return this.outputValues
+    }
+
     calculateDelay(stateHistory) {
         if (Object.keys(stateHistory).length === 0) {
             throw new Error("states dict is empty")
@@ -302,12 +315,13 @@ class Circuit {
                 ) {
                     this.instancesFE[fe].delayFE = delay
                     computedFE.add(fe)
-                    if (this.outputsNums.includes(+fe)) {
+                    if (this.outputNums.includes(+fe)) {
                         circuitDelays.push(+delay)
                     }
                 }
             }
         }
+
         const circuitDelay = Math.max(...circuitDelays)
         this.delay = circuitDelay
         return circuitDelay

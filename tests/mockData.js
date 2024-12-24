@@ -4,7 +4,7 @@ const mockData = [
         number: 1,
         countInputs: 3,
         countFE: 7,
-        outputsNums: [9],
+        outputNums: [9],
         instancesFE: [
             { id: 4, inputsFE: [1, 2], mincode: 1 },
             { id: 5, inputsFE: [2], mincode: 2 },

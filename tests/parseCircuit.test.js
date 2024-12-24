@@ -15,7 +15,7 @@ describe("Circuit class parseCircuit method", () => {
         expect(circuit.number).toBe(1)
         expect(circuit.countInputs).toBe(3)
         expect(circuit.countFE).toBe(7)
-        expect(circuit.outputsNums).toEqual([9])
+        expect(circuit.outputNums).toEqual([9])
         expect(circuit.inputsNums).toEqual([1, 2, 3])
         expect(Object.keys(circuit.instancesFE)).toHaveLength(10)
         expect(circuit.instancesFE[4].mincode).toBe(1)

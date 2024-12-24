@@ -25,7 +25,7 @@ class MIG extends Circuit {
         this.number = circuit.number
         this.countInputs = circuit.countInputs
         this.countFE = circuit.countFE
-        this.outputsNums = circuit.output
+        this.outputNums = circuit.output
         this.outputInversion = circuit.inversion
 
         this.instancesFE[0] = new ZeroElement(0)
@@ -92,6 +92,14 @@ class MIG extends Circuit {
             })
 
         return initialSet
+    }
+
+    calculateOutput() {
+        const outputIndex = this.outputNums[0]
+        this.outputValues[outputIndex] =
+            this.instancesFE[outputIndex].outputValue ^ this.outputInversion
+
+        return this.outputValues
     }
 }
 

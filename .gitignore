@@ -4,3 +4,9 @@ node_modules/
 # Temporary files
 draft.js
 
+#
+database_dump_MIG.txt
+mig-db.json
+mig-convert-to-JSON.js
+mongo.js
+circuit-results/

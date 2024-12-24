@@ -18,6 +18,12 @@ circuit.buildXDepthsDict()
 
 const stateHistory = circuit.simulateCircuit(circuit.xDepthsDict)
 console.log(stateHistory)
+circuit.calculateOutput()
+console.log(
+    `Output ${circuit.outputNums[0]}: ${
+        circuit.outputValues[circuit.outputNums[0]]
+    }`
+)
 console.log("DELAY: ", circuit.calculateDelay(stateHistory))
 
 // import { readFileSync } from "node:fs"
@@ -38,5 +44,10 @@ console.log("DELAY: ", circuit.calculateDelay(stateHistory))
 // circuit.buildXDepthsDict()
 
 // const stateHistory = circuit.simulateCircuit(circuit.xDepthsDict)
-// console.log(stateHistory)
-// // console.log("DELAY: ", circuit.calculateDelay(stateHistory))
+// // console.log(stateHistory)
+// circuit.calculateOutput()
+// circuit.outputNums.forEach((outputIndex) => {
+//     const value = circuit.outputValues[outputIndex]
+//     console.log(`Output ${outputIndex}: ${value}`)
+// })
+// console.log("DELAY: ", circuit.calculateDelay(stateHistory))
