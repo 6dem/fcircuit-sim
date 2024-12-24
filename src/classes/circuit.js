@@ -234,12 +234,14 @@ class Circuit {
         if (Object.keys(depthsDict).length === 0) {
             throw new Error("depths dict is empty")
         }
+
         // Перебираем все глубины в словаре depthsDict
         for (const depth in depthsDict) {
             if (depth === "0") continue // Пропускаем глубину 0, т.к. это входные элементы
 
             const feAtDepth = depthsDict[depth]
-            const currentStates = {}
+            const currentStates = {} // Состояния текущей глубины
+            const temporaryResults = {} // Временные результаты вычислений
 
             // Для каждого функционального элемента на текущей глубине
             feAtDepth.forEach((feIndex) => {
@@ -249,22 +251,34 @@ class Circuit {
                 if (fe.state !== "computed") {
                     const result = fe.computeFunction(this)
 
-                    // Если результат null, ставим состояние uncertain
-                    if (result === null) {
-                        fe.state = "uncertain"
+                    // Сохраняем результат во временное хранилище
+                    temporaryResults[feIndex] = result
+
+                    // Определяем состояние элемента на текущем шаге
+                    currentStates[fe.index] = {
+                        state: result === null ? "uncertain" : "computed",
+                        outputValue: result,
                     }
-                    // Если результат 0 или 1, ставим состояние computed
-                    else {
-                        fe.state = "computed"
-                        fe.outputValue = result
+                } else {
+                    // Если элемент уже вычислен, записываем его текущее состояние
+                    currentStates[fe.index] = {
+                        state: fe.state,
+                        outputValue: fe.outputValue,
                     }
-                }
-                // Записываем состояние элемента на текущем шаге (глубине)
-                currentStates[fe.index] = {
-                    state: fe.state,
-                    outputValue: fe.outputValue,
                 }
             })
+
+            // Применяем временные результаты после обработки всей глубины
+            for (const [feIndex, result] of Object.entries(temporaryResults)) {
+                const fe = this.instancesFE[feIndex]
+
+                if (result !== null) {
+                    fe.state = "computed"
+                    fe.outputValue = result
+                } else {
+                    fe.state = "uncertain"
+                }
+            }
 
             // Добавляем состояние на текущем шаге (глубине) в историю
             stateHistory[depth] = currentStates
