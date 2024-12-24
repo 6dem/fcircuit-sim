@@ -25,17 +25,19 @@ class FunctionalElement extends Vertex {
 
     computeFunction(circuit) {
         let inputValues = new Array(this.numInputs).fill(null)
+        const tempValues = []
+        const nullIndices = []
         for (let i = 0; i < this.numInputs; i++) {
             let inputNum = this.inputsFE[i]
             let inputFE = circuit.instancesFE[inputNum]
             inputValues[i] = inputFE.outputValue
+
+            if (inputFE.outputValue === null) {
+                nullIndices.push(i)
+            }
+
+            tempValues[i] = inputFE.outputValue
         }
-
-        const nullIndices = inputValues
-            .filter((value, index) => value === null)
-            .map((value, index) => index) // Получаем индексы null в inputValues
-
-        //FIXME: Объединение проходов двух циклов по InputValues
 
         // Создаем список всех возможных комбинаций для индексов null
         const combinations = generateCombinations(nullIndices.length)

@@ -9,7 +9,7 @@ const filePath = join(__dirname, "../../circuit-descriptions/mig.json")
 const jsonData = readFileSync(filePath, "utf8")
 const circuit = new MIG()
 
-circuit.parseCircuit(JSON.parse(jsonData), 1)
+circuit.parseCircuit(JSON.parse(jsonData), 23839913)
 circuit.initializeCircuit(0)
 // console.dir(circuit, { depth: null })
 

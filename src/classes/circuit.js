@@ -17,14 +17,15 @@ class Circuit {
         this.xDepthsDict = {}
     }
 
-    parseCircuit(jsonData, circuit_number) {
+    parseCircuit(jsonData, circuitNumber) {
         // Проверка, существует ли схема с таким номером
-        const circuit = jsonData[circuit_number - 1]
-        //FIXME: схема должна выбираться ровно по своему номеру, а не индекс минус один
+        const circuit = jsonData.find(
+            (circuit) => circuit.number === circuitNumber
+        )
 
         if (!circuit || circuit.format !== "fcircuit") {
             throw new Error(
-                `Invalid format or circuit number: ${circuit_number}`
+                `Invalid format or circuit number: ${circuitNumber}`
             )
         }
 
@@ -54,7 +55,6 @@ class Circuit {
                 continue
             }
             let isValid = true
-            //FIXME: проход по instancesFE странный
 
             // Проверяем каждый вход элемента
             for (const inputIndex of element.inputsFE) {

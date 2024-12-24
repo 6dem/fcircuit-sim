@@ -57,13 +57,7 @@ class MajorityInvertElement extends FunctionalElement {
             results.add(outputValue)
         })
 
-        // console.log(
-        //     `Элемент: ${this.index} | Входы ${inputValues} | Результат: ${
-        //         [...results][0]
-        //     }`
-        // )
-
-        // Если все результаты одинаковы, возвращаем значение
+        // Если все результаты одинаковы(множество размера 1), возвращаем значение
         return results.size === 1 ? [...results][0] : null
     }
 }

@@ -9,13 +9,15 @@ class MIG extends Circuit {
         this.outputInversion
     }
 
-    parseCircuit(jsonData, circuit_number) {
+    parseCircuit(jsonData, circuitNumber) {
         // Проверка, существует ли схема с таким номером
-        const circuit = jsonData[circuit_number - 1]
+        const circuit = jsonData.find(
+            (circuit) => circuit.number === circuitNumber
+        )
 
         if (!circuit || circuit.format !== "mig") {
             throw new Error(
-                `Invalid format or circuit number: ${circuit_number}`
+                `Invalid format or circuit number: ${circuitNumber}`
             )
         }
 
@@ -83,7 +85,7 @@ class MIG extends Circuit {
         const combinations = generateCombinations(this.countInputs)
         let initialSet = combinations[setNumber]
         Object.keys(this.instancesFE)
-            .slice(1, this.countInputs + 1) // Берем ключи входов схемы (от 0 до countInputs)
+            .slice(1, this.countInputs + 1) // Берем ключи входов схемы (от (пропускаем ZeroElement)1 до countInputs)
             .forEach((key, index) => {
                 const inputElement = this.instancesFE[key]
                 inputElement.outputValue = initialSet[index]
@@ -91,8 +93,6 @@ class MIG extends Circuit {
 
         return initialSet
     }
-
-    //FIXME: simulateCircuit() если существует элемент, который есть на данной глубине и является входом для другого элемента на данной глубине, то это приводит к ошибке
 }
 
 export { MIG }
