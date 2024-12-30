@@ -1,4 +1,4 @@
-import { generateCombinations } from "../utils/utils.js"
+import { generateCombinations } from "../utils/generate-combinations.js"
 import { FunctionalElement, Vertex } from "./nodes.js"
 
 class ZeroElement extends Vertex {

@@ -5,6 +5,9 @@ node_modules/
 draft.js
 
 #
+.gitignore
+
+#
 database_dump_MIG.txt
 mig-db.json
 mig-convert-to-JSON.js

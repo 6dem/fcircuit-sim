@@ -1,4 +1,4 @@
-import { generateCombinations } from "../utils/utils.js"
+import { generateCombinations } from "../utils/generate-combinations.js"
 import { FunctionalElement, InputElement } from "./nodes.js"
 
 class Circuit {

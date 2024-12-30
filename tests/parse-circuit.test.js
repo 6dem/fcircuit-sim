@@ -1,5 +1,5 @@
 import { Circuit } from "../src/classes/circuit.js"
-import { invalidInputFE, mockData } from "../tests/mockData.js"
+import { invalidInputFE, mockData } from "../tests/mock-data.js"
 
 describe("Circuit class parseCircuit method", () => {
     let circuit

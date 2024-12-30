@@ -1,4 +1,4 @@
-import { generateCombinations } from "../utils/utils.js"
+import { generateCombinations } from "../utils/generate-combinations.js"
 import { Circuit } from "./circuit.js"
 import { MajorityInvertElement, ZeroElement } from "./mig-nodes.js"
 import { InputElement } from "./nodes.js"

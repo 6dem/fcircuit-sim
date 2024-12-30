@@ -1,4 +1,4 @@
-import { generateCombinations } from "../utils/utils.js"
+import { generateCombinations } from "../utils/generate-combinations.js"
 
 class Vertex {
     constructor(index, outputValue = null) {

@@ -1,7 +1,7 @@
 import { Circuit } from "../src/classes/circuit.js"
-import { mockData } from "../tests/mockData.js"
+import { mockData } from "./mock-data.js"
 
-describe("Circuit class buildXDepthsDict method", () => {
+describe("Circuit class buildDepthsDict method", () => {
     let circuit
 
     beforeEach(() => {
@@ -10,17 +10,17 @@ describe("Circuit class buildXDepthsDict method", () => {
     })
 
     test("empty paths array", () => {
-        expect(() => circuit.buildXDepthsDict()).toThrow(
+        expect(() => circuit.buildDepthsDict()).toThrow(
             "allPaths array is empty"
         )
     })
 
-    test("build extended depths dict", () => {
+    test("build depths dict", () => {
         circuit.findAllPaths()
-        const depth = circuit.buildXDepthsDict()
+        const depth = circuit.buildDepthsDict()
         expect(depth).toEqual({
             0: new Set([2, 1, 3]),
-            1: new Set([5, 6, 4, 9, 10]),
+            1: new Set([5, 6, 4, 10]),
             2: new Set([8, 7]),
             3: new Set([9]),
         })

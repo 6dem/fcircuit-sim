@@ -1,5 +1,5 @@
 import { Circuit } from "../src/classes/circuit.js"
-import { mockData } from "../tests/mockData.js"
+import { mockData } from "../tests/mock-data.js"
 
 describe("Circuit class DFS method", () => {
     let circuit

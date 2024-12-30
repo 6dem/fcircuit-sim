@@ -1,5 +1,5 @@
 import { Circuit } from "../src/classes/circuit.js"
-import { mockData } from "../tests/mockData.js"
+import { mockData } from "../tests/mock-data.js"
 
 describe("Circuit class simulateCircuit method", () => {
     let circuit
@@ -19,7 +19,7 @@ describe("Circuit class simulateCircuit method", () => {
         )
     })
 
-    test("simulate on depths dict", () => {
+    test("simulate on extended depths dict", () => {
         circuit.buildXDepthsDict()
         circuit.initializeCircuit(2)
         expect(circuit.simulateCircuit(circuit.xDepthsDict)).toEqual({
@@ -38,7 +38,7 @@ describe("Circuit class simulateCircuit method", () => {
         })
     })
 
-    test("simulate on extended depths dict", () => {
+    test("simulate on depths dict", () => {
         circuit.buildDepthsDict()
         circuit.initializeCircuit(2)
         expect(circuit.simulateCircuit(circuit.depthsDict)).toEqual({
