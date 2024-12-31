@@ -67,7 +67,9 @@ class Circuit {
             }
 
             if (!isValid) {
-                throw new Error(`Invalid functional element: ${invalidIndex}`)
+                throw new Error(
+                    `Invalid input index (${invalidIndex}) of a functional element (${element.index})`
+                )
             }
         }
     }
@@ -293,8 +295,12 @@ class Circuit {
         const outputElements = Object.values(this.instancesFE).filter(
             (element) => this.outputNums.includes(element.index)
         )
+
         outputElements.forEach((fe) => {
             const feIndex = fe.index
+            if (this.instancesFE[feIndex].outputValue == null) {
+                throw new Error("output value has not been calculated yet")
+            }
             this.outputValues[feIndex] = this.instancesFE[feIndex].outputValue
         })
 

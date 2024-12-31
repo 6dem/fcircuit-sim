@@ -96,6 +96,9 @@ class MIG extends Circuit {
 
     calculateOutput() {
         const outputIndex = this.outputNums[0]
+        if (this.instancesFE[outputIndex].outputValue == null) {
+            throw new Error("output value has not been calculated yet")
+        }
         this.outputValues[outputIndex] =
             this.instancesFE[outputIndex].outputValue ^ this.outputInversion
 
