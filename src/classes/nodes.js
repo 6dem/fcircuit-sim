@@ -23,9 +23,8 @@ class FunctionalElement extends Vertex {
         this.delayFE = undefined
     }
 
-    computeFunction(circuit) {
-        let inputValues = new Array(this.numInputs).fill(null)
-        const tempValues = []
+    getInputValues(circuit) {
+        const inputValues = []
         const nullIndices = []
         for (let i = 0; i < this.numInputs; i++) {
             let inputNum = this.inputsFE[i]
@@ -35,8 +34,21 @@ class FunctionalElement extends Vertex {
             if (inputFE.outputValue === null) {
                 nullIndices.push(i)
             }
+        }
+        return [inputValues, nullIndices]
+    }
 
-            tempValues[i] = inputFE.outputValue
+    computeFunction(circuit, inputValues) {
+        let nullIndices = []
+
+        if (inputValues) {
+            // Если передан массив inputValues, создаем nullIndices на основе этого массива
+            nullIndices = inputValues
+                .map((value, index) => (value === null ? index : -1))
+                .filter((index) => index !== -1)
+        } else {
+            // Если передан только circuit, получаем входные данные через getInputValues
+            ;[inputValues, nullIndices] = this.getInputValues(circuit)
         }
 
         // Создаем список всех возможных комбинаций для индексов null
@@ -44,12 +56,9 @@ class FunctionalElement extends Vertex {
 
         let results = new Set() // Множество для хранения уникальных результатов вычислений функции
         combinations.forEach((combination) => {
-            // Создаем копию inputValues, чтобы не изменять оригинальный массив
-            const tempValues = [...inputValues]
-
             // Подставляем значения из комбинации на место null
             nullIndices.forEach((index, i) => {
-                tempValues[index] = combination[i]
+                inputValues[index] = combination[i]
             })
 
             // Переводим mincode в двоичное число и заполняем ведущими нулями
@@ -58,15 +67,15 @@ class FunctionalElement extends Vertex {
                 .padStart(2 ** this.numInputs, "0")
 
             // Находим индекс в двоичном представлении и переводим его в десятичное число
-            const binaryIndex = parseInt(tempValues.join(""), 2)
+            const binaryIndex = parseInt(inputValues.join(""), 2)
 
             // Получаем значение из mincode по индексу
-            const outputValue = parseInt(binaryMincode[binaryIndex], 10)
+            const outputValue = parseInt(binaryMincode[binaryIndex], 2)
 
             results.add(outputValue)
         })
 
-        // Если все результаты одинаковы, возвращаем значение
+        // Если все результаты одинаковы(множество размера 1), возвращаем значение, иначе null
         return results.size === 1 ? [...results][0] : null
     }
 }
