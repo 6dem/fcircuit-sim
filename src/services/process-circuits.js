@@ -42,13 +42,17 @@ export function processAllCircuits(jsonData) {
                     circuit.parseCircuit(jsonData, +circuitData.number)
                     circuit.findAllPaths()
                     circuit.buildXDepthsDict()
-                    depth = circuit.calculateDepth()
+                    depth = circuit.calculateDepth(circuit.allPaths)
 
                     let stateHistory = {}
                     circuit.initializeCircuit(set)
                     stateHistory = circuit.simulateCircuit(circuit.xDepthsDict)
                     const outputValues = circuit.calculateOutput()
                     const delay = circuit.calculateDelay(stateHistory)
+                    const signChains = circuit.searchSignChains(
+                        circuit.allPaths
+                    )
+                    const signDelay = circuit.calculateSignDelay(signChains)
 
                     // Сохраняем данные по конкретному входному набору
                     setResults.push({
@@ -57,6 +61,7 @@ export function processAllCircuits(jsonData) {
                             .padStart(circuit.countInputs, "0"),
                         outputValue: outputValues,
                         delay: delay,
+                        signDelay: signDelay,
                     })
                 }
 

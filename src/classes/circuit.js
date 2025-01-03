@@ -11,7 +11,9 @@ class Circuit {
         this.outputNums = []
         this.inputsNums = []
         this.outputValues = {}
+        this.depth = undefined
         this.delay = undefined
+        this.signDelay = undefined
 
         this.allPaths = []
         this.depthsDict = {}
@@ -125,12 +127,12 @@ class Circuit {
         }
     }
 
-    calculateDepth() {
-        if (this.allPaths.length === 0) {
+    calculateDepth(allPaths) {
+        if (allPaths.length === 0) {
             throw new Error(`allPaths array is empty`)
         } else {
             const maxDepth =
-                Math.max(...this.allPaths.map((path) => path.length)) - 1
+                Math.max(...allPaths.map((path) => path.length)) - 1
             return maxDepth
         }
     }
@@ -332,7 +334,98 @@ class Circuit {
         this.delay = circuitDelay
         return circuitDelay
     }
+
+    searchSignChains(allPaths) {
+        const checkDuplicate = (
+            dupInpElements,
+            feIndex,
+            dict,
+            key,
+            fePos,
+            inputIndex
+        ) => {
+            if (!dupInpElements.has(feIndex)) {
+                return false
+            }
+            const array = dict[key]
+
+            return array.some(
+                (innerArray) =>
+                    innerArray.length > fePos &&
+                    innerArray[fePos] === inputIndex
+            )
+        }
+
+        const processedPaths = {}
+        const signChains = []
+        const dupInpElements = new Set()
+        allPaths.forEach((path) => {
+            const strPath = path.join("-")
+            let relevantArr
+            if (strPath in processedPaths) {
+                relevantArr = processedPaths[strPath].length
+                processedPaths[strPath].push([])
+            } else {
+                relevantArr = 0
+                processedPaths[strPath] = [[]]
+            }
+            let significant = false
+            for (const feIndex of path) {
+                const fePos = path.indexOf(feIndex)
+                let oldInputValues = []
+                let newInputValues = []
+                if (feIndex <= this.countInputs) continue
+                const fe = this.instancesFE[feIndex]
+                if (new Set(fe.inputsFE).size !== fe.inputsFE.length) {
+                    dupInpElements.add(feIndex)
+                }
+                oldInputValues = fe.getInputValues(this)[0]
+                newInputValues = [...oldInputValues]
+
+                for (const inputIndex in fe.inputsFE) {
+                    if (
+                        path[fePos + 1] === fe.inputsFE[inputIndex] &&
+                        !checkDuplicate(
+                            dupInpElements,
+                            feIndex,
+                            processedPaths,
+                            strPath,
+                            fePos,
+                            +inputIndex
+                        )
+                    ) {
+                        processedPaths[strPath][relevantArr].push(+inputIndex)
+                        newInputValues[inputIndex] =
+                            1 - oldInputValues[inputIndex]
+                        const originalOutput = fe.outputValue
+                        const newOutput = fe.computeFunction(
+                            null,
+                            newInputValues
+                        )
+                        if (originalOutput !== newOutput) {
+                            significant = true
+                        } else {
+                            significant = false
+                            return
+                        }
+                        break
+                    }
+                }
+            }
+            if (significant) {
+                signChains.push(path)
+            }
+        })
+        return signChains
+    }
+
+    calculateSignDelay(signChains) {
+        if (signChains.length === 0) {
+            return 0
+        }
+        const signDelay = this.calculateDepth(signChains)
+        return signDelay
+    }
 }
 
-// Экспорт
 export { Circuit }
