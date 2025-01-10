@@ -356,6 +356,10 @@ class Circuit {
             )
         }
 
+        if (allPaths.length === 0) {
+            throw new Error(`method searchSignChains: allPaths array is empty`)
+        }
+
         const processedPaths = {}
         const signChains = []
         const dupInpElements = new Set()
