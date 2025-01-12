@@ -11,7 +11,4 @@ draft.js
 #
 database_dump_MIG.txt
 mig-db.json
-mig2.json
 mig-convert-to-JSON.js
-circuit-results/
-circuit-descriptions/mig copy.json
