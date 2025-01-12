@@ -1,0 +1,107 @@
+* {
+    box-sizing: border-box;
+}
+
+html {
+    min-height: 100vh;
+    scroll-behavior: smooth;
+    background: var(--color-gradient-grey), var(--color-pink-bg);
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    font-family: "Roboto", sans-serif;
+    background: var(--color-gradient-grey);
+    backdrop-filter: blur(75px);
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-gradient-grey);
+}
+
+a {
+    text-decoration: none;
+    color: unset;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.field {
+    border-radius: 44px;
+    backdrop-filter: blur(75px);
+    background-color: var(--color-gradient-grey-dark);
+}
+
+.btn {
+    width: 134px;
+    height: 54px;
+    border-radius: 30px;
+    background-color: var(--color-purple-dark);
+    color: var(--color-white);
+    font-weight: 700;
+    font-size: 24px;
+    outline: none;
+    border-width: 1px;
+    border-color: var(--color-white-50);
+    box-shadow: inset 1px 1px 0 var(--color-white-25),
+        5px 4px 10px var(--color-black-25);
+}
+
+.btn:disabled {
+    background-color: var(--color-purple-dark-50);
+    cursor: not-allowed;
+    color: var(--color-white-50);
+}
+
+.btn:hover:not(:disabled) {
+    cursor: pointer;
+    background-color: var(--color-purple-light);
+}
+
+#custom-alert {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.custom-alert-content {
+    background-color: var(--color-gradient-grey);
+    margin: 10vh;
+    padding: 20px;
+    border-radius: 44px;
+    backdrop-filter: blur(75px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 400px;
+}
+
+.custom-alert-content p {
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: var(--color-white);
+}
+
+.btn_alert {
+    width: 80px;
+    height: 40px;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.custom-alert-content button:hover {
+    background-color: #0056b3;
+}
+
+.hidden {
+    display: none !important;
+}

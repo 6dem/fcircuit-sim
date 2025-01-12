@@ -1,0 +1,24 @@
+:root {
+    --color-white: #fff;
+    --color-white-50: rgba(255, 255, 255, 0.5);
+    --color-white-25: rgba(255, 255, 255, 0.25);
+    --color-black-50: rgba(0, 0, 0, 0.5);
+    --color-black-25: rgba(0, 0, 0, 0.25);
+    --color-black: #000;
+    --color-blue: #2e335a;
+    --color-purple-dark: #48319d;
+    --color-purple-dark-50: rgba(72, 49, 157, 0.5);
+    --color-purple-light: #3b267b;
+    --color-purple-light-50: rgba(59, 38, 123, 0.5);
+    --color-pink-bg: #eeedff;
+    --color-gradient-grey: linear-gradient(
+        138deg,
+        rgba(46, 51, 90, 0.26) 0%,
+        rgba(28, 27, 51, 0.26) 100%
+    );
+    --color-gradient-grey-dark: linear-gradient(
+        138deg,
+        rgba(46, 51, 90, 0.52) 0%,
+        rgba(28, 27, 51, 0.52) 100%
+    );
+}

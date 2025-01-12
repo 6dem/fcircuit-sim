@@ -1,0 +1,52 @@
+.main {
+    padding-bottom: 20px;
+}
+
+.table-wrapper {
+    max-height: 536px;
+    padding: 25px;
+    backdrop-filter: blur(75px);
+    background-color: var(--color-gradient-grey-dark);
+    border-radius: 44px;
+    overflow: auto;
+    scrollbar-width: none;
+}
+
+.results-table {
+    border-collapse: collapse;
+    width: 100%;
+    overflow: hidden;
+    color: var(--color-white);
+    font-size: 24px;
+}
+
+.results-table th,
+.results-table td {
+    border: none;
+    text-align: center;
+}
+
+.results-table thead th {
+    padding-bottom: 25px;
+    border-bottom: 2px solid var(--color-blue);
+}
+
+.table-additional {
+    margin: 20px 0 0 0;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    /* align-items: center; */
+}
+
+.table-additional .btn {
+    margin-right: 25px;
+}
+
+.error-container {
+    max-height: 300px;
+    max-width: 800px;
+    overflow: auto;
+    color: var(--color-white);
+    padding: 20px;
+}

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./index.css">
+    <link rel="icon" href="assets/favicon.png" type="image/x-icon">
+    <title>fcircuit-sim</title>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-wrapper">
+                <div class="file-upload-wrapper">
+                    <label for="file-upload" class="file-label">
+                        <button class="btn" id="attach-file-button">Attach file</button>
+                    </label>
+                    <input type="file" id="file-upload" style="display: none;">
+                    <span class="file-name" id="file-name">No file chosen</span>
+                </div>
+                <button id="stopButton" class="btn" style="display:none;">Stop</button>
+                <button class="btn" id="perform-button" disabled>Perform</button>
+            </div>
+        </header>
+
+        <main class="main">
+            <div class="table-wrapper" id="table-wrapper" style="display: none;">
+                <table class="results-table" id="results-table">
+                    <thead>
+                        <tr>
+                            <th>Number</th>
+                            <th>Depth</th>
+                            <th>Set</th>
+                            <th>Output Value</th>
+                            <th>Delay</th>
+                            <th>Sign Delay</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="table-additional">
+                <button class="btn" id="save-button" style="display: none;">Save</button>
+                <div id="error-container" class="error-container field" style="display: none;"></div>
+            </div>
+        </main>
+    </div>
+
+    <div id="custom-alert" class="hidden">
+        <div class="custom-alert-content">
+          <p id="custom-alert-message"></p>
+          <button id="custom-alert-ok" class="btn btn_alert">OK</button>
+        </div>
+    </div>
+
+    <script type="module" src="./index.js"></script>
+</body>
+</html>

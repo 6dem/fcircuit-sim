@@ -1,0 +1,21 @@
+.header {
+    padding: 35px 0 35px 0;
+}
+.header-wrapper {
+    padding: 57px;
+    max-width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 44px;
+    background-color: var(--color-blue);
+    box-shadow: 20px 20px 150px 0 rgba(59, 38, 123, 0.7);
+}
+
+.file-label {
+}
+.file-name {
+    margin: 15px;
+    font-size: 24px;
+    color: var(--color-white);
+}

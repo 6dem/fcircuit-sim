@@ -2,13 +2,12 @@
   "name": "fcircuit-sim",
   "version": "1.0.0",
   "type": "module",
-  "main": "src/index.js",
+  "main": "index.html",
   "directories": {
-    "start": "node index.js",
     "test": "tests"
   },
   "scripts": {
-    "start": "node .",
+    "start": "live-server .",
     "test": "jest",
     "lint": "eslint .",
     "format": "prettier --write ."
@@ -32,6 +31,10 @@
     "@babel/core": "^7.26.0",
     "@babel/preset-env": "^7.26.0",
     "babel-jest": "^29.7.0",
-    "jest": "^29.7.0"
+    "jest": "^29.7.0",
+    "live-server": "^1.2.0"
+  },
+  "dependencies": {
+    "konva": "^9.3.18"
   }
 }
