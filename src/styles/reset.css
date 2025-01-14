@@ -75,7 +75,7 @@ a {
 
 .custom-alert-content {
     background-color: var(--color-gradient-grey);
-    margin: 10vh;
+    margin-top: 10vh;
     padding: 20px;
     border-radius: 44px;
     backdrop-filter: blur(75px);
@@ -90,16 +90,12 @@ a {
     color: var(--color-white);
 }
 
-.btn_alert {
+.btn--alert {
     width: 80px;
     height: 40px;
     text-align: center;
     font-size: 16px;
     cursor: pointer;
-}
-
-.custom-alert-content button:hover {
-    background-color: #0056b3;
 }
 
 .hidden {

@@ -1,6 +1,7 @@
 .header {
-    padding: 35px 0 35px 0;
+    padding: 35px;
 }
+
 .header-wrapper {
     padding: 57px;
     max-width: 100%;
@@ -12,10 +13,45 @@
     box-shadow: 20px 20px 150px 0 rgba(59, 38, 123, 0.7);
 }
 
-.file-label {
+.file-upload-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
+
 .file-name {
-    margin: 15px;
+    max-width: 155px;
+    margin-left: 15px;
     font-size: 24px;
     color: var(--color-white);
+}
+
+@media (max-width: 768px) {
+    .header {
+        padding: 20px;
+    }
+    .header-wrapper {
+        padding: 40px;
+    }
+    .file-name {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .header {
+        padding: 10px;
+    }
+    .header-wrapper {
+        padding: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-wrapper {
+        padding: 20px;
+    }
+    .file-name {
+        display: none;
+    }
 }

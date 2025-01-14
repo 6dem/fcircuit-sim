@@ -7,7 +7,7 @@ const fileNameDisplay = document.getElementById("file-name")
 const tableContainer = document.getElementById("table-wrapper")
 const tableBody = document.querySelector("#results-table tbody")
 const saveButton = document.getElementById("save-button")
-const stopButton = document.getElementById("stopButton")
+// const stopButton = document.getElementById("stopButton")
 
 let jsonData = null
 let processedData = []
@@ -47,7 +47,7 @@ performButton.addEventListener("click", async () => {
                     throw new Error("The JSON data is not an array")
                 }
 
-                stopButton.style.display = "inline-block"
+                // stopButton.style.display = "inline-block"
                 let { resultData, errorData } = await processAllCircuits(
                     jsonData
                 )
@@ -61,7 +61,7 @@ performButton.addEventListener("click", async () => {
 
                 displayErrors(errorData)
 
-                stopButton.style.display = "none"
+                // stopButton.style.display = "none"
             } catch (error) {
                 // Ошибка парсинга JSON или неправильная структура
                 console.error("Error:", error)
@@ -104,7 +104,7 @@ saveButton.addEventListener("click", () => {
     link.click()
 })
 
-stopButton.addEventListener("click", stopProcessing)
+// stopButton.addEventListener("click", stopProcessing)
 
 function loadMoreSchemes() {
     if (scrollLoading || currentSchemeIndex >= loadedSchemes.length) return
@@ -199,11 +199,11 @@ function displayErrors(errorData) {
     errorContainer.style.display = errorData.length ? "block" : "none" // Показываем блок, если есть ошибки
 }
 
-function stopProcessing() {
-    cancelProcessing = true
-    stopButton.style.display = "none"
-    showCustomAlert("Processing was canceled.")
-}
+// function stopProcessing() {
+//     cancelProcessing = true
+//     stopButton.style.display = "none"
+//     showCustomAlert("Processing was canceled.")
+// }
 
 function showCustomAlert(message) {
     const alertBox = document.getElementById("custom-alert")

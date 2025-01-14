@@ -1,5 +1,5 @@
 .main {
-    padding-bottom: 20px;
+    padding: 0 35px 35px 35px;
 }
 
 .table-wrapper {
@@ -40,7 +40,7 @@
 }
 
 .table-additional .btn {
-    margin-right: 25px;
+    margin: 0 25px 0 25px;
 }
 
 .error-container {
@@ -49,4 +49,22 @@
     overflow: auto;
     color: var(--color-white);
     padding: 20px;
+}
+
+@media (max-width: 768px) {
+    .main {
+        padding: 0 20px 20px 20px;
+    }
+    .table-wrapper {
+        padding: 20px 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    .main {
+        padding: 0 10px 10px 10px;
+    }
+    .results-table {
+        font-size: 20px;
+    }
 }
