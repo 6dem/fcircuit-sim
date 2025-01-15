@@ -18,6 +18,11 @@
     overflow: hidden;
     color: var(--color-white);
     font-size: 24px;
+    border-bottom: 2px solid var(--color-blue);
+}
+
+.results-table tr:last-child td {
+    padding-bottom: 25px;
 }
 
 .results-table th,

@@ -21,6 +21,10 @@
 
 .file-name {
     max-width: 155px;
+    max-height: 55px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     margin-left: 15px;
     font-size: 24px;
     color: var(--color-white);
