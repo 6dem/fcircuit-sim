@@ -8,8 +8,8 @@
     <title>fcircuit-sim</title>
 </head>
 <body>
-    <div class="container">
-        <header class="header">
+    <header class="header">
+        <div class="container">
             <div class="header-wrapper">
                 <div class="file-upload-wrapper">
                     <label for="file-upload" class="file-label">
@@ -19,32 +19,71 @@
                     <span class="file-name" id="file-name">No file chosen</span>
                 </div>
                 <button id="stopButton" class="btn" style="display:none;">Stop</button>
-                <button class="btn" id="perform-button" disabled>Perform</button>
-            </div>
-        </header>
+                <div class="process-btn-group">
+                    <button class="btn" id="visualize-button" disabled>Visualize</button>
+                    <button class="btn" id="perform-button" disabled>Perform</button>
+                </div>
+                </div>
+        </div>
+    </header>
 
         <main class="main">
-            <div class="table-wrapper" id="table-wrapper" style="display: none;">
-                <table class="results-table" id="results-table">
-                    <thead>
-                        <tr>
-                            <th>Number</th>
-                            <th>Depth</th>
-                            <th>Set</th>
-                            <th>Output Value</th>
-                            <th>Delay</th>
-                            <th>Sign Delay</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-            <div class="table-additional">
-                <button class="btn" id="save-button" style="display: none;">Save</button>
-                <div id="error-container" class="error-container field" style="display: none;"></div>
-            </div>
+            <section class="visualization" id="visualization-section" style="display: none;">
+                <div class="visualization__side-panel visualization__side-panel--left">
+                    <div class="binary-input">
+                        <!-- <label for="input-set">Input Set:</label> -->
+                        <div class="binary-input__controls">
+                            <button class="button--increase" id="button--increase" aria-label="Increase" disabled>▲</button>
+                            <input class="input-set" id="input-set" type="text" value="00000" readonly />
+                            <button class="button--decrease" id="button--decrease" aria-label="Decrease" disabled>▼</button>
+                          </div>
+                    </div>
+                    <button class="btn button--perform" id="visual-perform-button">Perform</button>
+                    <div class="field duration">
+                        <div class="duration__input-wrapper">
+                            <label for="duration__input">Duration:</label>
+                            <input type="text" id="duration__input" class="duration__input" value="1">
+                        </div>
+                            <button class="btn button--play" id="play-button" disabled>
+                            ▶
+                        </button>
+                    </div>
+                </div>
+                    <div class="visualization__main">
+                        <div class="visualization__container" id="visualization-container"></div>
+                    </div>
+                <div class="visualization__side-panel visualization__side-panel--right">
+                    <div class="field set-results-wrapper">
+                        <ul class="set-results" id="set-results"></ul>
+                    </div>
+                    <button class="btn button--results" id="button--results" disabled>All Results</button>
+                  </div>
+            
+            </section>
+            <section class="results" id="results-section" style="display: none;">
+                <div class="container">
+                    <div class="table-wrapper" id="table-wrapper" style="display: none;">
+                        <table class="results-table" id="results-table">
+                            <thead>
+                                <tr>
+                                    <th>Number</th>
+                                    <th>Depth</th>
+                                    <th>Set</th>
+                                    <th>Output Value</th>
+                                    <th>Delay</th>
+                                    <th>Sign Delay</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="table-additional">
+                        <button class="btn" id="save-button" style="display: none;">Save</button>
+                        <div id="error-container" class="error-container field" style="display: none;"></div>
+                    </div>
+                </div>
+            </section>
         </main>
-    </div>
 
     <div id="custom-alert" class="hidden">
         <div class="custom-alert-content">

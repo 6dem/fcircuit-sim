@@ -1,21 +1,35 @@
 import { processAllCircuits } from "./src/services/process-circuits.js"
+import { processCircuit } from "./src/services/visual-process-circuit.js"
+import {} from "./src/services/visualizer.js"
 
 const fileInput = document.getElementById("file-upload")
 const attachButton = document.getElementById("attach-file-button")
+const visualizeButton = document.getElementById("visualize-button")
 const performButton = document.getElementById("perform-button")
 const fileNameDisplay = document.getElementById("file-name")
+const visualizationSection = document.getElementById("visualization-section")
+const increaseButton = document.getElementById("button--increase")
+const decreaseButton = document.getElementById("button--decrease")
+const inputField = document.getElementById("input-set")
+const visualPerformButton = document.getElementById("visual-perform-button")
+const playButton = document.getElementById("play-button")
+const setResultsElement = document.getElementById("set-results")
+const resultsButton = document.getElementById("button--results")
+const resultsSection = document.getElementById("results-section")
 const tableContainer = document.getElementById("table-wrapper")
 const tableBody = document.querySelector("#results-table tbody")
 const saveButton = document.getElementById("save-button")
 // const stopButton = document.getElementById("stopButton")
 
+let inputSet = parseInt(inputField.value, 2)
+let setResultData
 let jsonData = null
+let circuitIndex = 0
 let processedData = []
 let currentSchemes = [] // Схемы, которые отображаются в таблице
 let loadedSchemes = [] // Все загруженные схемы
 let scrollLoading = false // Чтобы не запускать несколько загрузок одновременно
 
-const initialSchemeCount = 4
 let currentSchemeIndex = 0
 
 attachButton.addEventListener("click", () => {
@@ -27,15 +41,151 @@ fileInput.addEventListener("change", () => {
     if (file) {
         fileNameDisplay.textContent = file.name
         performButton.disabled = false
+        visualizeButton.disabled = false
+    } else {
+        fileNameDisplay.textContent = "No file chosen"
+        performButton.disabled = true
+        visualizeButton.disabled = true
+    }
+    fullReset()
+})
+
+visualizeButton.addEventListener("click", async () => {
+    const file = fileInput.files[0]
+    if (file) {
+        try {
+            ckeckFile(file)
+        } catch {
+            return
+        }
+        const reader = new FileReader()
+        reader.onload = async (event) => {
+            try {
+                jsonData = JSON.parse(event.target.result)
+
+                if (!Array.isArray(jsonData)) {
+                    throw new Error("The JSON data is not an array")
+                }
+
+                const circuitData = jsonData[0]
+
+                const numberOfInputs = circuitData.countInputs
+
+                // Устанавливаем начальное значение (столько нулей, сколько входов)
+                let binaryValue = "0".repeat(numberOfInputs)
+                inputField.value = binaryValue
+
+                // Функция для увеличения значения
+                function increaseBinary() {
+                    binaryValue = (parseInt(binaryValue, 2) + 1)
+                        .toString(2)
+                        .padStart(numberOfInputs, "0")
+                    if (binaryValue.length > numberOfInputs) {
+                        binaryValue = "0".repeat(numberOfInputs) // Цикличность
+                    }
+                    inputField.value = binaryValue
+                }
+
+                // Функция для уменьшения значения
+                function decreaseBinary() {
+                    binaryValue = (parseInt(binaryValue, 2) - 1)
+                        .toString(2)
+                        .padStart(numberOfInputs, "0")
+                    if (binaryValue.includes("-")) {
+                        binaryValue = "1".repeat(numberOfInputs) // Цикличность
+                    }
+                    inputField.value = binaryValue
+                }
+
+                // Сброс значения при клике на поле ввода
+                inputField.addEventListener("click", () => {
+                    binaryValue = "0".repeat(numberOfInputs)
+                    inputField.value = binaryValue
+                    inputSet = parseInt(inputField.value, 2)
+                    updateSetResults(setResultData)
+                })
+
+                // Привязка функций к кнопкам
+                increaseButton.addEventListener("click", () => {
+                    increaseBinary()
+                    inputSet = parseInt(inputField.value, 2)
+                    updateSetResults(setResultData)
+                })
+                decreaseButton.addEventListener("click", () => {
+                    decreaseBinary()
+                    inputSet = parseInt(inputField.value, 2)
+                    updateSetResults(setResultData)
+                })
+
+                visualizationSection.style.display = "flex"
+            } catch (error) {
+                console.error("Error:", error)
+                if (error instanceof SyntaxError) {
+                    showCustomAlert(
+                        "There was an error parsing the file.<br>Please ensure the JSON is correctly formatted."
+                    )
+                } else {
+                    showCustomAlert(
+                        `Invalid file format or structure: ${error.message}`
+                    )
+                }
+            }
+        }
+        reader.readAsText(file)
+    }
+})
+
+visualPerformButton.addEventListener("click", async () => {
+    const file = fileInput.files[0]
+    if (file) {
+        try {
+            ckeckFile(file)
+        } catch {
+            return
+        }
+        const reader = new FileReader()
+        reader.onload = async (event) => {
+            try {
+                jsonData = JSON.parse(event.target.result)
+
+                if (!Array.isArray(jsonData)) {
+                    throw new Error("The JSON data is not an array")
+                }
+
+                setResultData = processCircuit(jsonData, circuitIndex)
+                updateSetResults(setResultData)
+                increaseButton.disabled = false
+                decreaseButton.disabled = false
+                resultsButton.disabled = false
+                playButton.disabled = false
+
+                visualPerformButton.disabled = true
+                visualPerformButton.textContent = "Performed"
+            } catch (error) {
+                showCustomAlert(" ")
+                // Ошибка парсинга JSON или неправильная структура
+                console.error("Error:", error)
+                if (error instanceof SyntaxError) {
+                    showCustomAlert(
+                        "There was an error parsing the file.<br>Please ensure the JSON is correctly formatted."
+                    )
+                } else {
+                    showCustomAlert(
+                        `Invalid file format or structure: ${error.message}`
+                    )
+                }
+            }
+        }
+        reader.readAsText(file)
     }
 })
 
 performButton.addEventListener("click", async () => {
     const file = fileInput.files[0]
     if (file) {
-        const fileType = file.type
-        if (fileType !== "application/json") {
-            showCustomAlert("The uploaded file must be a JSON file.")
+        try {
+            ckeckFile(file)
+        } catch {
             return
         }
         const reader = new FileReader()
@@ -57,6 +207,7 @@ performButton.addEventListener("click", async () => {
 
                 currentSchemes = processedData.slice(0, 4)
                 currentSchemeIndex = 4
+                resultsSection.style.display = "block"
                 updateTable()
 
                 displayErrors(errorData)
@@ -105,6 +256,50 @@ saveButton.addEventListener("click", () => {
 })
 
 // stopButton.addEventListener("click", stopProcessing)
+
+function fullReset() {
+    circuitReset()
+    visualizationSection.style.display = "none"
+    resultsSection.style.display = "none"
+    circuitIndex = 0
+    processedData = []
+    currentSchemes = [] // Схемы, которые отображаются в таблице
+    loadedSchemes = [] // Все загруженные схемы
+    scrollLoading = false // Чтобы не запускать несколько загрузок одновременно
+    currentSchemeIndex = 0
+}
+
+function circuitReset() {
+    visualPerformButton.disabled = false
+    visualPerformButton.textContent = "Perform"
+    setResultsElement.innerHTML = ""
+    setResultData = null
+}
+
+function updateSetResults(resultData) {
+    setResultsElement.innerHTML = ""
+    setResultsElement.appendChild(createListItem("Depth:", resultData.depth))
+    setResultsElement.appendChild(
+        createListItem("Delay:", resultData.setResults[inputSet].delay)
+    )
+    setResultsElement.appendChild(
+        createListItem("Sign Delay:", resultData.setResults[inputSet].signDelay)
+    )
+    const outputs = Object.keys(resultData.setResults[inputSet].outputValue)
+    const output = outputs[0]
+    setResultsElement.appendChild(
+        createListItem(
+            "Output Value:",
+            resultData.setResults[inputSet].outputValue[output]
+        )
+    )
+
+    function createListItem(label, value) {
+        const li = document.createElement("li")
+        li.innerHTML = `<span>${label}</span> ${value}`
+        return li
+    }
+}
 
 function loadMoreSchemes() {
     if (scrollLoading || currentSchemeIndex >= loadedSchemes.length) return
@@ -216,5 +411,15 @@ function showCustomAlert(message) {
 
     alertOkButton.onclick = () => {
         alertBox.classList.add("hidden")
+    }
+}
+
+function ckeckFile(file) {
+    const fileType = file.type
+    if (fileType !== "application/json") {
+        showCustomAlert("The uploaded file must be a JSON file.")
+        return error
+    } else {
+        return
     }
 }

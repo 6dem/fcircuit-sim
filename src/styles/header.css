@@ -4,6 +4,7 @@
 
 .header-wrapper {
     padding: 57px;
+    max-height: 170px;
     max-width: 100%;
     display: flex;
     justify-content: space-between;
@@ -28,6 +29,14 @@
     margin-left: 15px;
     font-size: 24px;
     color: var(--color-white);
+}
+
+.process-btn-group {
+    display: flex;
+    justify-content: end;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 10px;
 }
 
 @media (max-width: 768px) {

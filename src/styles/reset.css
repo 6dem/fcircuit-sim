@@ -23,6 +23,22 @@ a {
     color: unset;
 }
 
+input {
+    border: none;
+}
+
+input:focus {
+    margin: 0;
+    padding: 0;
+    outline: none;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
 .container {
     max-width: 1000px;
     margin: 0 auto;
