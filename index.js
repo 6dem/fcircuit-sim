@@ -56,7 +56,7 @@ visualizeButton.addEventListener("click", async () => {
     const file = fileInput.files[0]
     if (file) {
         try {
-            ckeckFile(file)
+            checkFile(file)
         } catch {
             return
         }
@@ -69,7 +69,7 @@ visualizeButton.addEventListener("click", async () => {
                     throw new Error("The JSON data is not an array")
                 }
 
-                const circuitData = jsonData[0]
+                const circuitData = jsonData[circuitIndex]
 
                 const numberOfInputs = circuitData.countInputs
 
@@ -141,7 +141,7 @@ visualPerformButton.addEventListener("click", async () => {
     const file = fileInput.files[0]
     if (file) {
         try {
-            ckeckFile(file)
+            checkFile(file)
         } catch {
             return
         }
@@ -164,18 +164,7 @@ visualPerformButton.addEventListener("click", async () => {
                 visualPerformButton.disabled = true
                 visualPerformButton.textContent = "Performed"
             } catch (error) {
-                showCustomAlert(" ")
-                // Ошибка парсинга JSON или неправильная структура
-                console.error("Error:", error)
-                if (error instanceof SyntaxError) {
-                    showCustomAlert(
-                        "There was an error parsing the file.<br>Please ensure the JSON is correctly formatted."
-                    )
-                } else {
-                    showCustomAlert(
-                        `Invalid file format or structure: ${error.message}`
-                    )
-                }
+                return
             }
         }
         reader.readAsText(file)
@@ -207,7 +196,7 @@ performButton.addEventListener("click", async () => {
     const file = fileInput.files[0]
     if (file) {
         try {
-            ckeckFile(file)
+            checkFile(file)
         } catch {
             return
         }
@@ -301,21 +290,35 @@ function circuitReset() {
 
 function updateSetResults(resultData) {
     setResultsElement.innerHTML = ""
-    setResultsElement.appendChild(createListItem("Depth:", resultData.depth))
-    setResultsElement.appendChild(
-        createListItem("Delay:", resultData.setResults[inputSet].delay)
-    )
-    setResultsElement.appendChild(
-        createListItem("Sign Delay:", resultData.setResults[inputSet].signDelay)
-    )
-    const outputs = Object.keys(resultData.setResults[inputSet].outputValue)
-    const output = outputs[0]
-    setResultsElement.appendChild(
-        createListItem(
-            "Output Value:",
-            resultData.setResults[inputSet].outputValue[output]
+    try {
+        setResultsElement.appendChild(
+            createListItem("Depth:", resultData.depth)
         )
-    )
+        setResultsElement.appendChild(
+            createListItem("Delay:", resultData.setResults[inputSet].delay)
+        )
+        setResultsElement.appendChild(
+            createListItem(
+                "Sign Delay:",
+                resultData.setResults[inputSet].signDelay
+            )
+        )
+        const outputs = Object.keys(resultData.setResults[inputSet].outputValue)
+        const output = outputs[0]
+        setResultsElement.appendChild(
+            createListItem(
+                "Output Value:",
+                resultData.setResults[inputSet].outputValue[output]
+            )
+        )
+    } catch (error) {
+        setResultsElement.classList.add("error")
+        setResultsElement.style.display = "grid"
+        setResultsElement.style.placeItems = "center"
+
+        setResultsElement.innerHTML = `<li>Invalid circuit</li>`
+        throw new Error(`${error.message}`)
+    }
 
     function createListItem(label, value) {
         const li = document.createElement("li")
@@ -467,7 +470,7 @@ function showCustomAlert(message) {
     }
 }
 
-function ckeckFile(file) {
+function checkFile(file) {
     const fileType = file.type
     if (fileType !== "application/json") {
         showCustomAlert("The uploaded file must be a JSON file.")

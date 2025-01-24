@@ -147,6 +147,11 @@
     margin-top: auto;
 }
 
+.set-results.error li:last-child {
+    font-weight: 700;
+    margin-top: 0;
+}
+
 .button--results {
 }
 
