@@ -58,7 +58,26 @@
                     </div>
                     <button class="btn button--results" id="button--results" disabled>All Results</button>
                   </div>
-            
+            <div class="modal-overlay" id="modal-overlay">
+                <div class="modal" id="modal">
+                    <h2>Results</h2>
+                    <div class="modal__info" id="modal-info"></div>
+                    <div class="table-wrapper table-wrapper--visual">
+                        <table class="results-table results-table--visual" id="results-table--visual">
+                            <thead>
+                                <tr>
+                                    <th>Set</th>
+                                    <th>Output Value</th>
+                                    <th>Delay</th>
+                                    <th>Sign Delay</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <button class="btn modal-close" id="modal-close">Close</button>
+                </div>
+            </div>
             </section>
             <section class="results" id="results-section" style="display: none;">
                 <div class="container">

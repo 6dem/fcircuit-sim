@@ -14,15 +14,17 @@ const inputField = document.getElementById("input-set")
 const visualPerformButton = document.getElementById("visual-perform-button")
 const playButton = document.getElementById("play-button")
 const setResultsElement = document.getElementById("set-results")
+const modalInfo = document.getElementById("modal-info")
 const resultsButton = document.getElementById("button--results")
 const resultsSection = document.getElementById("results-section")
 const tableContainer = document.getElementById("table-wrapper")
 const tableBody = document.querySelector("#results-table tbody")
+const tableBodyVisual = document.querySelector("#results-table--visual tbody")
 const saveButton = document.getElementById("save-button")
 // const stopButton = document.getElementById("stopButton")
 
 let inputSet = parseInt(inputField.value, 2)
-let setResultData
+let circuitResultData
 let jsonData = null
 let circuitIndex = 0
 let processedData = []
@@ -102,19 +104,19 @@ visualizeButton.addEventListener("click", async () => {
                     binaryValue = "0".repeat(numberOfInputs)
                     inputField.value = binaryValue
                     inputSet = parseInt(inputField.value, 2)
-                    updateSetResults(setResultData)
+                    updateSetResults(circuitResultData)
                 })
 
                 // Привязка функций к кнопкам
                 increaseButton.addEventListener("click", () => {
                     increaseBinary()
                     inputSet = parseInt(inputField.value, 2)
-                    updateSetResults(setResultData)
+                    updateSetResults(circuitResultData)
                 })
                 decreaseButton.addEventListener("click", () => {
                     decreaseBinary()
                     inputSet = parseInt(inputField.value, 2)
-                    updateSetResults(setResultData)
+                    updateSetResults(circuitResultData)
                 })
 
                 visualizationSection.style.display = "flex"
@@ -152,8 +154,8 @@ visualPerformButton.addEventListener("click", async () => {
                     throw new Error("The JSON data is not an array")
                 }
 
-                setResultData = processCircuit(jsonData, circuitIndex)
-                updateSetResults(setResultData)
+                circuitResultData = processCircuit(jsonData, circuitIndex)
+                updateSetResults(circuitResultData)
                 increaseButton.disabled = false
                 decreaseButton.disabled = false
                 resultsButton.disabled = false
@@ -177,6 +179,27 @@ visualPerformButton.addEventListener("click", async () => {
             }
         }
         reader.readAsText(file)
+    }
+})
+
+const modalOverlay = document.getElementById("modal-overlay")
+const modalCloseButton = document.getElementById("modal-close")
+
+// Открыть модальное окно
+resultsButton.addEventListener("click", () => {
+    modalOverlay.style.display = "flex" // Показать модальное окно
+    updateVisualTable(circuitResultData)
+})
+
+// Закрыть модальное окно
+modalCloseButton.addEventListener("click", () => {
+    modalOverlay.style.display = "none" // Скрыть модальное окно
+})
+
+// Закрыть модальное окно при клике на затемненный фон
+modalOverlay.addEventListener("click", (e) => {
+    if (e.target === modalOverlay) {
+        modalOverlay.style.display = "none" // Скрыть модальное окно
     }
 })
 
@@ -273,7 +296,7 @@ function circuitReset() {
     visualPerformButton.disabled = false
     visualPerformButton.textContent = "Perform"
     setResultsElement.innerHTML = ""
-    setResultData = null
+    circuitResultData = null
 }
 
 function updateSetResults(resultData) {
@@ -330,6 +353,36 @@ function loadPreviousSchemes() {
     currentSchemeIndex -= 2 // Уменьшаем индекс
     updateTable("up") // Обновляем таблицу
     scrollLoading = false
+}
+
+function updateVisualTable(circuitResultData) {
+    tableBodyVisual.innerHTML = "" // Очищаем таблицу перед добавлением данных
+    modalInfo.innerHTML = ""
+
+    const numberInfo = document.createElement("p")
+    numberInfo.textContent = `number: ${circuitResultData.number}`
+
+    const depthInfo = document.createElement("p")
+    depthInfo.textContent = `depth: ${circuitResultData.depth}`
+
+    // Добавляем строки в modalInfo
+    modalInfo.appendChild(numberInfo)
+    modalInfo.appendChild(depthInfo)
+
+    circuitResultData.setResults.forEach((result) => {
+        const row = document.createElement("tr")
+        const outputs = Object.keys(result.outputValue)
+        const output = outputs[0]
+
+        row.innerHTML = `
+            <td style="padding-top: 10px">${result.inputSet}</td>
+            <td style="padding-top: 10px">${result.outputValue[output]}</td>
+            <td style="padding-top: 10px">${result.delay}</td>
+            <td style="padding-top: 10px">${result.signDelay}</td>
+        `
+
+        tableBodyVisual.appendChild(row)
+    })
 }
 
 function updateTable(direction) {
