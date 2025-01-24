@@ -43,7 +43,6 @@
 }
 
 .input-set:hover {
-    border: 2px solid var(--color-white);
     cursor: pointer;
 }
 
@@ -150,6 +149,11 @@
 .set-results.error li:last-child {
     font-weight: 700;
     margin-top: 0;
+}
+
+.set-results.error {
+    display: grid;
+    place-items: center;
 }
 
 .button--results {

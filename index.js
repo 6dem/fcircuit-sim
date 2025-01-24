@@ -156,6 +156,7 @@ visualPerformButton.addEventListener("click", async () => {
 
                 circuitResultData = processCircuit(jsonData, circuitIndex)
                 updateSetResults(circuitResultData)
+                applyHoverEffect(inputField)
                 increaseButton.disabled = false
                 decreaseButton.disabled = false
                 resultsButton.disabled = false
@@ -282,6 +283,12 @@ function fullReset() {
 }
 
 function circuitReset() {
+    setResultsElement.classList.remove("error")
+    removeHoverEffect(inputField)
+    increaseButton.disabled = true
+    decreaseButton.disabled = true
+    resultsButton.disabled = true
+    playButton.disabled = true
     visualPerformButton.disabled = false
     visualPerformButton.textContent = "Perform"
     setResultsElement.innerHTML = ""
@@ -313,8 +320,6 @@ function updateSetResults(resultData) {
         )
     } catch (error) {
         setResultsElement.classList.add("error")
-        setResultsElement.style.display = "grid"
-        setResultsElement.style.placeItems = "center"
 
         setResultsElement.innerHTML = `<li>Invalid circuit</li>`
         throw new Error(`${error.message}`)
@@ -455,6 +460,35 @@ function displayErrors(errorData) {
 //     stopButton.style.display = "none"
 //     showCustomAlert("Processing was canceled.")
 // }
+function applyHoverEffect(inputField) {
+    // Убираем старые обработчики, чтобы избежать дублирования
+    inputField.removeEventListener("mouseover", addHoverStyles)
+    inputField.removeEventListener("mouseout", removeHoverStyles)
+
+    // Добавляем новые обработчики событий
+    inputField.addEventListener("mouseover", addHoverStyles)
+    inputField.addEventListener("mouseout", removeHoverStyles)
+}
+
+function addHoverStyles() {
+    inputField.style.border = "2px solid var(--color-white)"
+    inputField.style.cursor = "pointer"
+}
+
+function removeHoverStyles() {
+    inputField.style.border = ""
+    inputField.style.cursor = ""
+}
+
+function removeHoverEffect(inputField) {
+    // Убираем обработчики событий
+    inputField.removeEventListener("mouseover", addHoverStyles)
+    inputField.removeEventListener("mouseout", removeHoverStyles)
+
+    // Убираем стили
+    inputField.style.border = ""
+    inputField.style.cursor = ""
+}
 
 function showCustomAlert(message) {
     const alertBox = document.getElementById("custom-alert")
