@@ -109,10 +109,57 @@
 }
 
 .visualization__main {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    gap: 30px;
+    padding-top: 30px;
     background-color: var(--color-blue);
     width: 1000px;
     height: 860px;
     border-radius: 44px;
+}
+
+.progress-bar-wrapper {
+    display: flex;
+    gap: 15px;
+    height: 30px;
+}
+.arrow-button {
+}
+.left {
+}
+.icon {
+}
+.progress-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    border: 2px solid var(--color-white);
+    border-radius: 30px;
+    width: 800px;
+}
+.progress-slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 10%;
+    height: 100%;
+    background: var(--color-purple-light);
+    border: 2px solid var(--color-white);
+    border-radius: 30px;
+    transition: width 0.3s ease;
+}
+.circuit-number {
+    color: var(--color-white);
+    font-size: 20px;
+    font-weight: 700;
+    justify-self: center;
+    z-index: 1000;
+}
+.right {
 }
 
 .visualization__container {

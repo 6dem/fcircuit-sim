@@ -13,6 +13,11 @@ const decreaseButton = document.getElementById("button--decrease")
 const inputField = document.getElementById("input-set")
 const visualPerformButton = document.getElementById("visual-perform-button")
 const playButton = document.getElementById("play-button")
+const circuitNumberElement = document.querySelector(".circuit-number")
+const progressSliderElement = document.querySelector(".progress-slider")
+const progressBarElement = document.querySelector(".progress-bar")
+const leftArrowButton = document.querySelector(".arrow-button.left")
+const rightArrowButton = document.querySelector(".arrow-button.right")
 const setResultsElement = document.getElementById("set-results")
 const modalInfo = document.getElementById("modal-info")
 const resultsButton = document.getElementById("button--results")
@@ -25,8 +30,17 @@ const saveButton = document.getElementById("save-button")
 
 let inputSet = parseInt(inputField.value, 2)
 let circuitResultData
-let jsonData = null
+let jsonData
+let circuitData
+let numberOfInputs
+let circuitNumber
+let circuitsCount
 let circuitIndex = 0
+
+let sliderWidth
+let realSliderWidth
+let sliderPosition = 0
+
 let processedData = []
 let currentSchemes = [] // Схемы, которые отображаются в таблице
 let loadedSchemes = [] // Все загруженные схемы
@@ -69,17 +83,29 @@ visualizeButton.addEventListener("click", async () => {
                     throw new Error("The JSON data is not an array")
                 }
 
-                const circuitData = jsonData[circuitIndex]
+                circuitsCount = jsonData.length
+                if (circuitsCount === 1) {
+                    leftArrowButton.style.display = "none"
+                    rightArrowButton.style.display = "none"
+                }
+                circuitNumber = jsonData[circuitIndex].number
+                updateCircuitNumber()
 
-                const numberOfInputs = circuitData.countInputs
+                circuitData = jsonData[circuitIndex]
+                numberOfInputs = circuitData.countInputs
 
                 // Устанавливаем начальное значение (столько нулей, сколько входов)
                 let binaryValue = "0".repeat(numberOfInputs)
                 inputField.value = binaryValue
 
+                sliderWidth = (1 / circuitsCount) * 100
+                realSliderWidth = Math.max(sliderWidth, 5)
+                progressSliderElement.style.width = `${realSliderWidth}%`
+                updateSliderPosition()
+
                 // Функция для увеличения значения
                 function increaseBinary() {
-                    binaryValue = (parseInt(binaryValue, 2) + 1)
+                    binaryValue = (parseInt(inputField.value, 2) + 1)
                         .toString(2)
                         .padStart(numberOfInputs, "0")
                     if (binaryValue.length > numberOfInputs) {
@@ -90,7 +116,7 @@ visualizeButton.addEventListener("click", async () => {
 
                 // Функция для уменьшения значения
                 function decreaseBinary() {
-                    binaryValue = (parseInt(binaryValue, 2) - 1)
+                    binaryValue = (parseInt(inputField.value, 2) - 1)
                         .toString(2)
                         .padStart(numberOfInputs, "0")
                     if (binaryValue.includes("-")) {
@@ -107,7 +133,6 @@ visualizeButton.addEventListener("click", async () => {
                     updateSetResults(circuitResultData)
                 })
 
-                // Привязка функций к кнопкам
                 increaseButton.addEventListener("click", () => {
                     increaseBinary()
                     inputSet = parseInt(inputField.value, 2)
@@ -117,6 +142,25 @@ visualizeButton.addEventListener("click", async () => {
                     decreaseBinary()
                     inputSet = parseInt(inputField.value, 2)
                     updateSetResults(circuitResultData)
+                })
+
+                leftArrowButton.addEventListener("click", async () => {
+                    circuitIndex =
+                        (circuitIndex - 1 + circuitsCount) % circuitsCount
+                    sliderPosition = circuitIndex * sliderWidth
+                    updateSliderPosition()
+                    circuitNumber = jsonData[circuitIndex].number
+                    updateCircuitNumber()
+                    circuitReset()
+                })
+
+                rightArrowButton.addEventListener("click", async () => {
+                    circuitIndex = (circuitIndex + 1) % circuitsCount
+                    sliderPosition = circuitIndex * sliderWidth
+                    updateSliderPosition()
+                    circuitNumber = jsonData[circuitIndex].number
+                    updateCircuitNumber()
+                    circuitReset()
                 })
 
                 visualizationSection.style.display = "flex"
@@ -271,10 +315,13 @@ saveButton.addEventListener("click", () => {
 // stopButton.addEventListener("click", stopProcessing)
 
 function fullReset() {
+    circuitIndex = 0
+    sliderPosition = 0
     circuitReset()
+    leftArrowButton.style.display = "block"
+    rightArrowButton.style.display = "block"
     visualizationSection.style.display = "none"
     resultsSection.style.display = "none"
-    circuitIndex = 0
     processedData = []
     currentSchemes = [] // Схемы, которые отображаются в таблице
     loadedSchemes = [] // Все загруженные схемы
@@ -283,6 +330,10 @@ function fullReset() {
 }
 
 function circuitReset() {
+    circuitData = jsonData[circuitIndex]
+    numberOfInputs = circuitData.countInputs
+    inputField.value = "0".repeat(numberOfInputs)
+    inputSet = parseInt(inputField.value, 2)
     setResultsElement.classList.remove("error")
     removeHoverEffect(inputField)
     increaseButton.disabled = true
@@ -293,6 +344,26 @@ function circuitReset() {
     visualPerformButton.textContent = "Perform"
     setResultsElement.innerHTML = ""
     circuitResultData = null
+}
+
+function updateCircuitNumber() {
+    circuitNumberElement.textContent = circuitNumber
+}
+
+function updateSliderPosition() {
+    progressSliderElement.style.left = `${Math.min(
+        100 - realSliderWidth,
+        sliderPosition
+    )}%`
+    console.log(
+        "circuitIndex:",
+        circuitIndex,
+        "circuitsCount:",
+        circuitsCount,
+        "sliderPosition:",
+        sliderPosition
+    )
+    console.log("sliderWidth", sliderWidth)
 }
 
 function updateSetResults(resultData) {
