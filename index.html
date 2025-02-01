@@ -32,9 +32,9 @@
                     <div class="binary-input">
                         <!-- <label for="input-set">Input Set:</label> -->
                         <div class="binary-input__controls">
-                            <button class="button--increase" id="button--increase" aria-label="Increase" disabled>▲</button>
+                            <button class="set-button" id="button--increase" aria-label="Increase" disabled>▲</button>
                             <input class="input-set" id="input-set" type="text" value="00000" readonly />
-                            <button class="button--decrease" id="button--decrease" aria-label="Decrease" disabled>▼</button>
+                            <button class="set-button" id="button--decrease" aria-label="Decrease" disabled>▼</button>
                           </div>
                     </div>
                     <button class="btn button--perform" id="visual-perform-button">Perform</button>
@@ -50,18 +50,18 @@
                 </div>
                     <div class="visualization__main">
                         <div class="progress-bar-wrapper">
-                            <button class="arrow-button left" data-direction="left">
-                                <svg class="icon" width="30" height="30">
-                                    <use href="/assets/sprites.svg#arrow--left" data-hover="/assets/sprites.svg#arrow_hover--left" data-clicked="/assets/sprites.svg#arrow_clicked--left"></use>
+                            <button class="arrow-button" id="arrow-button-left">
+                                <svg class="icon">
+                                    <use href="/assets/sprites.svg#arrow--left"></use>
                                 </svg>
                             </button>
                             <div class="progress-bar">
                                 <div class="progress-slider"></div>
-                                <p class="circuit-number">23839870</p>
+                                <p class="circuit-number"></p>
                             </div>
-                            <button class="arrow-button right" data-direction="right">
-                                <svg class="icon" width="30" height="30">
-                                    <use href="/assets/sprites.svg#arrow--right" data-hover="/assets/sprites.svg#arrow_hover--right" data-clicked="/assets/sprites.svg#arrow_clicked--right"></use>
+                            <button class="arrow-button" id="arrow-button-right">
+                                <svg class="icon">
+                                    <use href="/assets/sprites.svg#arrow--right"></use>
                                 </svg>
                             </button>
                         </div>

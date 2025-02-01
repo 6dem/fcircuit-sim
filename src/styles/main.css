@@ -46,19 +46,8 @@
     cursor: pointer;
 }
 
-.button--increase {
-    font-size: 24px;
-    color: var(--color-purple-dark);
-    background: none;
-    border: none;
-
-    &:hover {
-        cursor: pointer;
-    }
-}
-
-.button--decrease {
-    font-size: 24px;
+.set-button {
+    font-size: 25px;
     color: var(--color-purple-dark);
     background: none;
     border: none;
@@ -127,12 +116,39 @@
     height: 30px;
     width: 80%;
 }
+
 .arrow-button {
-    display: block;
+    padding: 3px;
+    margin: 0;
+    width: 29px;
+    height: 29px;
+    background: transparent;
+    border: 2px solid transparent;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: border-color 0.3s ease, background-color 0.1s ease;
 }
-.left {
+
+.arrow-button:hover {
+    border-color: white;
 }
+
+.arrow-button:active {
+    background-color: #48319d;
+}
+
+.arrow-button:active .icon {
+    transform: scale(0.95);
+    transition: transform 0.1s ease;
+}
+
 .icon {
+    width: 25px;
+    height: 25px;
+    transition: transform 0.1s ease;
 }
 .progress-bar {
     display: flex;
@@ -152,7 +168,7 @@
     background: var(--color-purple-light);
     border: 2px solid var(--color-white);
     border-radius: 30px;
-    transition: width 0.3s ease;
+    transition: left 0.3s ease;
 }
 .circuit-number {
     color: var(--color-white);
@@ -160,8 +176,6 @@
     font-weight: 700;
     justify-self: center;
     z-index: 1000;
-}
-.right {
 }
 
 .visualization__container {
