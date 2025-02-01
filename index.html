@@ -18,7 +18,6 @@
                     <input type="file" id="file-upload" style="display: none;">
                     <span class="file-name" id="file-name">No file chosen</span>
                 </div>
-                <button id="stopButton" class="btn" style="display:none;">Stop</button>
                 <div class="process-btn-group">
                     <button class="btn" id="visualize-button" disabled>Visualize</button>
                     <button class="btn" id="perform-button" disabled>Perform</button>
@@ -28,7 +27,7 @@
     </header>
 
         <main class="main">
-            <section class="visualization" id="visualization-section" style="display: none;">
+            <section class="visualization hidden" id="visualization-section">
                 <div class="visualization__side-panel visualization__side-panel--left">
                     <div class="binary-input">
                         <!-- <label for="input-set">Input Set:</label> -->
@@ -76,11 +75,11 @@
                     </div>
                     <button class="btn button--results" id="button--results" disabled>All Results</button>
                   </div>
-            <div class="modal-overlay" id="modal-overlay">
+            <div class="modal-overlay hidden" id="modal-overlay">
                 <div class="modal" id="modal">
                     <h2>Results</h2>
                     <div class="modal__info" id="modal-info"></div>
-                    <div class="table-wrapper table-wrapper--visual">
+                    <div class="table-wrapper table-wrapper--visual hidden" id="table-wrapper--visual">
                         <table class="results-table results-table--visual" id="results-table--visual">
                             <thead>
                                 <tr>
@@ -97,9 +96,9 @@
                 </div>
             </div>
             </section>
-            <section class="results" id="results-section" style="display: none;">
+            <section class="results hidden" id="results-section">
                 <div class="container">
-                    <div class="table-wrapper" id="table-wrapper" style="display: none;">
+                    <div class="table-wrapper" id="table-wrapper">
                         <table class="results-table" id="results-table">
                             <thead>
                                 <tr>
@@ -115,8 +114,8 @@
                         </table>
                     </div>
                     <div class="table-additional">
-                        <button class="btn" id="save-button" style="display: none;">Save</button>
-                        <div id="error-container" class="error-container field" style="display: none;"></div>
+                        <button class="btn hidden" id="save-button">Save</button>
+                        <div class="error-container field hidden" id="error-container"></div>
                     </div>
                 </div>
             </section>
