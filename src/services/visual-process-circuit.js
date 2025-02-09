@@ -52,15 +52,39 @@ export function processCircuit(jsonData, circuitIndex) {
             error: `Error: ${error.message}`,
         }
     }
+}
 
-    function createCircuit(format) {
-        switch (format) {
-            case "fcircuit":
-                return new Circuit()
-            case "mig":
-                return new MIG()
-            default:
-                throw new Error(`Unknown format: ${format}`)
+export function parseCircuitStructure(jsonData, circuitIndex) {
+    if (!Array.isArray(jsonData)) {
+        throw new Error("The JSON data is not an array")
+    }
+
+    const circuitData = jsonData[circuitIndex]
+
+    let circuit
+    const format = circuitData.format
+
+    try {
+        circuit = createCircuit(format)
+        circuit.parseCircuit(jsonData, +circuitData.number)
+        circuit.findAllPaths()
+        return circuit.buildDepthsDict()
+    } catch (error) {
+        console.error(`Error processing circuit ${circuitData.number}:`, error)
+        return {
+            number: circuitData.number,
+            error: `Error: ${error.message}`,
         }
+    }
+}
+
+function createCircuit(format) {
+    switch (format) {
+        case "fcircuit":
+            return new Circuit()
+        case "mig":
+            return new MIG()
+        default:
+            throw new Error(`Unknown format: ${format}`)
     }
 }

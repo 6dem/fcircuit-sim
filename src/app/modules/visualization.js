@@ -1,5 +1,9 @@
-import { processCircuit } from "../../services/visual-process-circuit.js"
+import {
+    parseCircuitStructure,
+    processCircuit,
+} from "../../services/visual-process-circuit.js"
 import { appState, setState } from "../app.js"
+import { Visualizer } from "../services/visualizer.js"
 import { disableButton, enableButton } from "../utils/disable-enable-btn.js"
 import { handleFileReadError } from "../utils/file-reader-error.js"
 import { circuitReset } from "../utils/reset.js"
@@ -31,6 +35,9 @@ const modalInfoElement = document.getElementById("modal-info")
 const modalOverlayElement = document.getElementById("modal-overlay")
 const modalCloseButton = document.getElementById("modal-close")
 
+const duration = document.getElementById("duration__input")
+const visualContainer = document.getElementById("visualization-container")
+
 function handleFileRead(event) {
     try {
         const jsonDataLocal = JSON.parse(event.target.result)
@@ -47,15 +54,41 @@ function handleFileRead(event) {
             numberOfInputs: jsonDataLocal[appState.circuitIndex].countInputs,
         })
 
-        // removeEventListeners()
+        removeEventListeners()
+
         updateUIOnFileLoad()
         setupEventListeners()
 
         showElement(visualizationSection)
+        showCircuit()
         removeVisualizeListener()
         disableButton(visualizeButton)
     } catch (error) {
         handleFileReadError(error)
+    }
+}
+
+function resetCircuit() {
+    appState.visualizer.resetCanvas()
+    console.log(appState.visualizer)
+}
+
+function showCircuit() {
+    try {
+        const depthDict = parseCircuitStructure(
+            appState.jsonData,
+            appState.circuitIndex
+        )
+        setState({
+            visualizer: new Visualizer(
+                visualContainer,
+                appState.circuitData,
+                depthDict
+            ),
+        })
+        appState.visualizer.buildCircuit()
+    } catch {
+        appState.visualizer.showError()
     }
 }
 
@@ -166,6 +199,8 @@ function handleLeftArrowClick() {
     updateSliderPosition()
     updateCircuitNumber()
     circuitReset()
+    resetCircuit()
+    showCircuit()
 }
 
 function handleRightArrowClick() {
@@ -180,6 +215,8 @@ function handleRightArrowClick() {
     updateSliderPosition()
     updateCircuitNumber()
     circuitReset()
+    resetCircuit()
+    showCircuit()
 }
 
 function setupEventListeners() {
@@ -224,6 +261,7 @@ function handleProcessCircuit(event) {
             ),
         })
 
+        console.log(appState)
         removeModalEventListeners()
 
         updateSetResults(appState.circuitResultData)
@@ -390,4 +428,9 @@ function removeHoverEffect(inputField) {
     inputField.style.cursor = ""
 }
 
-export { addVisualizeListener, removeHoverEffect, removeVisualizeListener }
+export {
+    addVisualizeListener,
+    removeHoverEffect,
+    removeVisualizeListener,
+    resetCircuit,
+}

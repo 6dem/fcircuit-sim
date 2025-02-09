@@ -57,9 +57,6 @@
     }
 }
 
-.button--perform {
-}
-
 .duration {
     display: flex;
     flex-direction: column;
@@ -94,9 +91,6 @@
     outline: none;
 }
 
-.button--play {
-}
-
 .visualization__main {
     display: flex;
     flex-direction: column;
@@ -105,7 +99,7 @@
     gap: 30px;
     padding-top: 30px;
     background-color: var(--color-blue);
-    width: 1000px;
+    width: min(1000px, 93vw);
     height: 860px;
     border-radius: 44px;
 }
@@ -217,9 +211,6 @@
 .set-results.error {
     display: grid;
     place-items: center;
-}
-
-.button--results {
 }
 
 .modal-overlay {

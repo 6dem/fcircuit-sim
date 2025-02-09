@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://unpkg.com/konva@9.3.18/konva.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./index.css">
@@ -15,7 +16,7 @@
                     <label for="file-upload" class="file-label">
                         <button class="btn" id="attach-file-button">Attach file</button>
                     </label>
-                    <input type="file" id="file-upload" style="display: none;">
+                    <input type="file" class="hidden" id="file-upload">
                     <span class="file-name" id="file-name">No file chosen</span>
                 </div>
                 <div class="process-btn-group">
