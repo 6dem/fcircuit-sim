@@ -101,7 +101,7 @@ function updateUIOnFileLoad() {
 
 function updateSliderSettings() {
     const sliderWidthLocal = (1 / appState.circuitsCount) * 100
-    const realSliderWidthLocal = Math.max(sliderWidthLocal, 5)
+    const realSliderWidthLocal = Math.max(sliderWidthLocal, 10)
     setState({
         sliderWidth: sliderWidthLocal,
         realSliderWidth: realSliderWidthLocal,
@@ -172,17 +172,29 @@ function handleVisualizeClick() {
 function handleInputClick() {
     resetBinaryInput()
     updateSetResults(appState.circuitResultData)
+    appState.visualizer.initializeCircuit(
+        appState.inputSet,
+        appState.circuitData.countInputs
+    )
 }
 
 function handleIncreaseClick() {
     increaseBinary()
     setState({ inputSet: parseInt(inputField.value, 2) })
+    appState.visualizer.initializeCircuit(
+        appState.inputSet,
+        appState.circuitData.countInputs
+    )
     updateSetResults(appState.circuitResultData)
 }
 
 function handleDecreaseClick() {
     decreaseBinary()
     setState({ inputSet: parseInt(inputField.value, 2) })
+    appState.visualizer.initializeCircuit(
+        appState.inputSet,
+        appState.circuitData.countInputs
+    )
     updateSetResults(appState.circuitResultData)
 }
 
@@ -220,7 +232,6 @@ function handleRightArrowClick() {
 }
 
 function setupEventListeners() {
-    inputField.addEventListener("click", handleInputClick)
     increaseButton.addEventListener("click", handleIncreaseClick)
     decreaseButton.addEventListener("click", handleDecreaseClick)
     leftArrowButton.addEventListener("click", handleLeftArrowClick)
@@ -260,11 +271,16 @@ function handleProcessCircuit(event) {
                 appState.circuitIndex
             ),
         })
+        appState.visualizer.initializeCircuit(
+            appState.inputSet,
+            appState.circuitData.countInputs
+        )
 
         console.log(appState)
         removeModalEventListeners()
 
         updateSetResults(appState.circuitResultData)
+        inputField.addEventListener("click", handleInputClick)
         applyHoverEffect(inputField)
         enableButton(increaseButton)
         enableButton(decreaseButton)
@@ -277,6 +293,10 @@ function handleProcessCircuit(event) {
     } catch (error) {
         return
     }
+    console.log(
+        "🚀 ~ handleProcessCircuit ~ appState.circuitResultData:",
+        appState.circuitResultData
+    )
 }
 
 function handleVisualPerformClick() {

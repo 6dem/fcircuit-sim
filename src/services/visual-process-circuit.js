@@ -13,6 +13,7 @@ export function processCircuit(jsonData, circuitIndex) {
     const format = circuitData.format
     let depth
     const setResults = []
+    let stateHistory = {}
 
     try {
         for (let set = 0; set < sets; set++) {
@@ -22,7 +23,6 @@ export function processCircuit(jsonData, circuitIndex) {
             circuit.buildXDepthsDict()
             depth = circuit.calculateDepth(circuit.allPaths)
 
-            let stateHistory = {}
             circuit.initializeCircuit(set)
             stateHistory = circuit.simulateCircuit(circuit.xDepthsDict)
             const outputValues = circuit.calculateOutput()
@@ -42,6 +42,7 @@ export function processCircuit(jsonData, circuitIndex) {
             number: circuitData.number,
             depth: depth,
             setResults: setResults,
+            stateHistory: stateHistory,
         }
 
         return result

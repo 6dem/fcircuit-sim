@@ -1,3 +1,5 @@
+import { toBinary } from "../../utils/to-binary.js"
+
 class Visualizer {
     constructor(container, circuitData, depthDict, stepTime = 1000) {
         this.container = container
@@ -91,6 +93,32 @@ class Visualizer {
 
         const container = document.getElementById("visualization-container")
         container.innerHTML = ""
+    }
+
+    initializeCircuit(inputSetNumber, inputCount) {
+        const inputSet = toBinary(inputSetNumber, inputCount)
+
+        if (this.elements.hasOwnProperty(0)) {
+            this.applyFillAndShadow(this.elements[0].shape, "0")
+        }
+
+        for (let i = 1; i < inputCount + 1; i++) {
+            const value = inputSet[i - 1]
+
+            if (this.elements[i]) {
+                this.applyFillAndShadow(this.elements[i].shape, value)
+            }
+        }
+    }
+
+    applyFillAndShadow(shape, value) {
+        const color = value === "1" ? "white" : "black"
+
+        shape.fill(color)
+        shape.shadowColor("rgba(255, 255, 255, 0.5)")
+        shape.shadowBlur(25)
+        shape.shadowOffset({ x: 0, y: 0 })
+        shape.shadowOpacity(1)
     }
 
     buildElements() {

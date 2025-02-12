@@ -154,22 +154,30 @@
     width: 100%;
 }
 .progress-slider {
+    display: flex;
+    justify-content: center;
     position: absolute;
     top: 0;
     left: 0;
     width: 10%;
     height: 100%;
+    overflow: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
     background: var(--color-purple-light);
     border: 2px solid var(--color-white);
     border-radius: 30px;
     transition: left 0.3s ease;
 }
 .circuit-number {
+    text-align: center;
     color: var(--color-white);
     font-size: 20px;
     font-weight: 700;
     justify-self: center;
     z-index: 1000;
+    text-overflow: ellipsis;
+    width: 90%;
 }
 
 .visualization__container {
