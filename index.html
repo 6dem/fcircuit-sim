@@ -8,6 +8,7 @@
     <link rel="icon" href="assets/favicon.png" type="image/x-icon">
     <title>fcircuit-sim</title>
 </head>
+
 <body>
     <header class="header">
         <div class="container">
@@ -31,7 +32,6 @@
             <section class="visualization hidden" id="visualization-section">
                 <div class="visualization__side-panel visualization__side-panel--left">
                     <div class="binary-input">
-                        <!-- <label for="input-set">Input Set:</label> -->
                         <div class="binary-input__controls">
                             <button class="set-button" id="button--increase" aria-label="Increase" disabled>▲</button>
                             <input class="input-set" id="input-set" type="text" value="00000" readonly />
@@ -53,7 +53,7 @@
                         <div class="progress-bar-wrapper">
                             <button class="arrow-button" id="arrow-button-left">
                                 <svg class="icon">
-                                    <use href="/assets/sprites.svg#arrow--left"></use>
+                                    <use href="./assets/sprites.svg#arrow--left"></use>
                                 </svg>
                             </button>
                             <div class="progress-bar">
@@ -63,11 +63,10 @@
                             </div>
                             <button class="arrow-button" id="arrow-button-right">
                                 <svg class="icon">
-                                    <use href="/assets/sprites.svg#arrow--right"></use>
+                                    <use href="./assets/sprites.svg#arrow--right"></use>
                                 </svg>
                             </button>
                         </div>
-                         
 
                         <div class="visualization__container" id="visualization-container"></div>
                     </div>
