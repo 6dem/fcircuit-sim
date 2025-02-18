@@ -1,7 +1,7 @@
 import { toBinary } from "../../utils/to-binary.js"
 
 class Visualizer {
-    constructor(container, circuitData, depthDict, stepTime = 1000) {
+    constructor(container, circuitData, depthDict) {
         this.container = container
         this.width = container.offsetWidth
         this.height = container.offsetHeight
@@ -19,14 +19,11 @@ class Visualizer {
         this.connections = {}
         this.circuitData = circuitData
         this.depthDict = depthDict
-        this.stepTime = stepTime
         this.currentStep = 0
         this.stateHistory
 
         this.spacingX = 120
         this.spacingY = 150
-
-        console.log("🚀 ~ Visualizer ~ constructor ~ this.stage:", this.stage)
     }
 
     showError() {
@@ -104,6 +101,7 @@ class Visualizer {
 
         for (let i = 1; i < inputCount + 1; i++) {
             const value = inputSet[i - 1]
+            this.elements[i].value = +value
 
             if (this.elements[i]) {
                 this.applyFillAndShadow(this.elements[i].shape, value)
@@ -111,10 +109,150 @@ class Visualizer {
         }
     }
 
-    applyFillAndShadow(shape, value) {
-        const color = value === "1" ? "white" : "black"
+    animateCircuit(stateHistory, stepTime) {
+        if (!stateHistory[0]) {
+            if (this.circuitData.format === "mig") {
+                stateHistory[0] = { 0: { state: "computed" } }
+            }
 
-        shape.fill(color)
+            for (let i = 0; i <= this.circuitData.countInputs; i++) {
+                stateHistory[0][i] = { state: "computed" }
+            }
+        }
+
+        removeDuplicateComputedElements(stateHistory)
+
+        function removeDuplicateComputedElements(stateHistory) {
+            const computedIndexes = new Set()
+
+            Object.keys(stateHistory).forEach((depth) => {
+                const elements = stateHistory[depth]
+
+                Object.entries(elements).forEach(([id, element]) => {
+                    if (computedIndexes.has(id)) {
+                        delete stateHistory[depth][id]
+                    }
+
+                    if (element.state === "computed") {
+                        computedIndexes.add(id)
+                    }
+                })
+            })
+
+            Object.keys(stateHistory).forEach((depth) => {
+                const elements = stateHistory[depth]
+
+                Object.entries(elements).forEach(([id, element]) => {})
+            })
+
+            console.log(
+                "🚀 ~ Visualizer ~ removeDuplicateComputedElements ~ computedIndexes:",
+                computedIndexes
+            )
+        }
+
+        console.log(
+            "🚀 ~ Visualizer ~ animateStep ~ stateHistory:",
+            stateHistory
+        )
+        const steps = Object.keys(stateHistory)
+            .map(Number)
+            .sort((a, b) => a - b)
+
+        const animateStep = (stepIndex) => {
+            if (stepIndex >= steps.length) return
+
+            const depth = steps[stepIndex]
+            const elements = stateHistory[depth]
+
+            Object.entries(elements).forEach(([id, { state, outputValue }]) => {
+                const element = this.elements[id]
+                if (!element) return
+
+                if (state === "uncertain") {
+                    this.applyFillAndShadow(element.shape, outputValue)
+                } else if (state === "computed") {
+                    if (element.id > this.circuitData.countInputs) {
+                        element.value = outputValue
+                        this.applyFillAndShadow(element.shape, outputValue)
+                    }
+                    Object.entries(this.connections).forEach(([key, conn]) => {
+                        const [fromId, inputIndex, toId] = key.split("-")
+                        if (fromId === id) {
+                            const value = this.elements[fromId].value
+                            const fromColor = value === 1 ? "white" : "black"
+                            let toColor = fromColor
+
+                            if (this.circuitData.format === "mig") {
+                                const fe = this.circuitData.instancesFE.find(
+                                    (fe) => fe.id == toId
+                                )
+                                const inverse = fe.inverses[inputIndex]
+                                const inverseValue = value ^ inverse
+                                toColor = inverseValue === 1 ? "white" : "black"
+                            }
+
+                            let progress = 0
+                            const totalSteps = 100
+                            const speed = (1 / (stepTime * totalSteps)) * 0.8
+
+                            const anim = new Konva.Animation(() => {
+                                progress += speed
+                                let fromStop = progress
+                                let inverseStart = progress
+
+                                if (progress >= 0.6) {
+                                    fromStop = 0.6 - progress * 0.01
+                                    inverseStart = 0.6 + progress * 0.01
+                                }
+
+                                if (progress >= 1) {
+                                    anim.stop()
+                                    progress = 1
+                                }
+
+                                conn.shape.attrs.strokeLinearGradientColorStops =
+                                    [
+                                        0,
+                                        fromColor,
+                                        fromStop,
+                                        fromColor,
+                                        inverseStart,
+                                        toColor,
+                                        progress,
+                                        toColor,
+                                        Math.min(progress + 0.01, 1),
+                                        "#808080",
+                                        1,
+                                        "#1a1a1a",
+                                    ]
+                            }, this.layer)
+
+                            const interval = 16
+                            anim.interval = interval
+
+                            anim.start()
+                        }
+                    })
+                }
+            })
+
+            if (stepTime > 0) {
+                setTimeout(() => animateStep(stepIndex + 1), stepTime * 1000)
+            } else {
+                animateStep(stepIndex + 1)
+            }
+        }
+
+        animateStep(0)
+    }
+
+    applyFillAndShadow(shape, value) {
+        if (value !== null) {
+            const color = value == 1 ? "white" : "black"
+            shape.fill(color)
+        }
+
         shape.shadowColor("rgba(255, 255, 255, 0.5)")
         shape.shadowBlur(25)
         shape.shadowOffset({ x: 0, y: 0 })
@@ -158,7 +296,7 @@ class Visualizer {
         Object.entries(this.circuitData.instancesFE).forEach(
             ([index, feData]) => {
                 const feId = feData.id
-                feData.inputsFE.forEach((inputId) => {
+                feData.inputsFE.forEach((inputId, index) => {
                     const fromElement = this.elements[inputId]
                     const toElement = this.elements[feId]
 
@@ -173,7 +311,7 @@ class Visualizer {
                         toElement.centerCoords[1],
                     ]
 
-                    const key = `${inputId}-${feId}`
+                    const key = `${inputId}-${index}-${feId}`
                     this.connections[key] = new Connection(this.layer, points)
                 })
             }
@@ -212,10 +350,7 @@ class Visualizer {
         const circuitHeight = depth * this.spacingY
 
         const circuitSize = [circuitWidth, circuitHeight]
-        console.log(
-            "🚀 ~ Visualizer ~ calculateCircuitSize ~ circuitSize:",
-            circuitSize
-        )
+
         return circuitSize
     }
 
@@ -288,6 +423,9 @@ class BaseElement {
 class ZeroElement extends BaseElement {
     constructor(layer, x, y, id) {
         super(layer, x, y, id)
+
+        this.value = 0
+
         this.width = 60
         this.height = 60
         this.calculateCenter()

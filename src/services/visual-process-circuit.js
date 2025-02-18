@@ -35,6 +35,7 @@ export function processCircuit(jsonData, circuitIndex) {
                 outputValue: outputValues,
                 delay: delay,
                 signDelay: signDelay,
+                stateHistory: stateHistory,
             })
         }
 
@@ -42,7 +43,6 @@ export function processCircuit(jsonData, circuitIndex) {
             number: circuitData.number,
             depth: depth,
             setResults: setResults,
-            stateHistory: stateHistory,
         }
 
         return result

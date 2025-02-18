@@ -52,6 +52,7 @@ function handleFileRead(event) {
             circuitData: jsonDataLocal[appState.circuitIndex],
             circuitNumber: jsonDataLocal[appState.circuitIndex].number,
             numberOfInputs: jsonDataLocal[appState.circuitIndex].countInputs,
+            duration: 1,
         })
 
         removeEventListeners()
@@ -70,7 +71,6 @@ function handleFileRead(event) {
 
 function resetCircuit() {
     appState.visualizer.resetCanvas()
-    console.log(appState.visualizer)
 }
 
 function showCircuit() {
@@ -170,17 +170,21 @@ function handleVisualizeClick() {
 }
 
 function handleInputClick() {
+    resetCircuit()
     resetBinaryInput()
-    updateSetResults(appState.circuitResultData)
+    showCircuit()
     appState.visualizer.initializeCircuit(
         appState.inputSet,
         appState.circuitData.countInputs
     )
+    updateSetResults(appState.circuitResultData)
 }
 
 function handleIncreaseClick() {
+    resetCircuit()
     increaseBinary()
     setState({ inputSet: parseInt(inputField.value, 2) })
+    showCircuit()
     appState.visualizer.initializeCircuit(
         appState.inputSet,
         appState.circuitData.countInputs
@@ -189,8 +193,10 @@ function handleIncreaseClick() {
 }
 
 function handleDecreaseClick() {
+    resetCircuit()
     decreaseBinary()
     setState({ inputSet: parseInt(inputField.value, 2) })
+    showCircuit()
     appState.visualizer.initializeCircuit(
         appState.inputSet,
         appState.circuitData.countInputs
@@ -237,15 +243,18 @@ function setupEventListeners() {
     leftArrowButton.addEventListener("click", handleLeftArrowClick)
     rightArrowButton.addEventListener("click", handleRightArrowClick)
     addVisualPerformListener()
+    addDurationInputListener()
 }
 
 function removeEventListeners() {
+    removePlayListener()
     inputField.removeEventListener("click", handleInputClick)
     increaseButton.removeEventListener("click", handleIncreaseClick)
     decreaseButton.removeEventListener("click", handleDecreaseClick)
     leftArrowButton.removeEventListener("click", handleLeftArrowClick)
     rightArrowButton.removeEventListener("click", handleRightArrowClick)
     removeVisualPerformListener()
+    removeDurationInputListener()
 }
 
 function addVisualizeListener() {
@@ -287,6 +296,7 @@ function handleProcessCircuit(event) {
         enableButton(resultsButton)
         addModalEventListeners()
         enableButton(playButton)
+        addPlayListener()
 
         disableButton(visualPerformButton)
         visualPerformButton.textContent = "Performed"
@@ -319,6 +329,53 @@ function addVisualPerformListener() {
 
 function removeVisualPerformListener() {
     visualPerformButton.removeEventListener("click", handleVisualPerformClick)
+}
+
+function handleDurationInput() {
+    let value = this.value.replace(",", ".")
+    if (!/^\d*\.?\d?$/.test(value)) {
+        value = value.slice(0, -1)
+    }
+
+    let num = parseFloat(value)
+    if (isNaN(num)) return
+
+    if (num < 0) num = 0
+    if (num > 10) num = 10
+
+    this.value = num.toFixed(value.includes(".") ? 1 : 0)
+    console.log("🚀 ~ this.value:", this.value)
+
+    setState({ duration: +this.value })
+}
+
+function addDurationInputListener() {
+    duration.addEventListener("input", handleDurationInput())
+}
+
+function removeDurationInputListener() {
+    duration.removeEventListener("input", handleDurationInput())
+}
+
+function handlePlayButton() {
+    resetCircuit()
+    showCircuit()
+    appState.visualizer.initializeCircuit(
+        appState.inputSet,
+        appState.circuitData.countInputs
+    )
+    appState.visualizer.animateCircuit(
+        appState.circuitResultData.setResults[appState.inputSet].stateHistory,
+        appState.duration
+    )
+}
+
+function addPlayListener() {
+    playButton.addEventListener("click", handlePlayButton)
+}
+
+function removePlayListener() {
+    playButton.removeEventListener("click", handlePlayButton)
 }
 
 function updateSetResults(resultData) {
