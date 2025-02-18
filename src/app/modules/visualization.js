@@ -332,7 +332,7 @@ function removeVisualPerformListener() {
 }
 
 function handleDurationInput() {
-    let value = this.value.replace(",", ".")
+    let value = duration.value.replace(",", ".")
     if (!/^\d*\.?\d?$/.test(value)) {
         value = value.slice(0, -1)
     }
@@ -343,10 +343,10 @@ function handleDurationInput() {
     if (num < 0) num = 0
     if (num > 10) num = 10
 
-    this.value = num.toFixed(value.includes(".") ? 1 : 0)
-    console.log("🚀 ~ this.value:", this.value)
+    duration.value = num.toFixed(value.includes(".") ? 1 : 0)
+    console.log("🚀 ~ this.value:", duration.value)
 
-    setState({ duration: +this.value })
+    setState({ duration: +duration.value })
 }
 
 function addDurationInputListener() {
