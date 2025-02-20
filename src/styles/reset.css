@@ -18,6 +18,14 @@ body {
     scrollbar-color: var(--color-gradient-grey);
 }
 
+button {
+    all: unset;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
 h2 {
     margin: 0;
 }
@@ -29,6 +37,15 @@ a {
 
 p {
     margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
 }
 
 input {
@@ -67,8 +84,7 @@ ul {
     font-weight: 700;
     font-size: 24px;
     outline: none;
-    border-width: 1px;
-    border-color: var(--color-white-50);
+    border: 2px solid transparent;
     box-shadow: inset 1px 1px 0 var(--color-white-25),
         5px 4px 10px var(--color-black-25);
 }
@@ -79,9 +95,19 @@ ul {
     color: var(--color-white-50);
 }
 
+.btn:focus-visible {
+    border: 2px solid var(--color-white);
+}
+
 .btn:hover:not(:disabled) {
     cursor: pointer;
     background-color: var(--color-purple-light);
+    border: 2px solid var(--color-white);
+}
+
+.btn:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease;
 }
 
 #custom-alert {
