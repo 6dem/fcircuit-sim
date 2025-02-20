@@ -18,7 +18,6 @@ const increaseButton = document.getElementById("button--increase")
 const decreaseButton = document.getElementById("button--decrease")
 
 const visualPerformButton = document.getElementById("visual-perform-button")
-const playButton = document.getElementById("play-button")
 const circuitNumberElement = document.querySelector(".circuit-number")
 const progressSliderElement = document.querySelector(".progress-slider")
 const progressBarElement = document.querySelector(".progress-bar")
@@ -36,6 +35,10 @@ const modalOverlayElement = document.getElementById("modal-overlay")
 const modalCloseButton = document.getElementById("modal-close")
 
 const duration = document.getElementById("duration__input")
+const animateButtonsWrapper = document.getElementById("animate-buttons-wrapper")
+const pauseButton = document.getElementById("pause-button")
+const playButton = document.getElementById("play-button")
+const restartButton = document.getElementById("restart-button")
 const visualContainer = document.getElementById("visualization-container")
 
 function handleFileRead(event) {
@@ -182,6 +185,7 @@ function handleInputClick() {
 
 function handleIncreaseClick() {
     resetCircuit()
+    removeAnimateControls()
     increaseBinary()
     setState({ inputSet: parseInt(inputField.value, 2) })
     showCircuit()
@@ -194,6 +198,7 @@ function handleIncreaseClick() {
 
 function handleDecreaseClick() {
     resetCircuit()
+    removeAnimateControls()
     decreaseBinary()
     setState({ inputSet: parseInt(inputField.value, 2) })
     showCircuit()
@@ -216,6 +221,7 @@ function handleLeftArrowClick() {
     })
     updateSliderPosition()
     updateCircuitNumber()
+    removeAnimateControls()
     circuitReset()
     resetCircuit()
     showCircuit()
@@ -232,6 +238,7 @@ function handleRightArrowClick() {
     })
     updateSliderPosition()
     updateCircuitNumber()
+    removeAnimateControls()
     circuitReset()
     resetCircuit()
     showCircuit()
@@ -285,7 +292,6 @@ function handleProcessCircuit(event) {
             appState.circuitData.countInputs
         )
 
-        console.log(appState)
         removeModalEventListeners()
 
         updateSetResults(appState.circuitResultData)
@@ -303,10 +309,6 @@ function handleProcessCircuit(event) {
     } catch (error) {
         return
     }
-    console.log(
-        "🚀 ~ handleProcessCircuit ~ appState.circuitResultData:",
-        appState.circuitResultData
-    )
 }
 
 function handleVisualPerformClick() {
@@ -344,17 +346,25 @@ function handleDurationInput() {
     if (num > 10) num = 10
 
     duration.value = num.toFixed(value.includes(".") ? 1 : 0)
-    console.log("🚀 ~ this.value:", duration.value)
 
     setState({ duration: +duration.value })
 }
 
 function addDurationInputListener() {
-    duration.addEventListener("input", handleDurationInput())
+    duration.addEventListener("input", handleDurationInput)
 }
 
 function removeDurationInputListener() {
-    duration.removeEventListener("input", handleDurationInput())
+    duration.removeEventListener("input", handleDurationInput)
+}
+
+function handlePauseButton() {}
+
+function addPauseListener() {
+    pauseButton.addEventListener("click", handlePauseButton)
+}
+function removePauseListener() {
+    pauseButton.removeEventListener("click", handlePauseButton)
 }
 
 function handlePlayButton() {
@@ -368,6 +378,25 @@ function handlePlayButton() {
         appState.circuitResultData.setResults[appState.inputSet].stateHistory,
         appState.duration
     )
+    setupAnimateControls()
+}
+
+function setupAnimateControls() {
+    animateButtonsWrapper.style.width = "180px"
+    playButton.style.padding = "0"
+    showElement(pauseButton)
+    addPauseListener()
+    showElement(restartButton)
+    addRestartListener()
+}
+
+function removeAnimateControls() {
+    animateButtonsWrapper.style.width = "134px"
+    playButton.style.padding = "5px 40px"
+    hideElement(pauseButton)
+    removePauseListener()
+    hideElement(restartButton)
+    removeRestartListener()
 }
 
 function addPlayListener() {
@@ -376,6 +405,27 @@ function addPlayListener() {
 
 function removePlayListener() {
     playButton.removeEventListener("click", handlePlayButton)
+}
+
+function handleRestartButton() {
+    resetCircuit()
+    showCircuit()
+    appState.visualizer.initializeCircuit(
+        appState.inputSet,
+        appState.circuitData.countInputs
+    )
+    appState.visualizer.animateCircuit(
+        appState.circuitResultData.setResults[appState.inputSet].stateHistory,
+        appState.duration
+    )
+}
+
+function addRestartListener() {
+    restartButton.addEventListener("click", handleRestartButton)
+}
+
+function removeRestartListener() {
+    restartButton.removeEventListener("click", handleRestartButton)
 }
 
 function updateSetResults(resultData) {

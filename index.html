@@ -42,12 +42,14 @@
                     <div class="field duration">
                         <div class="duration__input-wrapper">
                             <label for="duration__input">Duration:</label>
-                            <input type="text" id="duration__input" class="duration__input" value="1">
+                            <input id="duration__input" class="duration__input" type="number" value="1" min="0" max="10" step="0.1">
                         </div>
-                            <button class="btn button--play" id="play-button" disabled>
-                            ▶
-                        </button>
-                    </div>
+                        <div class="duration__btns-wrapper" id="animate-buttons-wrapper">
+                            <button class="btn duration__btn button--pause hidden" id="pause-button">∥</button>
+                            <button class="btn duration__btn button--play" id="play-button" disabled>▶</button>
+                            <button class="btn duration__btn button--restart hidden" id="restart-button">↺</button>
+                        </div>
+                        </div>
                 </div>
                     <div class="visualization__main">
                         <div class="progress-bar-wrapper">

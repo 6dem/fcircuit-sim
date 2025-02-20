@@ -1,5 +1,5 @@
+import { removeDuplicateComputedElements } from "../../utils/stateHistoryNormilize.js"
 import { toBinary } from "../../utils/to-binary.js"
-
 class Visualizer {
     constructor(container, circuitData, depthDict) {
         this.container = container
@@ -113,48 +113,17 @@ class Visualizer {
         if (!stateHistory[0]) {
             if (this.circuitData.format === "mig") {
                 stateHistory[0] = { 0: { state: "computed" } }
+            } else {
+                stateHistory[0] = {}
             }
 
-            for (let i = 0; i <= this.circuitData.countInputs; i++) {
+            for (let i = 1; i <= this.circuitData.countInputs; i++) {
                 stateHistory[0][i] = { state: "computed" }
             }
         }
 
         removeDuplicateComputedElements(stateHistory)
 
-        function removeDuplicateComputedElements(stateHistory) {
-            const computedIndexes = new Set()
-
-            Object.keys(stateHistory).forEach((depth) => {
-                const elements = stateHistory[depth]
-
-                Object.entries(elements).forEach(([id, element]) => {
-                    if (computedIndexes.has(id)) {
-                        delete stateHistory[depth][id]
-                    }
-
-                    if (element.state === "computed") {
-                        computedIndexes.add(id)
-                    }
-                })
-            })
-
-            Object.keys(stateHistory).forEach((depth) => {
-                const elements = stateHistory[depth]
-
-                Object.entries(elements).forEach(([id, element]) => {})
-            })
-
-            console.log(
-                "🚀 ~ Visualizer ~ removeDuplicateComputedElements ~ computedIndexes:",
-                computedIndexes
-            )
-        }
-
-        console.log(
-            "🚀 ~ Visualizer ~ animateStep ~ stateHistory:",
-            stateHistory
-        )
         const steps = Object.keys(stateHistory)
             .map(Number)
             .sort((a, b) => a - b)
@@ -180,26 +149,30 @@ class Visualizer {
                         const [fromId, inputIndex, toId] = key.split("-")
                         if (fromId === id) {
                             const value = this.elements[fromId].value
-                            const fromColor = value === 1 ? "white" : "black"
-                            let toColor = fromColor
-
-                            if (this.circuitData.format === "mig") {
-                                const fe = this.circuitData.instancesFE.find(
-                                    (fe) => fe.id == toId
-                                )
-                                const inverse = fe.inverses[inputIndex]
-                                const inverseValue = value ^ inverse
-                                toColor = inverseValue === 1 ? "white" : "black"
-                            }
+                            const [fromColor, toColor] =
+                                this.getConnectionColor(value, inputIndex, toId)
 
                             let progress = 0
                             const totalSteps = 100
-                            const speed = (1 / (stepTime * totalSteps)) * 0.8
+                            const speed = 1 / (stepTime * totalSteps)
 
                             const anim = new Konva.Animation(() => {
                                 progress += speed
                                 let fromStop = progress
                                 let inverseStart = progress
+
+                                if (stepTime === 0) {
+                                    conn.shape.attrs.strokeLinearGradientColorStops =
+                                        [
+                                            0,
+                                            fromColor,
+                                            0.59,
+                                            fromColor,
+                                            0.61,
+                                            toColor,
+                                        ]
+                                    return
+                                }
 
                                 if (progress >= 0.6) {
                                     fromStop = 0.6 - progress * 0.01
@@ -245,6 +218,20 @@ class Visualizer {
         }
 
         animateStep(0)
+    }
+
+    getConnectionColor(value, inputIndex, toId) {
+        const fromColor = value === 1 ? "white" : "black"
+        let toColor = fromColor
+
+        if (this.circuitData.format === "mig") {
+            const fe = this.circuitData.instancesFE.find((fe) => fe.id == toId)
+            const inverse = fe.inverses[inputIndex]
+            const inverseValue = value ^ inverse
+            toColor = inverseValue === 1 ? "white" : "black"
+        }
+
+        return [fromColor, toColor]
     }
 
     applyFillAndShadow(shape, value) {
@@ -391,6 +378,42 @@ class BaseElement {
         this.width
         this.height
         this.centerCoords
+    }
+
+    handleHover() {
+        this.shape.on("pointerenter", () => {
+            this.showIndex()
+        })
+
+        this.shape.on("pointerleave", () => {
+            this.hideIndex()
+        })
+    }
+
+    showIndex() {
+        this.idText = new Konva.Text({
+            x: this.x,
+            y: this.y,
+            width: this.width,
+            height: this.height,
+            align: "center",
+            verticalAlign: "middle",
+            text: `${this.id}`,
+            fontSize: 30,
+            fontFamily: "Roboto",
+            fontStyle: "bold",
+            fill: this.getIdColor(this.value) ?? "white",
+        })
+
+        this.layer.add(this.idText)
+    }
+
+    hideIndex() {
+        this.idText.destroy()
+    }
+
+    getIdColor(value) {
+        return value === 1 ? "black" : "white"
     }
 
     calculateCenter() {
