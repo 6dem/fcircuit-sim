@@ -110,20 +110,9 @@ class Visualizer {
     }
 
     animateCircuit(stateHistory, stepTime) {
-        if (!stateHistory[0]) {
-            if (this.circuitData.format === "mig") {
-                stateHistory[0] = { 0: { state: "computed" } }
-            } else {
-                stateHistory[0] = {}
-            }
-
-            for (let i = 1; i <= this.circuitData.countInputs; i++) {
-                stateHistory[0][i] = { state: "computed" }
-            }
-        }
-
+        this.stepTime = stepTime
+        this.initializeZeroStep(stateHistory)
         removeDuplicateComputedElements(stateHistory)
-
         const steps = Object.keys(stateHistory)
             .map(Number)
             .sort((a, b) => a - b)
@@ -133,6 +122,7 @@ class Visualizer {
 
             const depth = steps[stepIndex]
             const elements = stateHistory[depth]
+            const connectionsToAnimate = []
 
             Object.entries(elements).forEach(([id, { state, outputValue }]) => {
                 const element = this.elements[id]
@@ -146,92 +136,113 @@ class Visualizer {
                         this.applyFillAndShadow(element.shape, outputValue)
                     }
                     Object.entries(this.connections).forEach(([key, conn]) => {
-                        const [fromId, inputIndex, toId] = key.split("-")
-                        if (fromId === id) {
-                            const value = this.elements[fromId].value
-                            const [fromColor, toColor] =
-                                this.getConnectionColor(value, inputIndex, toId)
-
-                            let progress = 0
-                            const totalSteps = 100
-                            const speed = 1 / (stepTime * totalSteps)
-
-                            const anim = new Konva.Animation(() => {
-                                progress += speed
-                                let fromStop = progress
-                                let inverseStart = progress
-
-                                if (stepTime === 0) {
-                                    conn.shape.attrs.strokeLinearGradientColorStops =
-                                        [
-                                            0,
-                                            fromColor,
-                                            0.59,
-                                            fromColor,
-                                            0.61,
-                                            toColor,
-                                        ]
-                                    return
-                                }
-
-                                if (progress >= 0.6) {
-                                    fromStop = 0.6 - progress * 0.01
-                                    inverseStart = 0.6 + progress * 0.01
-                                }
-
-                                if (progress >= 1) {
-                                    anim.stop()
-                                    progress = 1
-                                }
-
-                                conn.shape.attrs.strokeLinearGradientColorStops =
-                                    [
-                                        0,
-                                        fromColor,
-                                        fromStop,
-                                        fromColor,
-                                        inverseStart,
-                                        toColor,
-                                        progress,
-                                        toColor,
-                                        Math.min(progress + 0.01, 1),
-                                        "#808080",
-                                        1,
-                                        "#1a1a1a",
-                                    ]
-                            }, this.layer)
-
-                            const interval = 16
-                            anim.interval = interval
-
-                            anim.start()
+                        if (key.startsWith(`${id}-`)) {
+                            connectionsToAnimate.push(conn)
                         }
                     })
                 }
             })
 
-            if (stepTime > 0) {
-                setTimeout(() => animateStep(stepIndex + 1), stepTime * 1000)
-            } else {
+            if (connectionsToAnimate.length === 0) {
                 animateStep(stepIndex + 1)
+                return
             }
+
+            if (stepTime === 0) {
+                connectionsToAnimate.forEach((conn) =>
+                    this.updateConnectionGradient(conn, 1)
+                )
+                animateStep(stepIndex + 1)
+                return
+            }
+
+            const duration = stepTime * 1000
+            let startTime = null
+            const anim = new Konva.Animation((frame) => {
+                if (startTime === null) startTime = frame.time
+                const elapsedTime = frame.time - startTime
+                const progress = Math.min(elapsedTime / duration, 1)
+
+                connectionsToAnimate.forEach((conn) => {
+                    this.updateConnectionGradient(conn, progress)
+                })
+
+                if (progress >= 1) {
+                    anim.stop()
+                    animateStep(stepIndex + 1)
+                }
+            }, this.layer)
+            anim.start()
         }
 
         animateStep(0)
     }
 
-    getConnectionColor(value, inputIndex, toId) {
-        const fromColor = value === 1 ? "white" : "black"
+    updateConnectionGradient(conn, progress) {
+        const { fromColor, toColor } = this.calculateConnectionColors(conn)
+
+        if (this.stepTime === 0) {
+            conn.shape.attrs.strokeLinearGradientColorStops = [
+                0,
+                fromColor,
+                0.59,
+                fromColor,
+                0.61,
+                toColor,
+            ]
+            return
+        }
+
+        let fromStop = progress
+        let inverseStart = progress
+
+        if (progress >= 0.6) {
+            fromStop = 0.6 - progress * 0.01
+            inverseStart = 0.6 + progress * 0.01
+        }
+
+        const gradientStops = [
+            0,
+            fromColor,
+            fromStop,
+            fromColor,
+            inverseStart,
+            toColor,
+            progress,
+            toColor,
+            Math.min(progress + 0.01, 1),
+            "#808080",
+            1,
+            "#1a1a1a",
+        ]
+
+        conn.shape.attrs.strokeLinearGradientColorStops = gradientStops
+    }
+
+    initializeZeroStep(stateHistory) {
+        stateHistory[0] =
+            this.circuitData.format === "mig"
+                ? { 0: { state: "computed" } }
+                : {}
+
+        for (let i = 1; i <= this.circuitData.countInputs; i++) {
+            stateHistory[0][i] = { state: "computed" }
+        }
+    }
+
+    calculateConnectionColors(conn) {
+        const [fromId, inputIndex, toId] = conn.key.split("-")
+        const value = this.elements[fromId].value
+        let fromColor = value === 1 ? "white" : "black"
         let toColor = fromColor
 
         if (this.circuitData.format === "mig") {
             const fe = this.circuitData.instancesFE.find((fe) => fe.id == toId)
-            const inverse = fe.inverses[inputIndex]
-            const inverseValue = value ^ inverse
+            const inverseValue = value ^ fe.inverses[inputIndex]
             toColor = inverseValue === 1 ? "white" : "black"
         }
 
-        return [fromColor, toColor]
+        return { fromColor, toColor }
     }
 
     applyFillAndShadow(shape, value) {
@@ -299,7 +310,11 @@ class Visualizer {
                     ]
 
                     const key = `${inputId}-${index}-${feId}`
-                    this.connections[key] = new Connection(this.layer, points)
+                    this.connections[key] = new Connection(
+                        this.layer,
+                        points,
+                        key
+                    )
                 })
             }
         )
@@ -535,7 +550,7 @@ class FunctionalElement extends BaseElement {
 }
 
 class Connection {
-    constructor(layer, points) {
+    constructor(layer, points, key) {
         this.shape = new Konva.Line({
             points: points,
             strokeWidth: 3,
@@ -547,6 +562,7 @@ class Connection {
             strokeLinearGradientEndPoint: { x: points[2], y: points[3] },
             strokeLinearGradientColorStops: [0, "#808080", 1, "#1a1a1a"],
         })
+        this.key = key
         layer.add(this.shape)
         this.shape.moveToBottom()
     }
