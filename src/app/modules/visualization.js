@@ -358,7 +358,10 @@ function removeDurationInputListener() {
     duration.removeEventListener("input", handleDurationInput)
 }
 
-function handlePauseButton() {}
+function handlePauseButton() {
+    hideElement(pauseButton)
+    showElement(playButton)
+}
 
 function addPauseListener() {
     pauseButton.addEventListener("click", handlePauseButton)
@@ -378,11 +381,11 @@ function handlePlayButton() {
         appState.circuitResultData.setResults[appState.inputSet].stateHistory,
         appState.duration
     )
+    hideElement(playButton)
     setupAnimateControls()
 }
 
 function setupAnimateControls() {
-    animateButtonsWrapper.style.width = "180px"
     playButton.style.padding = "0"
     showElement(pauseButton)
     addPauseListener()
