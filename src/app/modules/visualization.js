@@ -474,15 +474,27 @@ function updateSetResults(resultData) {
     }
 }
 
+function createInfoElement(label, value) {
+    const container = document.createElement("div")
+    const labelElement = document.createElement("span")
+    labelElement.textContent = label
+    labelElement.style.fontWeight = "700"
+
+    const valueElement = document.createElement("span")
+    valueElement.textContent = value
+
+    container.appendChild(labelElement)
+    container.appendChild(valueElement)
+
+    return container
+}
+
 function updateVisualTable(circuitResultData) {
     tableBodyVisualElement.innerHTML = ""
     modalInfoElement.innerHTML = ""
 
-    const numberInfo = document.createElement("p")
-    numberInfo.textContent = `number: ${circuitResultData.number}`
-
-    const depthInfo = document.createElement("p")
-    depthInfo.textContent = `depth: ${circuitResultData.depth}`
+    const numberInfo = createInfoElement("Number: ", circuitResultData.number)
+    const depthInfo = createInfoElement("Depth: ", circuitResultData.depth)
 
     // Добавляем строки в modalInfoElement
     modalInfoElement.appendChild(numberInfo)

@@ -298,7 +298,16 @@
 }
 
 .modal__info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     max-width: 200px;
+}
+
+.modal__info div {
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
 }
 
 .modal-close {
