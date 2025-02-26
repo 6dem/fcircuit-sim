@@ -64,6 +64,16 @@ ul {
     list-style: none;
 }
 
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+th {
+    position: sticky;
+    top: 0;
+}
+
 .container {
     max-width: 1000px;
     margin: 0 auto;
