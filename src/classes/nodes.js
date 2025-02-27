@@ -55,7 +55,7 @@ class FunctionalElement extends Vertex {
         const combinations = generateCombinations(nullIndices.length)
 
         let results = new Set() // Множество для хранения уникальных результатов вычислений функции
-        combinations.forEach((combination) => {
+        for (const combination of combinations) {
             // Подставляем значения из комбинации на место null
             nullIndices.forEach((index, i) => {
                 inputValues[index] = combination[i]
@@ -65,15 +65,14 @@ class FunctionalElement extends Vertex {
             const binaryMincode = this.mincode
                 .toString(2)
                 .padStart(2 ** this.numInputs, "0")
-
             // Находим индекс в двоичном представлении и переводим его в десятичное число
             const binaryIndex = parseInt(inputValues.join(""), 2)
-
             // Получаем значение из mincode по индексу
             const outputValue = parseInt(binaryMincode[binaryIndex], 2)
 
             results.add(outputValue)
-        })
+            if (results.size > 1) break
+        }
 
         // Если все результаты одинаковы(множество размера 1), возвращаем значение, иначе null
         return results.size === 1 ? [...results][0] : null
