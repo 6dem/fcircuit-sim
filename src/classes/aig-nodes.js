@@ -1,9 +1,10 @@
 import { InvertElement } from "./ig-nodes.js"
-class MajorityInvertElement extends InvertElement {
+
+class AndInvertElement extends InvertElement {
     constructor(inputs, index, inverses) {
-        super(23, inputs, index)
+        super(8, inputs, index)
         this.inverses = inverses
     }
 }
 
-export { MajorityInvertElement }
+export { AndInvertElement }

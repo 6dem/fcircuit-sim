@@ -20,17 +20,20 @@ class Circuit {
         this.xDepthsDict = {}
     }
 
-    parseCircuit(jsonData, circuitNumber) {
-        // Проверка, существует ли схема с таким номером
-        const circuit = jsonData.find(
-            (circuit) => circuit.number === circuitNumber
-        )
-
+    validateCircuit(circuit, circuitNumber) {
         if (!circuit || circuit.format !== "fcircuit") {
             throw new Error(
                 `Invalid format or circuit number: ${circuitNumber}`
             )
         }
+    }
+
+    parseCircuit(jsonData, circuitNumber) {
+        const circuit = jsonData.find(
+            (circuit) => circuit.number === circuitNumber
+        )
+
+        this.validateCircuit(circuit, circuitNumber)
 
         this.format = circuit.format
         this.number = circuit.number
@@ -38,6 +41,38 @@ class Circuit {
         this.countFE = circuit.countFE
         this.outputNums = circuit.outputNums
 
+        this.creatingElements(circuit)
+
+        for (const instanceKey of Object.keys(this.instancesFE)) {
+            const element = this.instancesFE[instanceKey]
+            let invalidIndex
+            if (element.index <= this.countInputs) {
+                continue
+            }
+            let isValid = true
+
+            // Проверяем каждый вход элемента
+            for (const inputIndex of element.inputsFE) {
+                if (
+                    !(inputIndex in this.instancesFE) ||
+                    inputIndex === element.index
+                ) {
+                    invalidIndex = inputIndex
+                    isValid = false // Если входа нет в `instancesFE`, элемент некорректен
+                    break
+                }
+            }
+
+            if (!isValid) {
+                throw new Error(
+                    `Invalid input index (${invalidIndex}) of a functional element (${element.index})`
+                )
+            }
+        }
+        return circuit
+    }
+
+    creatingElements(circuit) {
         for (let i = 1; i < this.countInputs + 1; i++) {
             this.inputsNums.push(i)
             this.instancesFE[i] = new InputElement(i)
@@ -50,29 +85,6 @@ class Circuit {
                 fe.inputsFE,
                 fe.id
             )
-        }
-        for (const instanceKey of Object.keys(this.instancesFE)) {
-            const element = this.instancesFE[instanceKey]
-            let invalidIndex
-            if (element.index <= this.countInputs) {
-                continue
-            }
-            let isValid = true
-
-            // Проверяем каждый вход элемента
-            for (const inputIndex of element.inputsFE) {
-                if (!(inputIndex in this.instancesFE)) {
-                    invalidIndex = inputIndex
-                    isValid = false // Если входа нет в `instancesFE`, элемент некорректен
-                    break
-                }
-            }
-
-            if (!isValid) {
-                throw new Error(
-                    `Invalid input index (${invalidIndex}) of a functional element (${element.index})`
-                )
-            }
         }
     }
 
@@ -212,6 +224,10 @@ class Circuit {
     }
 
     initializeCircuit(setNumber = 0) {
+        return this._initializeCircuitInternal(setNumber, 0)
+    }
+
+    _initializeCircuitInternal(setNumber, sliceStart) {
         if (
             setNumber < 0 ||
             setNumber > 2 ** this.countInputs - 1 ||
@@ -224,7 +240,7 @@ class Circuit {
         const combinations = generateCombinations(this.countInputs)
         let initialSet = combinations[setNumber]
         Object.keys(this.instancesFE)
-            .slice(0, this.countInputs + 1) // Берем ключи входов схемы (от 0 до countInputs)
+            .slice(sliceStart, this.countInputs + 1)
             .forEach((key, index) => {
                 const inputElement = this.instancesFE[key]
                 inputElement.outputValue = initialSet[index]
