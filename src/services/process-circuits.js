@@ -1,5 +1,4 @@
-import { Circuit } from "../classes/circuit.js"
-import { MIG } from "../classes/mig.js"
+import { createCircuit } from "../utils/create-circuit.js"
 import { formatJson } from "../utils/format-json.js"
 
 let cancelProcessing = false // Флаг для досрочной остановки
@@ -80,15 +79,4 @@ export function processAllCircuits(jsonData) {
 
     // Возвращаем только успешно обработанные данные и передаем errorData для отображения ошибок
     return { resultData: formatJson(resultData), errorData: errorData }
-
-    function createCircuit(format) {
-        switch (format) {
-            case "fcircuit":
-                return new Circuit()
-            case "mig":
-                return new MIG()
-            default:
-                throw new Error(`Unknown format: ${format}`)
-        }
-    }
 }

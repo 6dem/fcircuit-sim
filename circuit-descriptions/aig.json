@@ -1,0 +1,22 @@
+[
+  {
+    "format": "aig",
+    "number": 5736,
+    "countInputs": 5,
+    "countFE": 10,
+    "output": [15],
+    "inversion": 0,
+    "instancesFE": [
+      { "id": 6, "inputsFE": [5, 4], "inverses": [1,1]},
+      { "id": 7, "inputsFE": [2, 3], "inverses": [1,1]},
+      { "id": 8, "inputsFE": [5, 4], "inverses": [0,0]},
+      { "id": 9, "inputsFE": [3, 2], "inverses": [0,0]},
+      { "id": 10, "inputsFE": [8, 9 ], "inverses": [1,1]},
+      { "id": 11, "inputsFE": [12, 10], "inverses": [1,1]},
+      { "id": 12, "inputsFE": [6, 7], "inverses": [1,1]},
+      { "id": 13, "inputsFE": [10, 12], "inverses": [0,0]},
+      { "id": 14, "inputsFE": [11, 13], "inverses": [1,1]},
+      { "id": 15, "inputsFE": [1, 14], "inverses": [1,1]}
+    ]
+  }
+]

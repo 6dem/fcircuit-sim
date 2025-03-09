@@ -236,7 +236,10 @@ class Visualizer {
         let fromColor = value === 1 ? "white" : "black"
         let toColor = fromColor
 
-        if (this.circuitData.format === "mig") {
+        if (
+            this.circuitData.format === "mig" ||
+            this.circuitData.format === "aig"
+        ) {
             const fe = this.circuitData.instancesFE.find((fe) => fe.id == toId)
             const inverseValue = value ^ fe.inverses[inputIndex]
             toColor = inverseValue === 1 ? "white" : "black"

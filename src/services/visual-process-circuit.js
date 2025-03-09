@@ -1,5 +1,4 @@
-import { Circuit } from "../classes/circuit.js"
-import { MIG } from "../classes/mig.js"
+import { createCircuit } from "../utils/create-circuit.js"
 
 export function processCircuit(jsonData, circuitIndex) {
     if (!Array.isArray(jsonData)) {
@@ -76,16 +75,5 @@ export function parseCircuitStructure(jsonData, circuitIndex) {
             number: circuitData.number,
             error: `Error: ${error.message}`,
         }
-    }
-}
-
-function createCircuit(format) {
-    switch (format) {
-        case "fcircuit":
-            return new Circuit()
-        case "mig":
-            return new MIG()
-        default:
-            throw new Error(`Unknown format: ${format}`)
     }
 }
