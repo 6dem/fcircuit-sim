@@ -127,10 +127,15 @@ function resetBinaryInput() {
 }
 
 function updateSliderPosition() {
-    progressSliderElement.style.left = `${Math.min(
+    const shift =
+        appState.circuitIndex === appState.circuitsCount - 1 &&
+        appState.circuitsCount !== 1
+            ? 0.013
+            : 0
+    progressSliderElement.style.left = `calc(${Math.min(
         100 - appState.realSliderWidth,
         appState.sliderPosition
-    )}%`
+    )}% + ${shift}px)`
 }
 
 function updateCircuitNumber() {

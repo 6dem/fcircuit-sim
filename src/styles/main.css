@@ -146,9 +146,11 @@
 }
 
 .arrow-button {
+    box-sizing: border-box;
     margin: 0;
-    width: 29px;
-    height: 29px;
+    padding: 0 1.5px;
+    width: 30px;
+    height: 30px;
     background: transparent;
     border: 2px solid transparent;
     border-radius: 50%;
@@ -173,15 +175,18 @@
 }
 
 .icon {
-    width: 80%;
-    height: 80%;
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
     transition: transform 0.1s ease;
 }
+
 .progress-bar {
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
+    overflow: hidden;
     border: 2px solid var(--color-white);
     border-radius: 30px;
     width: 100%;
