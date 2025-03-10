@@ -261,6 +261,8 @@ class Visualizer {
     }
 
     buildElements() {
+        const elemShift = 30
+
         Object.entries(this.depthDict).forEach(([depth, nodes]) => {
             const sortedNodes =
                 depth === "0" ? [...nodes].sort((a, b) => a - b) : [...nodes]
@@ -275,16 +277,26 @@ class Visualizer {
 
                 let element
                 if (elementType === "ZeroElement") {
-                    element = new ZeroElement(this.layer, x, y, nodeId)
+                    element = new ZeroElement(
+                        this.layer,
+                        x - elemShift,
+                        y,
+                        nodeId
+                    )
                 } else if (elementType === "InputElement") {
                     element = new InputElement(
                         this.layer,
-                        x + 30,
-                        y + 30,
+                        x,
+                        y + elemShift,
                         nodeId
                     )
                 } else {
-                    element = new FunctionalElement(this.layer, x, y, nodeId)
+                    element = new FunctionalElement(
+                        this.layer,
+                        x - elemShift,
+                        y,
+                        nodeId
+                    )
                 }
 
                 this.elements[nodeId] = element
@@ -374,10 +386,10 @@ class Visualizer {
 
     scaleStage(scale) {
         if (scale === 1) return
-        const newWidth = this.circuitWidth * scale
-        const newHeight = this.circuitHeight * scale
+        const newWidth = this.width * scale
+        const newHeight = this.width * scale
 
-        const offsetX = (this.width - newWidth) / 2 - this.spacingX
+        const offsetX = (this.width - newWidth) / 2
         const offsetY = 0
 
         this.stage.scale({ x: scale, y: scale })

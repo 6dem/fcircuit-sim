@@ -260,6 +260,7 @@ function setupEventListeners() {
 
 function removeEventListeners() {
     removePlayListener()
+    removeAnimateControls()
     inputField.removeEventListener("click", handleInputClick)
     increaseButton.removeEventListener("click", handleIncreaseClick)
     decreaseButton.removeEventListener("click", handleDecreaseClick)
