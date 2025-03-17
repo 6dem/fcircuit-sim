@@ -405,6 +405,7 @@ function setupAnimateControls() {
 
 function removeAnimateControls() {
     showElement(playButton)
+    enableButton(playButton)
     animateButtonsWrapper.style.width = "134px"
     playButton.style.padding = "5px 40px"
     hideElement(pauseButton)
