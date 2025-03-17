@@ -365,7 +365,9 @@ function removeDurationInputListener() {
 }
 
 function handlePauseButton() {
+    disableButton(pauseButton)
     hideElement(pauseButton)
+    enableButton(playButton)
     showElement(playButton)
 }
 
@@ -387,6 +389,7 @@ function handlePlayButton() {
         appState.circuitResultData.setResults[appState.inputSet].stateHistory,
         appState.duration
     )
+    disableButton(playButton)
     hideElement(playButton)
     setupAnimateControls()
 }
@@ -394,6 +397,7 @@ function handlePlayButton() {
 function setupAnimateControls() {
     playButton.style.padding = "0"
     showElement(pauseButton)
+    enableButton(pauseButton)
     addPauseListener()
     showElement(restartButton)
     addRestartListener()
@@ -404,6 +408,7 @@ function removeAnimateControls() {
     animateButtonsWrapper.style.width = "134px"
     playButton.style.padding = "5px 40px"
     hideElement(pauseButton)
+    disableButton(pauseButton)
     removePauseListener()
     hideElement(restartButton)
     removeRestartListener()

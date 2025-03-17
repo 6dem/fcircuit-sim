@@ -1,4 +1,5 @@
 import { addFileEventListeners } from "./modules/fileHandlers.js"
+import { initKeyboardControls } from "./modules/keyboard-controls.js"
 
 const appState = {
     jsonData: null,
@@ -25,6 +26,7 @@ function setState(newState) {
 
 function initApp() {
     addFileEventListeners()
+    initKeyboardControls()
 }
 
 export { appState, initApp, setState }

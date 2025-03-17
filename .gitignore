@@ -11,10 +11,12 @@ draft.js
 #
 database_dump_MIG.txt
 mig-db.json
-mig-convert-to-JSON.js
 circuit-descriptions/mig-and-error — копия.json
 src/draft.html
 src/draft-data.js
 circuit-descriptions/mig-and-error-9.json
 circuit-descriptions/database_dump_AIG.txt
 circuit-descriptions/aig.txt
+src/utils/circuit-description-formatting.js
+circuit-descriptions/aig-converted.json
+circuit-descriptions/aig-db.json
