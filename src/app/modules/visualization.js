@@ -89,6 +89,7 @@ function showCircuit() {
                 depthDict
             ),
         })
+        console.log("appState", appState)
         appState.visualizer.buildCircuit()
     } catch {
         appState.visualizer.showError()
@@ -179,6 +180,8 @@ function handleVisualizeClick() {
 
 function handleInputClick() {
     resetCircuit()
+    removeAnimateControls()
+    enableButton(playButton)
     resetBinaryInput()
     showCircuit()
     appState.visualizer.initializeCircuit(
@@ -191,6 +194,7 @@ function handleInputClick() {
 function handleIncreaseClick() {
     resetCircuit()
     removeAnimateControls()
+    enableButton(playButton)
     increaseBinary()
     setState({ inputSet: parseInt(inputField.value, 2) })
     showCircuit()
@@ -204,6 +208,7 @@ function handleIncreaseClick() {
 function handleDecreaseClick() {
     resetCircuit()
     removeAnimateControls()
+    enableButton(playButton)
     decreaseBinary()
     setState({ inputSet: parseInt(inputField.value, 2) })
     showCircuit()
@@ -405,7 +410,6 @@ function setupAnimateControls() {
 
 function removeAnimateControls() {
     showElement(playButton)
-    enableButton(playButton)
     animateButtonsWrapper.style.width = "134px"
     playButton.style.padding = "5px 40px"
     hideElement(pauseButton)

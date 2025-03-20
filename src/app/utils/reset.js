@@ -15,6 +15,7 @@ const setResultsElement = document.getElementById("set-results")
 const resultsButton = document.getElementById("button--results")
 const resultsSection = document.getElementById("results-section")
 const tableContainer = document.getElementById("table-wrapper")
+const duration = document.getElementById("duration__input")
 
 function fullReset() {
     setState({
@@ -28,6 +29,7 @@ function fullReset() {
     })
 
     tableContainer.scrollTop = 0
+    duration.value = "1"
     circuitReset()
     showElement(leftArrowButton)
     showElement(rightArrowButton)
