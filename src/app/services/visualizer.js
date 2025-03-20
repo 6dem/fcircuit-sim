@@ -276,27 +276,31 @@ class Visualizer {
                 )
 
                 let element
-                if (elementType === "ZeroElement") {
-                    element = new ZeroElement(
-                        this.layer,
-                        x - elemShift,
-                        y,
-                        nodeId
-                    )
-                } else if (elementType === "InputElement") {
-                    element = new InputElement(
-                        this.layer,
-                        x,
-                        y + elemShift,
-                        nodeId
-                    )
-                } else {
-                    element = new FunctionalElement(
-                        this.layer,
-                        x - elemShift,
-                        y,
-                        nodeId
-                    )
+                switch (elementType) {
+                    case "ZeroElement":
+                        element = new ZeroElement(
+                            this.layer,
+                            x - elemShift,
+                            y,
+                            nodeId
+                        )
+                        break
+                    case "InputElement":
+                        element = new InputElement(
+                            this.layer,
+                            x,
+                            y + elemShift,
+                            nodeId
+                        )
+                        break
+                    case "FunctionalElement":
+                        element = new FunctionalElement(
+                            this.layer,
+                            x - elemShift,
+                            y,
+                            nodeId
+                        )
+                        break
                 }
 
                 this.elements[nodeId] = element
