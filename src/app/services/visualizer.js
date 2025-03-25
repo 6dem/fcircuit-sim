@@ -134,6 +134,9 @@ class Visualizer {
                     if (element.id > this.circuitData.countInputs) {
                         element.value = outputValue
                         this.applyFillAndShadow(element.shape, outputValue)
+                        if (element.isOutput) {
+                            this.applyOutputStyle(element, outputValue)
+                        }
                     }
                     Object.entries(this.connections).forEach(([key, conn]) => {
                         if (key.startsWith(`${id}-`)) {
@@ -248,6 +251,12 @@ class Visualizer {
         return { fromColor, toColor }
     }
 
+    applyStroke(shape) {
+        const strokeWidth = 4
+        shape.stroke("rgba(59,38,123,1)")
+        shape.strokeWidth(strokeWidth)
+    }
+
     applyFillAndShadow(shape, value) {
         if (value !== null) {
             const color = value == 1 ? "white" : "black"
@@ -258,6 +267,21 @@ class Visualizer {
         shape.shadowBlur(25)
         shape.shadowOffset({ x: 0, y: 0 })
         shape.shadowOpacity(1)
+    }
+
+    applyOutputStyle(element, value) {
+        this.applyStroke(element.shape)
+        if (this.circuitData.inversion !== undefined) {
+            const outputCircle = new Konva.Circle({
+                x: element.outputCoords[0],
+                y: element.outputCoords[1] + 2,
+                radius: 5,
+            })
+            const outputValue = value ^ this.circuitData.inversion
+            this.applyFillAndShadow(outputCircle, outputValue)
+            this.layer.add(outputCircle)
+            outputCircle.moveToBottom()
+        }
     }
 
     buildElements() {
@@ -294,11 +318,16 @@ class Visualizer {
                         )
                         break
                     case "FunctionalElement":
+                        const outputId =
+                            this.circuitData.output ||
+                            this.circuitData.outputNums
+                        const isOutput = outputId.includes(nodeId)
                         element = new FunctionalElement(
                             this.layer,
                             x - elemShift,
                             y,
-                            nodeId
+                            nodeId,
+                            isOutput
                         )
                         break
                 }
@@ -541,8 +570,9 @@ class InputElement extends BaseElement {
 }
 
 class FunctionalElement extends BaseElement {
-    constructor(layer, x, y, id) {
+    constructor(layer, x, y, id, isOutput) {
         super(layer, x, y, id)
+        this.isOutput = isOutput
         this.width = 85 * 0.75
         this.height = 85 * 0.75
         this.calculateCenter()

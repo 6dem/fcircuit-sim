@@ -89,7 +89,6 @@ function showCircuit() {
                 depthDict
             ),
         })
-        console.log("appState", appState)
         appState.visualizer.buildCircuit()
     } catch {
         appState.visualizer.showError()
