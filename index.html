@@ -17,6 +17,32 @@
 <body>
     <header class="header">
         <div class="container">
+            <button class="btn btn--shortcuts" id="shortcuts-button" title="Show shortcuts" aria-label="Keyboard shortcuts">
+                <svg width="20" height="20" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+                    <use href="./assets/sprites.svg#icon-keyboard"></use>
+                </svg>
+            </button>
+            <div class="field field--shortcuts hidden" id="shortcuts-field">
+                <ul class="field--shortcuts__list">
+                    <li>Keyboard shortcuts <span class="field--shortcuts__keys">?</span></li>
+                    <li>Attach file <span class="field--shortcuts__keys">F</span></li>
+                    <li>Visualize <span class="field--shortcuts__keys">V</span></li>
+                    <li>Perform <span class="field--shortcuts__keys">P</span></li>
+                    <div class="field--shortcuts__title">Visualize section</div>
+                    <li>Next circuit <span class="field--shortcuts__keys">Shift + ⇨</span></li>
+                    <li>Prev circuit <span class="field--shortcuts__keys">Shift + ⇦</span></li>
+                    <li>Increase set <span class="field--shortcuts__keys">Shift + ⇧</span></li>
+                    <li>Decrease set <span class="field--shortcuts__keys">Shift + ⇩</span></li>
+                    <li>Perform circuit <span class="field--shortcuts__keys">Shift + P</span></li>
+                    <li>Start/Stop<span class="field--shortcuts__keys">Shift + Space</span></li>
+                    <li>Duration focus <span class="field--shortcuts__keys">Shift + D</span></li>
+                    <li>Circuit results <span class="field--shortcuts__keys">R</span></li>
+                    <li>Close modal <span class="field--shortcuts__keys">Esc</span></li>
+                    <div class="field--shortcuts__title">Perform section</div>
+                    <li>Save results <span class="field--shortcuts__keys">S</span></li>
+                </ul>
+            </div>
+            <div class="shortcuts-wrapper hidden"></div>
             <div class="header-wrapper">
                 <div class="file-upload-wrapper">
                     <label for="file-upload" class="file-label">

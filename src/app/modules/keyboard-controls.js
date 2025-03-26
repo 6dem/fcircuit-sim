@@ -1,4 +1,13 @@
+import { hideElement, showElement } from "../utils/show-hide-element.js"
+
+const shortcutsButton = document.getElementById("shortcuts-button")
+const shortcutsField = document.getElementById("shortcuts-field")
+
 const keyBindings = [
+    {
+        code: "Slash",
+        action: () => document.getElementById("shortcuts-button")?.click(),
+    },
     {
         code: "Escape",
         action: () => document.getElementById("modal-overlay")?.click(),
@@ -100,10 +109,32 @@ function handleKeydown(event) {
     }
 }
 
-export function initKeyboardControls() {
+function initKeyboardControls() {
     document.addEventListener("keydown", handleKeydown)
 }
 
-export function removeKeyboardControls() {
+function removeKeyboardControls() {
     document.removeEventListener("keydown", handleKeydown)
 }
+
+function handleShortcutsClick() {
+    const isHidden = shortcutsField.classList.contains("hidden")
+
+    if (isHidden) {
+        showElement(shortcutsField)
+        shortcutsButton.setAttribute("title", "Hide shortcuts")
+        shortcutsButton.setAttribute("aria-label", "Hide keyboard shortcuts")
+    } else {
+        hideElement(shortcutsField)
+        shortcutsButton.setAttribute("title", "Show shortcuts")
+        shortcutsButton.setAttribute("aria-label", "Show keyboard shortcuts")
+    }
+}
+
+function initShortcutsToggle() {
+    if (!shortcutsButton || !shortcutsField) return
+
+    shortcutsButton.addEventListener("click", handleShortcutsClick)
+}
+
+export { initKeyboardControls, initShortcutsToggle, removeKeyboardControls }

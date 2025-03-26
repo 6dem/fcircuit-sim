@@ -6,6 +6,7 @@ html {
     min-height: 100vh;
     scroll-behavior: smooth;
     background: var(--color-gradient-grey), var(--color-pink-bg);
+    overflow-x: hidden;
 }
 
 body {
@@ -75,6 +76,7 @@ th {
 }
 
 .container {
+    position: relative;
     max-width: 1000px;
     margin: 0 auto;
 }
@@ -97,6 +99,7 @@ th {
     border: 2px solid transparent;
     box-shadow: inset 1px 1px 0 var(--color-white-25),
         5px 4px 10px var(--color-black-25);
+    transition: background 0.3s ease;
 }
 
 .btn:disabled {
