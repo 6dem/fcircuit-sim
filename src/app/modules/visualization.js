@@ -82,12 +82,23 @@ function showCircuit() {
             appState.jsonData,
             appState.circuitIndex
         )
+        const visualizerInstance = new Visualizer(
+            visualContainer,
+            appState.circuitData,
+            depthDict
+        )
+        const proxiedVisualizer = new Proxy(visualizerInstance, {
+            set(target, property, value) {
+                target[property] = value
+
+                if (property === "isAnimationComplete" && value === true) {
+                    disableButton(pauseButton)
+                }
+                return true
+            },
+        })
         setState({
-            visualizer: new Visualizer(
-                visualContainer,
-                appState.circuitData,
-                depthDict
-            ),
+            visualizer: proxiedVisualizer,
         })
         appState.visualizer.buildCircuit()
     } catch {
@@ -371,6 +382,7 @@ function removeDurationInputListener() {
 function handlePauseButton() {
     disableButton(pauseButton)
     hideElement(pauseButton)
+    appState.visualizer.stopAnimation()
     enableButton(playButton)
     showElement(playButton)
 }
@@ -383,16 +395,21 @@ function removePauseListener() {
 }
 
 function handlePlayButton() {
-    resetCircuit()
-    showCircuit()
-    appState.visualizer.initializeCircuit(
-        appState.inputSet,
-        appState.circuitData.countInputs
-    )
-    appState.visualizer.animateCircuit(
-        appState.circuitResultData.setResults[appState.inputSet].stateHistory,
-        appState.duration
-    )
+    if (!appState.visualizer.currentAnimation) {
+        resetCircuit()
+        showCircuit()
+        appState.visualizer.initializeCircuit(
+            appState.inputSet,
+            appState.circuitData.countInputs
+        )
+        appState.visualizer.animateCircuit(
+            appState.circuitResultData.setResults[appState.inputSet]
+                .stateHistory,
+            appState.duration
+        )
+    } else {
+        appState.visualizer.currentAnimation.start()
+    }
     disableButton(playButton)
     hideElement(playButton)
     setupAnimateControls()
@@ -427,6 +444,8 @@ function removePlayListener() {
 }
 
 function handleRestartButton() {
+    hideElement(playButton)
+    disableButton(playButton)
     resetCircuit()
     showCircuit()
     appState.visualizer.initializeCircuit(
@@ -437,6 +456,8 @@ function handleRestartButton() {
         appState.circuitResultData.setResults[appState.inputSet].stateHistory,
         appState.duration
     )
+    showElement(pauseButton)
+    enableButton(pauseButton)
 }
 
 function addRestartListener() {

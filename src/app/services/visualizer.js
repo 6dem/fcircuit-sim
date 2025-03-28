@@ -19,11 +19,13 @@ class Visualizer {
         this.connections = {}
         this.circuitData = circuitData
         this.depthDict = depthDict
-        this.currentStep = 0
         this.stateHistory
 
         this.spacingX = 120
         this.spacingY = 150
+
+        this.currentAnimation = null
+        this.isAnimationComplete = false
     }
 
     showError() {
@@ -109,7 +111,20 @@ class Visualizer {
         }
     }
 
+    stopAnimation() {
+        if (this.currentAnimation) {
+            this.currentAnimation.stop()
+        }
+    }
+
+    resumeAnimation() {
+        if (this.currentAnimation) {
+            this.currentAnimation.start()
+        }
+    }
+
     animateCircuit(stateHistory, stepTime) {
+        this.isAnimationComplete = false
         this.stepTime = stepTime
         this.initializeZeroStep(stateHistory)
         removeDuplicateComputedElements(stateHistory)
@@ -118,7 +133,10 @@ class Visualizer {
             .sort((a, b) => a - b)
 
         const animateStep = (stepIndex) => {
-            if (stepIndex >= steps.length) return
+            if (stepIndex >= steps.length) {
+                this.isAnimationComplete = true
+                return
+            }
 
             const depth = steps[stepIndex]
             const elements = stateHistory[depth]
@@ -175,6 +193,7 @@ class Visualizer {
                     animateStep(stepIndex + 1)
                 }
             }, this.layer)
+            this.currentAnimation = anim
             anim.start()
         }
 
