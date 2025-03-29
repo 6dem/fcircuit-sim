@@ -35,6 +35,11 @@ const keyBindings = [
         action: () => document.getElementById("arrow-button-right")?.click(),
     },
     {
+        code: "KeyZ",
+        shift: true,
+        action: () => document.getElementById("input-set")?.click(),
+    },
+    {
         code: "ArrowUp",
         shift: true,
         action: () => document.getElementById("button--increase")?.click(),
