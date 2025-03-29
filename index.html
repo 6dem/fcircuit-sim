@@ -64,9 +64,17 @@
                 <div class="visualization__side-panel visualization__side-panel--left">
                     <div class="binary-input">
                         <div class="binary-input__controls">
-                            <button class="set-button" id="button--increase" aria-label="Increase" disabled>▲</button>
+                            <button class="set-button" id="button--increase" aria-label="Increase" disabled>
+                                <svg width="30" height="30" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+                                    <use href="./assets/sprites.svg#chevron-up"></use>
+                                </svg>
+                            </button>
                             <input class="input-set" id="input-set" type="text" value="00000" readonly />
-                            <button class="set-button" id="button--decrease" aria-label="Decrease" disabled>▼</button>
+                            <button class="set-button" id="button--decrease" aria-label="Decrease" disabled>
+                                <svg width="30" height="30" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+                                    <use href="./assets/sprites.svg#chevron-down"></use>
+                                </svg>
+                            </button>
                           </div>
                     </div>
                     <button class="btn button--perform" id="visual-perform-button">Perform</button>
@@ -76,16 +84,28 @@
                             <input id="duration__input" class="duration__input" type="number" value="1" min="0" max="10" step="0.1">
                         </div>
                         <div class="duration__btns-wrapper" id="animate-buttons-wrapper">
-                            <button class="btn duration__btn button--pause hidden" id="pause-button">∥</button>
-                            <button class="btn duration__btn button--play" id="play-button" disabled>▶</button>
-                            <button class="btn duration__btn button--restart hidden" id="restart-button">↺</button>
+                            <button class="btn duration__btn button--pause hidden" id="pause-button">
+                                <svg width="24" height="24" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+                                    <use href="./assets/sprites.svg#pause"></use>
+                                </svg>
+                            </button>
+                            <button class="btn duration__btn button--play" id="play-button" disabled>
+                                <svg width="24" height="24" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+                                    <use href="./assets/sprites.svg#play"></use>
+                                </svg>
+                            </button>
+                            <button class="btn duration__btn button--restart hidden" id="restart-button">
+                                <svg width="24" height="24" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+                                    <use href="./assets/sprites.svg#restart"></use>
+                                </svg>
+                            </button>
                         </div>
                         </div>
                 </div>
                     <div class="visualization__main">
                         <div class="progress-bar-wrapper">
                             <button class="arrow-button" id="arrow-button-left">
-                                <svg class="icon" width="24px" height="24px" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+                                <svg class="icon" width="26px" height="26px" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
                                     <use href="./assets/sprites.svg#arrow--left"></use>
                                 </svg>
                             </button>
@@ -95,7 +115,7 @@
                                 </div>
                             </div>
                             <button class="arrow-button" id="arrow-button-right">
-                                <svg class="icon" width="24px" height="24px" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+                                <svg class="icon" width="26px" height="26px" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
                                     <use href="./assets/sprites.svg#arrow--right"></use>
                                 </svg>
                             </button>

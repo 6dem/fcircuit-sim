@@ -239,6 +239,7 @@ function handleLeftArrowClick() {
         sliderPosition: circuitIndexLocal * appState.sliderWidth,
         circuitNumber: appState.jsonData[circuitIndexLocal].number,
     })
+    inputField.removeEventListener("click", handleInputClick)
     updateSliderPosition()
     updateCircuitNumber()
     removeAnimateControls()
@@ -256,6 +257,7 @@ function handleRightArrowClick() {
         sliderPosition: circuitIndexLocal * appState.sliderWidth,
         circuitNumber: appState.jsonData[circuitIndexLocal].number,
     })
+    inputField.removeEventListener("click", handleInputClick)
     updateSliderPosition()
     updateCircuitNumber()
     removeAnimateControls()

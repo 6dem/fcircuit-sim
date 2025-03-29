@@ -51,9 +51,25 @@
     color: var(--color-purple-dark);
     background: none;
     border: none;
+    transition: background 0.3s ease;
 
     &:hover {
         cursor: pointer;
+    }
+    &:disabled {
+        cursor: not-allowed;
+        color: var(--color-purple-light);
+    }
+    &:focus-visible {
+        color: var(--color-white);
+    }
+    &:hover:not(:disabled) {
+        cursor: pointer;
+        color: var(--color-white);
+    }
+    &:active {
+        transform: scale(0.95);
+        transition: transform 0.1s ease;
     }
 }
 
@@ -146,6 +162,7 @@
 }
 
 .arrow-button {
+    color: var(--color-white);
     box-sizing: border-box;
     margin: 0;
     padding: 0 1.5px;
