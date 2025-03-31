@@ -25,6 +25,11 @@ const keyBindings = [
         action: () => document.getElementById("perform-button")?.click(),
     },
     {
+        code: "KeyS",
+        shift: true,
+        action: () => document.getElementById("sign-checkbox")?.click(),
+    },
+    {
         code: "ArrowLeft",
         shift: true,
         action: () => document.getElementById("arrow-button-left")?.click(),

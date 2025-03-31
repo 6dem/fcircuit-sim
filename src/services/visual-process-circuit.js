@@ -26,7 +26,9 @@ export function processCircuit(jsonData, circuitIndex) {
             stateHistory = circuit.simulateCircuit(circuit.xDepthsDict)
             const outputValues = circuit.calculateOutput()
             const delay = circuit.calculateDelay(stateHistory)
-            const signChains = circuit.searchSignChains(circuit.allPaths)
+            const [signChains, fullStrPath] = circuit.searchSignChains(
+                circuit.allPaths
+            )
             const signDelay = circuit.calculateSignDelay(signChains)
 
             setResults.push({
@@ -34,6 +36,7 @@ export function processCircuit(jsonData, circuitIndex) {
                 outputValue: outputValues,
                 delay: delay,
                 signDelay: signDelay,
+                signChains: fullStrPath,
                 stateHistory: stateHistory,
             })
         }

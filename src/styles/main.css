@@ -152,6 +152,110 @@
     border-radius: 44px;
 }
 
+.circuit-options-wrapper {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 15px;
+    height: 30px;
+    width: 80%;
+}
+
+.sign-chains-check-group {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 5px;
+    height: 100%;
+}
+
+.checkbox-wrapper:hover .check {
+    stroke-dashoffset: 0;
+}
+
+.checkbox-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+}
+
+.checkbox-wrapper .background {
+    fill: var(--color-purple-dark);
+    box-shadow: 5px 4px 10px var(--color-black-25);
+    transition: ease all 0.6s;
+    -webkit-transition: ease all 0.6s;
+}
+
+.checkbox-wrapper .stroke {
+    fill: none;
+    stroke: #fff;
+    stroke-miterlimit: 10;
+    stroke-width: 2px;
+    stroke-dashoffset: 100;
+    stroke-dasharray: 100;
+    transition: ease all 0.6s;
+    -webkit-transition: ease all 0.6s;
+}
+
+.checkbox-wrapper .check {
+    fill: none;
+    stroke: #fff;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2px;
+    stroke-dashoffset: 22;
+    stroke-dasharray: 22;
+    transition: ease all 0.6s;
+    -webkit-transition: ease all 0.6s;
+}
+
+.checkbox-wrapper input[type="checkbox"] {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    margin: 0;
+    opacity: 0;
+    -appearance: none;
+    -webkit-appearance: none;
+}
+
+/* Стилизация чекбокса, когда он отключен */
+input[type="checkbox"]:disabled {
+    cursor: not-allowed;
+    opacity: 0.5; /* Затемнение */
+}
+
+/* Стилизация .checkbox-wrapper, когда чекбокс внутри него отключен */
+.checkbox-wrapper input:disabled + svg {
+    cursor: not-allowed;
+
+    opacity: 0.5;
+    filter: grayscale(100%);
+}
+
+.checkbox-wrapper input:disabled + svg .check {
+    stroke: var(--color-pink-bg);
+}
+
+.checkbox-wrapper input[type="checkbox"]:hover {
+    cursor: pointer;
+}
+
+.checkbox-wrapper input[type="checkbox"]:checked + svg .background {
+    fill: var(--color-purple-light);
+}
+
+.checkbox-wrapper input[type="checkbox"]:checked + svg .stroke {
+    stroke-dashoffset: 0;
+}
+
+.checkbox-wrapper input[type="checkbox"]:checked + svg .check {
+    stroke-dashoffset: 0;
+}
+
 .progress-bar-wrapper {
     display: flex;
     justify-content: center;

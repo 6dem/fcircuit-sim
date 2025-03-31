@@ -98,7 +98,7 @@ class Visualizer {
         const inputSet = toBinary(inputSetNumber, inputCount)
 
         if (this.elements.hasOwnProperty(0)) {
-            this.applyFillAndShadow(this.elements[0].shape, "0")
+            this.applyFillAndShadow(this.elements[0].shape, 0)
         }
 
         for (let i = 1; i < inputCount + 1; i++) {
@@ -106,7 +106,7 @@ class Visualizer {
             this.elements[i].value = +value
 
             if (this.elements[i]) {
-                this.applyFillAndShadow(this.elements[i].shape, value)
+                this.applyFillAndShadow(this.elements[i].shape, +value)
             }
         }
     }
@@ -253,7 +253,8 @@ class Visualizer {
     }
 
     calculateConnectionColors(conn) {
-        const [fromId, inputIndex, toId] = conn.key.split("-")
+        const [fromId, inputIndex, toId] =
+            conn.key?.split("-") ?? conn.split("-")
         const value = this.elements[fromId].value
         let fromColor = value === 1 ? "white" : "black"
         let toColor = fromColor
@@ -271,18 +272,32 @@ class Visualizer {
     }
 
     applyStroke(shape) {
-        const strokeWidth = 4
-        shape.stroke("rgba(59,38,123,1)")
-        shape.strokeWidth(strokeWidth)
+        shape.stroke("#48319d")
+        shape.strokeWidth(4)
+    }
+
+    hideStroke(shape) {
+        shape.stroke(0)
     }
 
     applyFillAndShadow(shape, value) {
-        if (value !== null) {
-            const color = value == 1 ? "white" : "black"
-            shape.fill(color)
+        let elemColor
+        switch (value) {
+            case 1:
+                elemColor = "white"
+                break
+            case 0:
+                elemColor = "black"
+                break
         }
 
-        shape.shadowColor("rgba(255, 255, 255, 0.5)")
+        if (elemColor) {
+            shape.fill(elemColor)
+        }
+
+        let shadowColor = "rgba(255, 255, 255, 0.5)"
+
+        shape.shadowColor(shadowColor)
         shape.shadowBlur(25)
         shape.shadowOffset({ x: 0, y: 0 })
         shape.shadowOpacity(1)
@@ -399,7 +414,7 @@ class Visualizer {
 
         return {
             x: centerX + (index - (total - 1) / 2) * this.spacingX,
-            y: depth * this.spacingY + 50,
+            y: depth * this.spacingY + 30,
         }
     }
 
@@ -448,6 +463,50 @@ class Visualizer {
         this.stage.position({ x: offsetX, y: offsetY })
         this.stage.batchDraw()
     }
+
+    showSignChains(signChains) {
+        for (const [key, value] of Object.entries(signChains)) {
+            key.split("-").forEach((elemIndex) => {
+                this.applyStroke(this.elements[elemIndex].shape)
+            })
+            value.forEach((path) => {
+                path.split("_").forEach((conn) => {
+                    delete this.connections[conn].shape.attrs
+                        .strokeLinearGradientColorStops
+                    this.connections[conn].shape.opacity(1)
+                    this.connections[conn].shape.stroke("#48319d")
+                })
+            })
+        }
+    }
+
+    hideSignChains(signChains) {
+        for (const [key, value] of Object.entries(signChains)) {
+            key.split("-").forEach((elemIndex) => {
+                if (!this.elements[elemIndex].isOutput) {
+                    this.hideStroke(this.elements[elemIndex].shape)
+                }
+            })
+            value.forEach((path) => {
+                path.split("_").forEach((conn) => {
+                    this.connections[conn].shape.opacity(0.5)
+                    const { fromColor, toColor } =
+                        this.calculateConnectionColors(conn)
+
+                    this.connections[
+                        conn
+                    ].shape.attrs.strokeLinearGradientColorStops = [
+                        0,
+                        fromColor,
+                        0.59,
+                        fromColor,
+                        0.61,
+                        toColor,
+                    ]
+                })
+            })
+        }
+    }
 }
 
 class BaseElement {
@@ -463,11 +522,11 @@ class BaseElement {
     }
 
     handleHover() {
-        this.shape.on("pointerenter", () => {
+        this.shape.on("mouseover", () => {
             this.showIndex()
         })
 
-        this.shape.on("pointerleave", () => {
+        this.shape.on("mouseout", () => {
             this.hideIndex()
         })
     }

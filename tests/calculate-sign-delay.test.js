@@ -15,7 +15,7 @@ describe("Circuit class calculateSignDelay method", () => {
         circuit.buildDepthsDict()
         circuit.initializeCircuit(2)
         circuit.simulateCircuit(circuit.depthsDict)
-        const signChains = circuit.searchSignChains(circuit.allPaths)
+        const [signChains, _] = circuit.searchSignChains(circuit.allPaths)
         expect(circuit.calculateSignDelay(signChains)).toEqual(2)
     })
 
@@ -23,7 +23,7 @@ describe("Circuit class calculateSignDelay method", () => {
         circuit.buildXDepthsDict()
         circuit.initializeCircuit(2)
         circuit.simulateCircuit(circuit.xDepthsDict)
-        const signChains = circuit.searchSignChains(circuit.allPaths)
+        const [signChains, _] = circuit.searchSignChains(circuit.allPaths)
         expect(circuit.calculateSignDelay(signChains)).toEqual(2)
     })
 
@@ -31,7 +31,7 @@ describe("Circuit class calculateSignDelay method", () => {
         circuit.buildXDepthsDict()
         circuit.initializeCircuit()
         circuit.simulateCircuit(circuit.xDepthsDict)
-        const signChains = circuit.searchSignChains(circuit.allPaths)
+        const [signChains, _] = circuit.searchSignChains(circuit.allPaths)
         expect(circuit.calculateSignDelay(signChains)).toEqual(3)
     })
 })
@@ -49,7 +49,7 @@ describe("MIG class calculateSignDelay method", () => {
         circuit.buildDepthsDict()
         circuit.initializeCircuit(2)
         circuit.simulateCircuit(circuit.depthsDict)
-        const signChains = circuit.searchSignChains(circuit.allPaths)
+        const [signChains, _] = circuit.searchSignChains(circuit.allPaths)
         expect(circuit.calculateSignDelay(signChains)).toEqual(3)
     })
 
@@ -57,7 +57,7 @@ describe("MIG class calculateSignDelay method", () => {
         circuit.buildXDepthsDict()
         circuit.initializeCircuit()
         circuit.simulateCircuit(circuit.xDepthsDict)
-        const signChains = circuit.searchSignChains(circuit.allPaths)
+        const [signChains, _] = circuit.searchSignChains(circuit.allPaths)
         expect(circuit.calculateSignDelay(signChains)).toEqual(0)
     })
 
@@ -65,7 +65,7 @@ describe("MIG class calculateSignDelay method", () => {
         circuit.buildXDepthsDict()
         circuit.initializeCircuit(18)
         circuit.simulateCircuit(circuit.xDepthsDict)
-        const signChains = circuit.searchSignChains(circuit.allPaths)
+        const [signChains, _] = circuit.searchSignChains(circuit.allPaths)
         expect(circuit.calculateSignDelay(signChains)).toEqual(2)
     })
 })

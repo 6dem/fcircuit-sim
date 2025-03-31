@@ -21,7 +21,8 @@ describe("Circuit class searchSignChains method", () => {
         circuit.buildDepthsDict()
         circuit.initializeCircuit(2)
         circuit.simulateCircuit(circuit.depthsDict)
-        expect(circuit.searchSignChains(circuit.allPaths)).toEqual([
+        const [signChains, _] = circuit.searchSignChains(circuit.allPaths)
+        expect(signChains).toEqual([
             [8, 5, 2],
             [8, 6, 1],
             [8, 6, 3],
@@ -34,7 +35,8 @@ describe("Circuit class searchSignChains method", () => {
         circuit.buildXDepthsDict()
         circuit.initializeCircuit(2)
         circuit.simulateCircuit(circuit.xDepthsDict)
-        expect(circuit.searchSignChains(circuit.allPaths)).toEqual([
+        const [signChains, _] = circuit.searchSignChains(circuit.allPaths)
+        expect(signChains).toEqual([
             [8, 5, 2],
             [8, 6, 1],
             [8, 6, 3],
@@ -47,7 +49,8 @@ describe("Circuit class searchSignChains method", () => {
         circuit.buildXDepthsDict()
         circuit.initializeCircuit()
         circuit.simulateCircuit(circuit.xDepthsDict)
-        expect(circuit.searchSignChains(circuit.allPaths)).toEqual([
+        const [signChains, _] = circuit.searchSignChains(circuit.allPaths)
+        expect(signChains).toEqual([
             [8, 5, 2],
             [9, 7, 5, 2],
             [10, 3],
@@ -76,7 +79,8 @@ describe("MIG class searchSignChains method", () => {
         circuit.buildDepthsDict()
         circuit.initializeCircuit(2)
         circuit.simulateCircuit(circuit.depthsDict)
-        expect(circuit.searchSignChains(circuit.allPaths)).toEqual([
+        const [signChains, _] = circuit.searchSignChains(circuit.allPaths)
+        expect(signChains).toEqual([
             [13, 9, 0],
             [13, 9, 2],
             [13, 10, 5],
@@ -88,14 +92,16 @@ describe("MIG class searchSignChains method", () => {
         circuit.buildXDepthsDict()
         circuit.initializeCircuit()
         circuit.simulateCircuit(circuit.xDepthsDict)
-        expect(circuit.searchSignChains(circuit.allPaths)).toEqual([])
+        const [signChains, _] = circuit.searchSignChains(circuit.allPaths)
+        expect(signChains).toEqual([])
     })
 
     test("search significant chains on 18th set | extended depths dict", () => {
         circuit.buildXDepthsDict()
         circuit.initializeCircuit(18)
         circuit.simulateCircuit(circuit.xDepthsDict)
-        expect(circuit.searchSignChains(circuit.allPaths)).toEqual([
+        const [signChains, _] = circuit.searchSignChains(circuit.allPaths)
+        expect(signChains).toEqual([
             [13, 9, 0],
             [13, 9, 2],
             [13, 12, 1],

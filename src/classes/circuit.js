@@ -378,9 +378,11 @@ class Circuit {
 
         const processedPaths = {}
         const signChains = []
+        const fullStrPaths = {}
         const dupInpElements = new Set()
         allPaths.forEach((path) => {
             const strPath = path.join("-")
+            const forwardStrPath = [...path].reverse().join("-")
             let relevantArr
             if (strPath in processedPaths) {
                 relevantArr = processedPaths[strPath].length
@@ -390,11 +392,13 @@ class Circuit {
                 processedPaths[strPath] = [[]]
             }
             let significant = false
+            const fullPath = []
             for (const feIndex of path) {
+                if (feIndex <= this.countInputs) continue
+
                 const fePos = path.indexOf(feIndex)
                 let oldInputValues = []
                 let newInputValues = []
-                if (feIndex <= this.countInputs) continue
                 const fe = this.instancesFE[feIndex]
                 if (new Set(fe.inputsFE).size !== fe.inputsFE.length) {
                     dupInpElements.add(feIndex)
@@ -402,21 +406,29 @@ class Circuit {
                 oldInputValues = fe.getInputValues(this)[0]
                 newInputValues = [...oldInputValues]
 
-                for (const inputIndex in fe.inputsFE) {
+                for (
+                    let inputNumber = 0;
+                    inputNumber < fe.inputsFE.length;
+                    inputNumber++
+                ) {
                     if (
-                        path[fePos + 1] === fe.inputsFE[inputIndex] &&
+                        path[fePos + 1] === fe.inputsFE[inputNumber] &&
                         !checkDuplicate(
                             dupInpElements,
                             feIndex,
                             processedPaths,
                             strPath,
                             fePos,
-                            +inputIndex
+                            +inputNumber
                         )
                     ) {
-                        processedPaths[strPath][relevantArr].push(+inputIndex)
-                        newInputValues[inputIndex] =
-                            1 - oldInputValues[inputIndex]
+                        fullPath.push(
+                            `${fe.inputsFE[inputNumber]}-${inputNumber}-${fe.index}`
+                        )
+
+                        processedPaths[strPath][relevantArr].push(+inputNumber)
+                        newInputValues[inputNumber] =
+                            1 - oldInputValues[inputNumber]
                         const originalOutput = fe.outputValue
                         const newOutput = fe.computeFunction(
                             null,
@@ -433,10 +445,15 @@ class Circuit {
                 }
             }
             if (significant) {
+                if (!fullStrPaths[forwardStrPath]) {
+                    fullStrPaths[forwardStrPath] = []
+                }
+                fullStrPaths[forwardStrPath].push(fullPath.reverse().join("_"))
+
                 signChains.push(path)
             }
         })
-        return signChains
+        return [signChains, fullStrPaths]
     }
 
     calculateSignDelay(signChains) {

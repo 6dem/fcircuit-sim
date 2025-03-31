@@ -75,6 +75,10 @@ th {
     top: 0;
 }
 
+label {
+    color: var(--color-white);
+}
+
 .container {
     position: relative;
     max-width: 1000px;

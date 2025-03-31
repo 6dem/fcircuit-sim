@@ -4,6 +4,7 @@ import {
 } from "../../services/visual-process-circuit.js"
 import { appState, setState } from "../app.js"
 import { Visualizer } from "../services/visualizer.js"
+import { setCheckboxUnchecked } from "../utils/check-uncheck.js"
 import { disableButton, enableButton } from "../utils/disable-enable-btn.js"
 import { handleFileReadError } from "../utils/file-reader-error.js"
 import { circuitReset } from "../utils/reset.js"
@@ -21,6 +22,7 @@ const visualPerformButton = document.getElementById("visual-perform-button")
 const circuitNumberElement = document.querySelector(".circuit-number")
 const progressSliderElement = document.querySelector(".progress-slider")
 const progressBarElement = document.querySelector(".progress-bar")
+const signCheckbox = document.getElementById("sign-checkbox")
 const leftArrowButton = document.getElementById("arrow-button-left")
 const rightArrowButton = document.getElementById("arrow-button-right")
 const setResultsElement = document.getElementById("set-results")
@@ -93,6 +95,15 @@ function showCircuit() {
 
                 if (property === "isAnimationComplete" && value === true) {
                     disableButton(pauseButton)
+                    const isEmpty =
+                        Object.keys(
+                            appState.circuitResultData.setResults[
+                                appState.inputSet
+                            ].signChains
+                        ).length === 0
+                    if (!isEmpty) {
+                        enableButton(signCheckbox)
+                    }
                 }
                 return true
             },
@@ -122,6 +133,31 @@ function updateSliderSettings() {
     })
     progressSliderElement.style.width = `${realSliderWidthLocal}%`
     updateSliderPosition()
+}
+
+function handleCheckboxChange(event) {
+    const isChecked = event.target.checked
+    if (isChecked) {
+        appState.visualizer.showSignChains(
+            appState.circuitResultData.setResults[appState.inputSet].signChains
+        )
+    } else {
+        appState.visualizer.hideSignChains(
+            appState.circuitResultData.setResults[appState.inputSet].signChains
+        )
+    }
+}
+
+function addsignCheckboxListener() {
+    if (signCheckbox) {
+        signCheckbox.addEventListener("change", handleCheckboxChange)
+    }
+}
+
+function removeSignCheckboxListener() {
+    if (signCheckbox) {
+        signCheckbox.removeEventListener("change", handleCheckboxChange)
+    }
 }
 
 function toggleArrowButtons() {
@@ -204,6 +240,8 @@ function handleInputClick() {
 function handleIncreaseClick() {
     resetCircuit()
     removeAnimateControls()
+    setCheckboxUnchecked(signCheckbox)
+    disableButton(signCheckbox)
     enableButton(playButton)
     increaseBinary()
     setState({ inputSet: parseInt(inputField.value, 2) })
@@ -218,6 +256,8 @@ function handleIncreaseClick() {
 function handleDecreaseClick() {
     resetCircuit()
     removeAnimateControls()
+    setCheckboxUnchecked(signCheckbox)
+    disableButton(signCheckbox)
     enableButton(playButton)
     decreaseBinary()
     setState({ inputSet: parseInt(inputField.value, 2) })
@@ -242,6 +282,8 @@ function handleLeftArrowClick() {
     inputField.removeEventListener("click", handleInputClick)
     updateSliderPosition()
     updateCircuitNumber()
+    setCheckboxUnchecked(signCheckbox)
+    disableButton(signCheckbox)
     removeAnimateControls()
     circuitReset()
     resetCircuit()
@@ -260,6 +302,8 @@ function handleRightArrowClick() {
     inputField.removeEventListener("click", handleInputClick)
     updateSliderPosition()
     updateCircuitNumber()
+    setCheckboxUnchecked(signCheckbox)
+    disableButton(signCheckbox)
     removeAnimateControls()
     circuitReset()
     resetCircuit()
@@ -267,6 +311,11 @@ function handleRightArrowClick() {
 }
 
 function setupEventListeners() {
+    disableButton(signCheckbox)
+    setTimeout(() => {
+        setCheckboxUnchecked(signCheckbox)
+    })
+    addsignCheckboxListener()
     increaseButton.addEventListener("click", handleIncreaseClick)
     decreaseButton.addEventListener("click", handleDecreaseClick)
     leftArrowButton.addEventListener("click", handleLeftArrowClick)
@@ -278,6 +327,7 @@ function setupEventListeners() {
 function removeEventListeners() {
     removePlayListener()
     removeAnimateControls()
+    removeSignCheckboxListener()
     inputField.removeEventListener("click", handleInputClick)
     increaseButton.removeEventListener("click", handleIncreaseClick)
     decreaseButton.removeEventListener("click", handleDecreaseClick)
@@ -448,6 +498,8 @@ function removePlayListener() {
 function handleRestartButton() {
     hideElement(playButton)
     disableButton(playButton)
+    disableButton(signCheckbox)
+    setCheckboxUnchecked(signCheckbox)
     resetCircuit()
     showCircuit()
     appState.visualizer.initializeCircuit(
