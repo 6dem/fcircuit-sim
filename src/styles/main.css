@@ -169,6 +169,12 @@
     height: 100%;
 }
 
+.sign-checkbox-label {
+    padding: 4px;
+    border-radius: 16px;
+    background-color: var(--color-purple-dark-50);
+}
+
 .checkbox-wrapper:hover .check {
     stroke-dashoffset: 0;
 }
@@ -181,7 +187,7 @@
 }
 
 .checkbox-wrapper .background {
-    fill: var(--color-purple-dark);
+    fill: var(--color-purple-dark-50);
     box-shadow: 5px 4px 10px var(--color-black-25);
     transition: ease all 0.6s;
     -webkit-transition: ease all 0.6s;
@@ -189,7 +195,7 @@
 
 .checkbox-wrapper .stroke {
     fill: none;
-    stroke: #fff;
+    stroke: var(--color-white);
     stroke-miterlimit: 10;
     stroke-width: 2px;
     stroke-dashoffset: 100;
@@ -200,7 +206,7 @@
 
 .checkbox-wrapper .check {
     fill: none;
-    stroke: #fff;
+    stroke: var(--color-white);
     stroke-linecap: round;
     stroke-linejoin: round;
     stroke-width: 2px;
@@ -222,13 +228,11 @@
     -webkit-appearance: none;
 }
 
-/* Стилизация чекбокса, когда он отключен */
 input[type="checkbox"]:disabled {
     cursor: not-allowed;
-    opacity: 0.5; /* Затемнение */
+    opacity: 0.5;
 }
 
-/* Стилизация .checkbox-wrapper, когда чекбокс внутри него отключен */
 .checkbox-wrapper input:disabled + svg {
     cursor: not-allowed;
 
@@ -245,7 +249,7 @@ input[type="checkbox"]:disabled {
 }
 
 .checkbox-wrapper input[type="checkbox"]:checked + svg .background {
-    fill: var(--color-purple-light);
+    fill: var(--color-purple-light-50);
 }
 
 .checkbox-wrapper input[type="checkbox"]:checked + svg .stroke {
@@ -259,7 +263,6 @@ input[type="checkbox"]:disabled {
 .progress-bar-wrapper {
     display: flex;
     justify-content: center;
-    /* align-items: center; */
     gap: 15px;
     height: 30px;
     width: 80%;
