@@ -26,6 +26,7 @@ const signCheckbox = document.getElementById("sign-checkbox")
 const indexCheckbox = document.getElementById("index-checkbox")
 const signCheckboxWrapper = document.getElementById("sign-checkbox-wrapper")
 const indexCheckboxWrapper = document.getElementById("index-checkbox-wrapper")
+const circuitFormat = document.getElementById("circuit-format")
 const leftArrowButton = document.getElementById("arrow-button-left")
 const rightArrowButton = document.getElementById("arrow-button-right")
 const setResultsElement = document.getElementById("set-results")
@@ -70,6 +71,7 @@ function handleFileRead(event) {
 
         showElement(visualizationSection)
         showCircuit()
+        showCircuitFormat()
         removeVisualizeListener()
         disableButton(visualizeButton)
     } catch (error) {
@@ -139,6 +141,10 @@ function updateSliderSettings() {
     })
     progressSliderElement.style.width = `${realSliderWidthLocal}%`
     updateSliderPosition()
+}
+
+function showCircuitFormat() {
+    circuitFormat.textContent = `${appState.circuitData.format}`
 }
 
 function handleSignCheckboxChange(event) {
@@ -315,6 +321,7 @@ function handleLeftArrowClick() {
     circuitReset()
     resetCircuit()
     showCircuit()
+    showCircuitFormat()
 }
 
 function handleRightArrowClick() {
@@ -335,6 +342,7 @@ function handleRightArrowClick() {
     circuitReset()
     resetCircuit()
     showCircuit()
+    showCircuitFormat()
 }
 
 function setupEventListeners() {

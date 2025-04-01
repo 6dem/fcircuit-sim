@@ -177,9 +177,10 @@
     stroke-dashoffset: 0;
 }
 
-.checkbox-label {
-    padding: 4px;
-    border-radius: 16px;
+.checkbox-label,
+.circuit-format {
+    padding: 4px 6px;
+    border-radius: 12px;
     background-color: var(--color-purple-dark-50);
 }
 
