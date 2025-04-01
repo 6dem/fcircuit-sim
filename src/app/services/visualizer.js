@@ -1,7 +1,7 @@
 import { removeDuplicateComputedElements } from "../../utils/stateHistoryNormilize.js"
 import { toBinary } from "../../utils/to-binary.js"
 class Visualizer {
-    constructor(container, circuitData, depthDict) {
+    constructor(container, circuitData, depthDict, isIndexShow = false) {
         this.container = container
         this.width = container.offsetWidth
         this.height = container.offsetHeight
@@ -26,6 +26,13 @@ class Visualizer {
 
         this.currentAnimation = null
         this.isAnimationComplete = false
+        this.isRestart = false
+
+        this.isIndexShow = isIndexShow
+    }
+
+    setField(field, value) {
+        this[field] = value
     }
 
     showError() {
@@ -99,6 +106,9 @@ class Visualizer {
 
         if (this.elements.hasOwnProperty(0)) {
             this.applyFillAndShadow(this.elements[0].shape, 0)
+            if (this.isIndexShow) {
+                this.elements[0].showIndex()
+            }
         }
 
         for (let i = 1; i < inputCount + 1; i++) {
@@ -107,6 +117,10 @@ class Visualizer {
 
             if (this.elements[i]) {
                 this.applyFillAndShadow(this.elements[i].shape, +value)
+                if (this.isIndexShow) {
+                    this.elements[i].hideIndex()
+                    this.elements[i].showIndex()
+                }
             }
         }
     }
@@ -125,6 +139,7 @@ class Visualizer {
 
     animateCircuit(stateHistory, stepTime) {
         this.isAnimationComplete = false
+        this.isRestart = false
         this.stepTime = stepTime
         this.initializeZeroStep(stateHistory)
         removeDuplicateComputedElements(stateHistory)
@@ -133,6 +148,7 @@ class Visualizer {
             .sort((a, b) => a - b)
 
         const animateStep = (stepIndex) => {
+            if (this.isRestart) return
             if (stepIndex >= steps.length) {
                 this.isAnimationComplete = true
                 return
@@ -154,6 +170,9 @@ class Visualizer {
                         this.applyFillAndShadow(element.shape, outputValue)
                         if (element.isOutput) {
                             this.applyOutputStyle(element, outputValue)
+                        }
+                        if (this.isIndexShow) {
+                            element.showIndex()
                         }
                     }
                     Object.entries(this.connections).forEach(([key, conn]) => {
@@ -340,7 +359,8 @@ class Visualizer {
                             this.layer,
                             x - elemShift,
                             y,
-                            nodeId
+                            nodeId,
+                            this.isIndexShow
                         )
                         break
                     case "InputElement":
@@ -348,7 +368,8 @@ class Visualizer {
                             this.layer,
                             x,
                             y + elemShift,
-                            nodeId
+                            nodeId,
+                            this.isIndexShow
                         )
                         break
                     case "FunctionalElement":
@@ -361,6 +382,7 @@ class Visualizer {
                             x - elemShift,
                             y,
                             nodeId,
+                            this.isIndexShow,
                             isOutput
                         )
                         break
@@ -507,15 +529,30 @@ class Visualizer {
             })
         }
     }
+
+    showIndexes() {
+        this.isIndexShow = true
+        Object.values(this.elements).forEach((element) => {
+            element.showIndex()
+        })
+    }
+
+    hideIndexes() {
+        this.isIndexShow = false
+        Object.values(this.elements).forEach((element) => {
+            element.hideIndex()
+        })
+    }
 }
 
 class BaseElement {
-    constructor(layer, x, y, id) {
+    constructor(layer, x, y, id, isIndexShow = false) {
         this.layer = layer
         this.id = id
         this.value = null
         this.x = x
         this.y = y
+        this.isIndexShow = isIndexShow
         this.width
         this.height
         this.centerCoords
@@ -532,6 +569,9 @@ class BaseElement {
     }
 
     showIndex() {
+        if (this.idText) {
+            this.idText.destroy()
+        }
         this.idText = new Konva.Text({
             x: this.x,
             y: this.y,
@@ -550,7 +590,9 @@ class BaseElement {
     }
 
     hideIndex() {
-        this.idText.destroy()
+        if (this.idText) {
+            this.idText.destroy()
+        }
     }
 
     getIdColor(value) {
@@ -585,8 +627,8 @@ class BaseElement {
 }
 
 class ZeroElement extends BaseElement {
-    constructor(layer, x, y, id) {
-        super(layer, x, y, id)
+    constructor(layer, x, y, id, isIndexShow) {
+        super(layer, x, y, id, isIndexShow)
 
         this.value = 0
 
@@ -597,6 +639,9 @@ class ZeroElement extends BaseElement {
         this.shape = this.createShape(this.x, this.y)
         this.applyGradient()
         this.layer.add(this.shape)
+        if (this.isIndexShow) {
+            this.showIndex()
+        }
     }
 
     createShape(x, y) {
@@ -611,8 +656,8 @@ class ZeroElement extends BaseElement {
 }
 
 class InputElement extends BaseElement {
-    constructor(layer, x, y, id) {
-        super(layer, x, y, id)
+    constructor(layer, x, y, id, isIndexShow) {
+        super(layer, x, y, id, isIndexShow)
         this.width = 62
         this.height = 62
         this.radius = this.width / 2
@@ -621,6 +666,9 @@ class InputElement extends BaseElement {
         this.shape = this.createShape(this.x, this.y)
         this.applyGradient()
         this.layer.add(this.shape)
+        if (this.isIndexShow) {
+            this.showIndex()
+        }
     }
     createShape(x, y) {
         return new Konva.Circle({
@@ -645,11 +693,29 @@ class InputElement extends BaseElement {
         })
         this.shape.fillLinearGradientColorStops([0, "#808080", 1, "#1a1a1a"])
     }
+
+    showIndex() {
+        this.idText = new Konva.Text({
+            x: this.x - this.width / 2,
+            y: this.y - this.height / 2,
+            width: this.width,
+            height: this.height,
+            align: "center",
+            verticalAlign: "middle",
+            text: `${this.id}`,
+            fontSize: 30,
+            fontFamily: "Roboto",
+            fontStyle: "bold",
+            fill: this.getIdColor(this.value) ?? "white",
+        })
+
+        this.layer.add(this.idText)
+    }
 }
 
 class FunctionalElement extends BaseElement {
-    constructor(layer, x, y, id, isOutput) {
-        super(layer, x, y, id)
+    constructor(layer, x, y, id, isIndexShow, isOutput) {
+        super(layer, x, y, id, isIndexShow)
         this.isOutput = isOutput
         this.width = 85 * 0.75
         this.height = 85 * 0.75
@@ -663,6 +729,9 @@ class FunctionalElement extends BaseElement {
         this.shape = this.createShape(this.x, this.y)
         this.applyGradient()
         this.layer.add(this.shape)
+        if (this.isIndexShow) {
+            this.showIndex()
+        }
     }
     createShape(x, y) {
         const shape = new Konva.Path({

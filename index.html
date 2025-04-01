@@ -30,6 +30,7 @@
                     <li>Perform <span class="field--shortcuts__keys">P</span></li>
                     <div class="field--shortcuts__title">Visualize section</div>
                     <li>Sign Chains <span class="field--shortcuts__keys">Shift + S</span></li>
+                    <li>Show indexes <span class="field--shortcuts__keys">Shift + I</span></li>
                     <li>Next circuit <span class="field--shortcuts__keys">Shift + ⇨</span></li>
                     <li>Prev circuit <span class="field--shortcuts__keys">Shift + ⇦</span></li>
                     <li>Increase set <span class="field--shortcuts__keys">Shift + ⇧</span></li>
@@ -124,16 +125,27 @@
                         </div>
                         
                         <div class="circuit-options-wrapper">
-                            <div class="sign-chains-check-group">
-                                <div class="checkbox-wrapper" id="sign-chains-checkbox">
-                                    <input checked="" type="checkbox" id="sign-checkbox" disabled>
+                            <div class="checkbox-group">
+                                <div class="checkbox-wrapper hover" id="sign-checkbox-wrapper">
+                                    <input type="checkbox" id="sign-checkbox" disabled>
                                     <svg viewBox="0 0 35.6 35.6">
                                         <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle>
                                         <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
                                         <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
                                     </svg>
                                 </div>
-                                <label for="sign-chains-checkbox" class="sign-checkbox-label">show Sign Chains</label>
+                                <label for="sign-checkbox" class="checkbox-label">show Sign Chains</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <div class="checkbox-wrapper hover" id="index-checkbox-wrapper">
+                                    <input type="checkbox" id="index-checkbox">
+                                    <svg viewBox="0 0 35.6 35.6">
+                                        <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle>
+                                        <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
+                                        <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
+                                    </svg>
+                                </div>
+                                <label for="index-checkbox" class="checkbox-label">show indexes</label>
                             </div>
                         </div>
 

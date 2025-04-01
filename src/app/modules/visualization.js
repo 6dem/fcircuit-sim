@@ -7,6 +7,7 @@ import { Visualizer } from "../services/visualizer.js"
 import { setCheckboxUnchecked } from "../utils/check-uncheck.js"
 import { disableButton, enableButton } from "../utils/disable-enable-btn.js"
 import { handleFileReadError } from "../utils/file-reader-error.js"
+import { removeHoverClass } from "../utils/hover-element.js"
 import { circuitReset } from "../utils/reset.js"
 import { hideElement, showElement } from "../utils/show-hide-element.js"
 import { checkFileType } from "./fileHandlers.js"
@@ -21,8 +22,10 @@ const decreaseButton = document.getElementById("button--decrease")
 const visualPerformButton = document.getElementById("visual-perform-button")
 const circuitNumberElement = document.querySelector(".circuit-number")
 const progressSliderElement = document.querySelector(".progress-slider")
-const progressBarElement = document.querySelector(".progress-bar")
 const signCheckbox = document.getElementById("sign-checkbox")
+const indexCheckbox = document.getElementById("index-checkbox")
+const signCheckboxWrapper = document.getElementById("sign-checkbox-wrapper")
+const indexCheckboxWrapper = document.getElementById("index-checkbox-wrapper")
 const leftArrowButton = document.getElementById("arrow-button-left")
 const rightArrowButton = document.getElementById("arrow-button-right")
 const setResultsElement = document.getElementById("set-results")
@@ -87,7 +90,8 @@ function showCircuit() {
         const visualizerInstance = new Visualizer(
             visualContainer,
             appState.circuitData,
-            depthDict
+            depthDict,
+            indexCheckbox.checked
         )
         const proxiedVisualizer = new Proxy(visualizerInstance, {
             set(target, property, value) {
@@ -95,12 +99,14 @@ function showCircuit() {
 
                 if (property === "isAnimationComplete" && value === true) {
                     disableButton(pauseButton)
-                    const isEmpty =
-                        Object.keys(
-                            appState.circuitResultData.setResults[
-                                appState.inputSet
-                            ].signChains
-                        ).length === 0
+                    const signChains =
+                        appState.circuitResultData?.setResults[
+                            appState.inputSet
+                        ].signChains
+                    let isEmpty
+                    if (signChains) {
+                        isEmpty = Object.keys(signChains).length === 0
+                    }
                     if (!isEmpty) {
                         enableButton(signCheckbox)
                     }
@@ -135,7 +141,7 @@ function updateSliderSettings() {
     updateSliderPosition()
 }
 
-function handleCheckboxChange(event) {
+function handleSignCheckboxChange(event) {
     const isChecked = event.target.checked
     if (isChecked) {
         appState.visualizer.showSignChains(
@@ -148,15 +154,36 @@ function handleCheckboxChange(event) {
     }
 }
 
-function addsignCheckboxListener() {
+function addSignCheckboxListener() {
     if (signCheckbox) {
-        signCheckbox.addEventListener("change", handleCheckboxChange)
+        signCheckbox.addEventListener("change", handleSignCheckboxChange)
     }
 }
 
 function removeSignCheckboxListener() {
     if (signCheckbox) {
-        signCheckbox.removeEventListener("change", handleCheckboxChange)
+        signCheckbox.removeEventListener("change", handleSignCheckboxChange)
+    }
+}
+
+function addIndexCheckboxListener() {
+    if (indexCheckbox) {
+        indexCheckbox.addEventListener("change", handleIndexCheckboxChange)
+    }
+}
+
+function removeIndexCheckboxListener() {
+    if (indexCheckbox) {
+        indexCheckbox.removeEventListener("change", handleIndexCheckboxChange)
+    }
+}
+
+function handleIndexCheckboxChange(event) {
+    const isChecked = event.target.checked
+    if (isChecked) {
+        appState.visualizer.showIndexes()
+    } else {
+        appState.visualizer.hideIndexes()
     }
 }
 
@@ -313,9 +340,11 @@ function handleRightArrowClick() {
 function setupEventListeners() {
     disableButton(signCheckbox)
     setTimeout(() => {
-        setCheckboxUnchecked(signCheckbox)
-    })
-    addsignCheckboxListener()
+        removeHoverClass(signCheckboxWrapper)
+        removeHoverClass(indexCheckboxWrapper)
+    }, 500)
+    addSignCheckboxListener()
+    addIndexCheckboxListener()
     increaseButton.addEventListener("click", handleIncreaseClick)
     decreaseButton.addEventListener("click", handleDecreaseClick)
     leftArrowButton.addEventListener("click", handleLeftArrowClick)
@@ -328,6 +357,7 @@ function removeEventListeners() {
     removePlayListener()
     removeAnimateControls()
     removeSignCheckboxListener()
+    removeIndexCheckboxListener()
     inputField.removeEventListener("click", handleInputClick)
     increaseButton.removeEventListener("click", handleIncreaseClick)
     decreaseButton.removeEventListener("click", handleDecreaseClick)
@@ -496,6 +526,7 @@ function removePlayListener() {
 }
 
 function handleRestartButton() {
+    appState.visualizer.setField("isRestart", true)
     hideElement(playButton)
     disableButton(playButton)
     disableButton(signCheckbox)
