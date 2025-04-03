@@ -47,7 +47,7 @@ async function handleSampleClick() {
     try {
         showLoader()
         const response = await fetch(
-            "../../../circuit-descriptions/fcircuit-aig-mig.json"
+            "circuit-descriptions/fcircuit-aig-mig.json"
         )
 
         if (!response.ok) throw new Error("Ошибка загрузки файла")
