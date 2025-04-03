@@ -14,12 +14,38 @@ import {
 
 const fileInputElement = document.getElementById("file-upload")
 const attachButton = document.getElementById("attach-file-button")
+const loadSampleButton = document.getElementById("load-sample-button")
 const fileNameDisplay = document.getElementById("file-name")
 const visualizeButton = document.getElementById("visualize-button")
 const performButton = document.getElementById("perform-button")
 
 function handleAttachClick() {
     fileInputElement.click()
+}
+
+async function handleSampleClick() {
+    try {
+        const response = await fetch(
+            "../../../circuit-descriptions/fcircuit-aig-mig.json"
+        )
+
+        if (!response.ok) throw new Error("Ошибка загрузки файла")
+
+        const fileContent = await response.blob()
+        const file = new File([fileContent], "sample.json", {
+            type: "application/json",
+        })
+
+        const dataTransfer = new DataTransfer()
+        dataTransfer.items.add(file)
+
+        const fileInput = document.getElementById("file-upload")
+        fileInput.files = dataTransfer.files
+
+        fileInput.dispatchEvent(new Event("change"))
+    } catch (error) {
+        console.error("Ошибка загрузки:", error)
+    }
 }
 
 async function handleFileChange() {
@@ -89,11 +115,13 @@ function checkFileType(file) {
 function addFileEventListeners() {
     attachButton.addEventListener("click", handleAttachClick)
     fileInputElement.addEventListener("change", handleFileChange)
+    loadSampleButton.addEventListener("click", handleSampleClick)
 }
 
 function removeFileEventListeners() {
     attachButton.removeEventListener("click", handleAttachClick)
     fileInputElement.removeEventListener("change", handleFileChange)
+    loadSampleButton.removeEventListener("click", handleSampleClick)
 }
 
 export { addFileEventListeners, checkFileType }

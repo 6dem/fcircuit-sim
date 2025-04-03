@@ -20,6 +20,28 @@
     align-items: center;
 }
 
+.file-btn-group {
+    display: flex;
+    width: 138px;
+    height: 58px;
+    border-radius: 30px;
+    background-color: var(--color-purple-dark);
+    color: var(--color-white);
+    font-weight: 700;
+    font-size: 24px;
+}
+
+.btn--attach {
+    text-align: center;
+    width: 100px;
+    border-radius: 30px 0 0 30px;
+}
+
+.btn--sample {
+    width: 34px;
+    border-radius: 0 30px 30px 0;
+}
+
 .file-name {
     max-width: 155px;
     max-height: 55px;
