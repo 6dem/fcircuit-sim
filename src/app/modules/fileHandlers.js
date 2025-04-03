@@ -3,6 +3,7 @@ import { showCustomAlert } from "../utils/alerts.js"
 import { disableButton, enableButton } from "../utils/disable-enable-btn.js"
 import { handleFileReadError } from "../utils/file-reader-error.js"
 import { fullReset } from "../utils/reset.js"
+import { hideElement, showElement } from "../utils/show-hide-element.js"
 import {
     addPerformEventListener,
     removePerformEventListener,
@@ -15,9 +16,28 @@ import {
 const fileInputElement = document.getElementById("file-upload")
 const attachButton = document.getElementById("attach-file-button")
 const loadSampleButton = document.getElementById("load-sample-button")
-const fileNameDisplay = document.getElementById("file-name")
+const fileLoader = document.getElementById("code-loader")
+const fileError = document.getElementById("file-error")
+const fileName = document.getElementById("file-name")
 const visualizeButton = document.getElementById("visualize-button")
 const performButton = document.getElementById("perform-button")
+
+function showLoader() {
+    hideElement(fileName)
+    hideElement(fileError)
+    showElement(fileLoader)
+}
+
+function hideLoader() {
+    hideElement(fileLoader)
+    showElement(fileName)
+}
+
+function showError() {
+    hideElement(fileLoader)
+    hideElement(fileName)
+    showElement(fileError)
+}
 
 function handleAttachClick() {
     fileInputElement.click()
@@ -25,6 +45,7 @@ function handleAttachClick() {
 
 async function handleSampleClick() {
     try {
+        showLoader()
         const response = await fetch(
             "../../../circuit-descriptions/fcircuit-aig-mig.json"
         )
@@ -44,6 +65,7 @@ async function handleSampleClick() {
 
         fileInput.dispatchEvent(new Event("change"))
     } catch (error) {
+        showError()
         console.error("Ошибка загрузки:", error)
     }
 }
@@ -52,7 +74,7 @@ async function handleFileChange() {
     const file = fileInputElement.files[0]
 
     if (!file) {
-        fileNameDisplay.textContent = "No file chosen"
+        fileName.textContent = "No file chosen"
         disableButton(performButton)
         disableButton(visualizeButton)
         return
@@ -61,9 +83,8 @@ async function handleFileChange() {
     removeVisualizeListener()
     removePerformEventListener()
 
-    fileNameDisplay.textContent = file.name
-
     try {
+        showLoader()
         const jsonDataLocal = await validateJsonFile(file)
         setState({ jsonData: jsonDataLocal })
         fullReset()
@@ -73,7 +94,10 @@ async function handleFileChange() {
 
         addVisualizeListener()
         addPerformEventListener()
+        fileName.textContent = file.name
+        hideLoader()
     } catch (error) {
+        showError()
         handleFileReadError(error)
     }
 }

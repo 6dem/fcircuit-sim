@@ -57,7 +57,13 @@
                         </button>
                     </div>
                     <input type="file" class="hidden" id="file-upload">
+                    <div class="code-loader hidden" id="code-loader">
+                        <span>{</span><span>}</span>
+                    </div>
                     <span class="file-name" id="file-name">No file chosen</span>
+                    <svg id="file-error" class="file-error hidden" width="30" height="30" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+                        <use href="./assets/sprites.svg#error"></use>
+                    </svg>
                 </div>
                 <div class="process-btn-group">
                     <button class="btn" id="visualize-button" disabled>Visualize</button>
