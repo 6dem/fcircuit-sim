@@ -17,6 +17,10 @@ const keyBindings = [
         action: () => document.getElementById("attach-file-button")?.click(),
     },
     {
+        code: "KeyU",
+        action: () => document.getElementById("load-sample-button")?.click(),
+    },
+    {
         code: "KeyV",
         action: () => document.getElementById("visualize-button")?.click(),
     },
