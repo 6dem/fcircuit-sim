@@ -20,3 +20,9 @@ circuit-descriptions/aig.txt
 src/utils/circuit-description-formatting.js
 circuit-descriptions/aig-converted.json
 circuit-descriptions/aig-db.json
+src/app/services/test-analizator.js
+src/services/errors.ndjson
+src/services/optimal-process-circuits.js
+src/services/results.ndjson
+src/services/test-optimal.js
+src/utils/load-ndjson.js
