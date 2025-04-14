@@ -11,14 +11,14 @@ describe("Circuit class buildXDepthsDict method", () => {
     })
 
     test("empty paths array", () => {
-        expect(() => circuit.buildXDepthsDict()).toThrow(
+        expect(() => circuit.buildXDepthsDict([])).toThrow(
             "allPaths array is empty"
         )
     })
 
     test("build extended depths dict", () => {
-        circuit.findAllPaths()
-        const depth = circuit.buildXDepthsDict()
+        const allPaths = circuit.findAllPaths()
+        const depth = circuit.buildXDepthsDict(allPaths)
         expect(depth).toEqual({
             0: new Set([2, 1, 3]),
             1: new Set([5, 6, 4, 9, 10]),
@@ -37,14 +37,14 @@ describe("MIG class buildXDepthsDict method", () => {
     })
 
     test("empty paths array", () => {
-        expect(() => circuit.buildXDepthsDict()).toThrow(
+        expect(() => circuit.buildXDepthsDict([])).toThrow(
             "allPaths array is empty"
         )
     })
 
     test("build extended depths dict", () => {
-        circuit.findAllPaths()
-        const depth = circuit.buildXDepthsDict()
+        const allPaths = circuit.findAllPaths()
+        const depth = circuit.buildXDepthsDict(allPaths)
         expect(depth).toEqual({
             0: new Set([0, 2, 5, 4, 3, 1]),
             1: new Set([9, 11, 10, 7, 8, 6, 12]),

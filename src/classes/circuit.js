@@ -111,32 +111,40 @@ class Circuit {
         visited.add(startFE.index)
         path.push(startFE.index)
 
-        // Если элемент является входом, добавляем текущий путь в список всех путей
+        // Инициализируем массив для накопления путей
+        let paths = []
+
+        // Если элемент является входом, сохраняем копию текущего пути
         if (startFE.index <= this.countInputs) {
-            this.allPaths.push([...path]) // Создаем копию пути
+            paths.push([...path])
         } else {
-            // Обходим все входные элементы
+            // Иначе рекурсивно обходим все входящие элементы
             for (const inputIndex of startFE.inputsFE) {
                 const inputFE = this.instancesFE[inputIndex]
                 if (!visited.has(inputFE.index)) {
-                    this.dfs(inputFE, visited, path)
+                    // Рекурсивный вызов возвращает массив путей, который мы объединяем
+                    paths = paths.concat(this.dfs(inputFE, visited, path))
                 }
             }
         }
+
+        // Откатываем изменения: удаляем текущий узел из пути и множества посещенных
         path.pop()
         visited.delete(startFE.index)
+
+        return paths
     }
 
     findAllPaths() {
         const roots = this.findAllRoots()
-        const visited = new Set()
+        let allPaths = []
 
+        // Обходим все корневые элементы и объединяем пути
         for (const rootIndex of roots) {
             const rootFE = this.instancesFE[rootIndex]
-            if (!visited.has(rootFE.index)) {
-                this.dfs(rootFE, visited)
-            }
+            allPaths = allPaths.concat(this.dfs(rootFE))
         }
+        return allPaths
     }
 
     calculateDepth(allPaths) {
@@ -149,14 +157,14 @@ class Circuit {
         }
     }
 
-    buildDepthsDict() {
+    buildDepthsDict(allPaths) {
         const depthsDict = {}
 
-        if (this.allPaths.length === 0) {
+        if (allPaths.length === 0) {
             throw new Error(`allPaths array is empty`)
         }
 
-        for (const path of this.allPaths) {
+        for (const path of allPaths) {
             for (let i = 0; i < path.length; i++) {
                 const depth = path.length - 1 - i // Глубина элемента (обратный индекс)
                 const feIndex = path[i]
@@ -195,18 +203,17 @@ class Circuit {
             }
         }
 
-        this.depthsDict = depthsDict
         return depthsDict
     }
 
-    buildXDepthsDict() {
+    buildXDepthsDict(allPaths) {
         const xDepthsDict = {}
 
-        if (this.allPaths.length === 0) {
+        if (allPaths.length === 0) {
             throw new Error(`allPaths array is empty`)
         }
 
-        for (const path of this.allPaths) {
+        for (const path of allPaths) {
             for (let i = 0; i < path.length; i++) {
                 const depth = path.length - 1 - i // Глубина элемента (обратный индекс)
                 const feIndex = path[i]
@@ -219,7 +226,6 @@ class Circuit {
             }
         }
 
-        this.xDepthsDict = xDepthsDict
         return xDepthsDict
     }
 

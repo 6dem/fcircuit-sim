@@ -26,3 +26,4 @@ src/services/optimal-process-circuits.js
 src/services/results.ndjson
 src/services/test-optimal.js
 src/utils/load-ndjson.js
+.prettierignore

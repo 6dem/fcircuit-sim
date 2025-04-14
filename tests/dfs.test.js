@@ -12,8 +12,7 @@ describe("Circuit class DFS method", () => {
 
     test("find all paths in the 0 part of fcircuit", () => {
         const roots = circuit.findAllRoots()
-        circuit.dfs(circuit.instancesFE[roots[0]])
-        expect(circuit.allPaths).toEqual([
+        expect(circuit.dfs(circuit.instancesFE[roots[0]])).toEqual([
             [8, 5, 2],
             [8, 6, 1],
             [8, 6, 2],
@@ -23,8 +22,7 @@ describe("Circuit class DFS method", () => {
 
     test("find all paths in the 1 part of fcircuit", () => {
         const roots = circuit.findAllRoots()
-        circuit.dfs(circuit.instancesFE[roots[1]])
-        expect(circuit.allPaths).toEqual([
+        expect(circuit.dfs(circuit.instancesFE[roots[1]])).toEqual([
             [9, 7, 4, 1],
             [9, 7, 4, 2],
             [9, 7, 5, 2],
@@ -34,8 +32,7 @@ describe("Circuit class DFS method", () => {
 
     test("find all paths in the 2 part of fcircuit", () => {
         const roots = circuit.findAllRoots()
-        circuit.dfs(circuit.instancesFE[roots[2]])
-        expect(circuit.allPaths).toEqual([
+        expect(circuit.dfs(circuit.instancesFE[roots[2]])).toEqual([
             [10, 3],
             [10, 2],
         ])
@@ -52,8 +49,7 @@ describe("MIG class DFS method", () => {
 
     test("find all paths in the MIG", () => {
         const roots = circuit.findAllRoots()
-        circuit.dfs(circuit.instancesFE[roots[0]])
-        expect(circuit.allPaths).toEqual([
+        expect(circuit.dfs(circuit.instancesFE[roots[0]])).toEqual([
             [13, 9, 0],
             [13, 9, 2],
             [13, 9, 11, 5],

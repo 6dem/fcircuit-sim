@@ -19,23 +19,26 @@ describe("Circuit class calculateDelay method", () => {
     })
 
     test("calculate delay on 2nd set | depths dict", () => {
-        circuit.buildDepthsDict()
+        const allPaths = circuit.findAllPaths()
+        const depthsDict = circuit.buildDepthsDict(allPaths)
         circuit.initializeCircuit(2)
-        const stateHistory = circuit.simulateCircuit(circuit.depthsDict)
+        const stateHistory = circuit.simulateCircuit(depthsDict)
         expect(circuit.calculateDelay(stateHistory)).toEqual(3)
     })
 
     test("calculate delay on 2nd set | extended depths dict", () => {
-        circuit.buildXDepthsDict()
+        const allPaths = circuit.findAllPaths()
+        const xDepthsDict = circuit.buildXDepthsDict(allPaths)
         circuit.initializeCircuit(2)
-        const stateHistory = circuit.simulateCircuit(circuit.xDepthsDict)
+        const stateHistory = circuit.simulateCircuit(xDepthsDict)
         expect(circuit.calculateDelay(stateHistory)).toEqual(1)
     })
 
     test("calculate delay on 0 set | extended depths dict", () => {
-        circuit.buildXDepthsDict()
+        const allPaths = circuit.findAllPaths()
+        const xDepthsDict = circuit.buildXDepthsDict(allPaths)
         circuit.initializeCircuit()
-        const stateHistory = circuit.simulateCircuit(circuit.xDepthsDict)
+        const stateHistory = circuit.simulateCircuit(xDepthsDict)
         expect(circuit.calculateDelay(stateHistory)).toEqual(3)
     })
 })
@@ -57,23 +60,26 @@ describe("MIG class calculateDelay method", () => {
     })
 
     test("calculate delay on 2nd set | depths dict", () => {
-        circuit.buildDepthsDict()
+        const allPaths = circuit.findAllPaths()
+        const depthsDict = circuit.buildDepthsDict(allPaths)
         circuit.initializeCircuit(2)
-        const stateHistory = circuit.simulateCircuit(circuit.depthsDict)
+        const stateHistory = circuit.simulateCircuit(depthsDict)
         expect(circuit.calculateDelay(stateHistory)).toEqual(4)
     })
 
     test("calculate delay on 0 set | extended depths dict", () => {
-        circuit.buildXDepthsDict()
+        const allPaths = circuit.findAllPaths()
+        const xDepthsDict = circuit.buildXDepthsDict(allPaths)
         circuit.initializeCircuit()
-        const stateHistory = circuit.simulateCircuit(circuit.xDepthsDict)
+        const stateHistory = circuit.simulateCircuit(xDepthsDict)
         expect(circuit.calculateDelay(stateHistory)).toEqual(4)
     })
 
     test("calculate delay on 18th set | extended depths dict", () => {
-        circuit.buildXDepthsDict()
+        const allPaths = circuit.findAllPaths()
+        const xDepthsDict = circuit.buildXDepthsDict(allPaths)
         circuit.initializeCircuit(18)
-        const stateHistory = circuit.simulateCircuit(circuit.xDepthsDict)
+        const stateHistory = circuit.simulateCircuit(xDepthsDict)
         expect(circuit.calculateDelay(stateHistory)).toEqual(2)
     })
 })

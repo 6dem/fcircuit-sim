@@ -11,6 +11,9 @@ export function processAllCircuits(jsonData) {
     if (!Array.isArray(jsonData)) {
         throw new Error("The JSON data is not an array")
     }
+    if (!jsonData || !jsonData.length) {
+        throw new Error("The JSON data is empty")
+    }
 
     const resultData = []
     const errorData = [] // Массив для ошибок
@@ -26,6 +29,11 @@ export function processAllCircuits(jsonData) {
         const format = circuitData.format
         let depth
         const setResults = []
+        circuit = createCircuit(format)
+        circuit.parseCircuit(jsonData, +circuitData.number)
+        const allPaths = circuit.findAllPaths()
+        const xDepthsDict = circuit.buildXDepthsDict(allPaths)
+        depth = circuit.calculateDepth(allPaths)
 
         try {
             for (let set = 0; set < sets; set++) {
@@ -33,20 +41,16 @@ export function processAllCircuits(jsonData) {
                     break // Прерываем выполнение при установке флага
                 }
 
+                let stateHistory = {}
+
                 circuit = createCircuit(format)
                 circuit.parseCircuit(jsonData, +circuitData.number)
-                circuit.findAllPaths()
-                circuit.buildXDepthsDict()
-                depth = circuit.calculateDepth(circuit.allPaths)
-
-                let stateHistory = {}
                 circuit.initializeCircuit(set)
-                stateHistory = circuit.simulateCircuit(circuit.xDepthsDict)
+                stateHistory = circuit.simulateCircuit(xDepthsDict)
                 const outputValues = circuit.calculateOutput()
                 const delay = circuit.calculateDelay(stateHistory)
-                const [signChains, fullStrPath] = circuit.searchSignChains(
-                    circuit.allPaths
-                )
+                const [signChains, fullStrPath] =
+                    circuit.searchSignChains(allPaths)
                 const signDelay = circuit.calculateSignDelay(signChains)
 
                 setResults.push({

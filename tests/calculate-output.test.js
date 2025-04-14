@@ -18,23 +18,26 @@ describe("Circuit class calculateOutput method", () => {
     })
 
     test("calculate output on 0 set", () => {
-        circuit.buildDepthsDict()
+        const allPaths = circuit.findAllPaths()
+        const depthsDict = circuit.buildDepthsDict(allPaths)
         circuit.initializeCircuit(0)
-        circuit.simulateCircuit(circuit.depthsDict)
+        circuit.simulateCircuit(depthsDict)
         expect(circuit.calculateOutput()).toEqual({ 9: 1 })
     })
 
     test("calculate output on 2nd set", () => {
-        circuit.buildXDepthsDict()
+        const allPaths = circuit.findAllPaths()
+        const xDepthsDict = circuit.buildXDepthsDict(allPaths)
         circuit.initializeCircuit(2)
-        circuit.simulateCircuit(circuit.xDepthsDict)
+        circuit.simulateCircuit(xDepthsDict)
         expect(circuit.calculateOutput()).toEqual({ 9: 1 })
     })
 
     test("calculate output on 5th set", () => {
-        circuit.buildXDepthsDict()
+        const allPaths = circuit.findAllPaths()
+        const xDepthsDict = circuit.buildXDepthsDict(allPaths)
         circuit.initializeCircuit(5)
-        circuit.simulateCircuit(circuit.xDepthsDict)
+        circuit.simulateCircuit(xDepthsDict)
         expect(circuit.calculateOutput()).toEqual({ 9: 1 })
     })
 })
@@ -55,23 +58,26 @@ describe("MIG class calculateOutput method", () => {
     })
 
     test("calculate output on 0 set", () => {
-        circuit.buildDepthsDict()
+        const allPaths = circuit.findAllPaths()
+        const depthsDict = circuit.buildDepthsDict(allPaths)
         circuit.initializeCircuit(0)
-        circuit.simulateCircuit(circuit.depthsDict)
+        circuit.simulateCircuit(depthsDict)
         expect(circuit.calculateOutput()).toEqual({ 13: 0 })
     })
 
     test("calculate output on 7th set", () => {
-        circuit.buildXDepthsDict()
+        const allPaths = circuit.findAllPaths()
+        const xDepthsDict = circuit.buildXDepthsDict(allPaths)
         circuit.initializeCircuit(7)
-        circuit.simulateCircuit(circuit.xDepthsDict)
+        circuit.simulateCircuit(xDepthsDict)
         expect(circuit.calculateOutput()).toEqual({ 13: 1 })
     })
 
     test("calculate output on 18th set", () => {
-        circuit.buildXDepthsDict()
+        const allPaths = circuit.findAllPaths()
+        const xDepthsDict = circuit.buildXDepthsDict(allPaths)
         circuit.initializeCircuit(18)
-        circuit.simulateCircuit(circuit.xDepthsDict)
+        circuit.simulateCircuit(xDepthsDict)
         expect(circuit.calculateOutput()).toEqual({ 13: 0 })
     })
 })

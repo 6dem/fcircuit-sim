@@ -4,6 +4,15 @@ export function processCircuit(jsonData, circuitIndex) {
     if (!Array.isArray(jsonData)) {
         throw new Error("The JSON data is not an array")
     }
+    if (!jsonData || !jsonData.length) {
+        throw new Error("The JSON data is empty")
+    }
+    if (circuitIndex == null) {
+        throw new Error("The circuit index was not transmitted")
+    }
+    if (circuitIndex > jsonData.length) {
+        throw new Error("Invalid circuit index")
+    }
 
     const circuitData = jsonData[circuitIndex]
 
@@ -18,17 +27,15 @@ export function processCircuit(jsonData, circuitIndex) {
         for (let set = 0; set < sets; set++) {
             circuit = createCircuit(format)
             circuit.parseCircuit(jsonData, +circuitData.number)
-            circuit.findAllPaths()
-            circuit.buildXDepthsDict()
-            depth = circuit.calculateDepth(circuit.allPaths)
+            const allPaths = circuit.findAllPaths()
+            const xDepthsDict = circuit.buildXDepthsDict(allPaths)
+            depth = circuit.calculateDepth(allPaths)
 
             circuit.initializeCircuit(set)
-            stateHistory = circuit.simulateCircuit(circuit.xDepthsDict)
+            stateHistory = circuit.simulateCircuit(xDepthsDict)
             const outputValues = circuit.calculateOutput()
             const delay = circuit.calculateDelay(stateHistory)
-            const [signChains, fullStrPath] = circuit.searchSignChains(
-                circuit.allPaths
-            )
+            const [signChains, fullStrPath] = circuit.searchSignChains(allPaths)
             const signDelay = circuit.calculateSignDelay(signChains)
 
             setResults.push({
@@ -70,8 +77,9 @@ export function parseCircuitStructure(jsonData, circuitIndex) {
     try {
         circuit = createCircuit(format)
         circuit.parseCircuit(jsonData, +circuitData.number)
-        circuit.findAllPaths()
-        return circuit.buildDepthsDict()
+        const allPaths = circuit.findAllPaths()
+        const depthsDict = circuit.buildDepthsDict(allPaths)
+        return depthsDict
     } catch (error) {
         console.error(`Error processing circuit ${circuitData.number}:`, error)
         return {

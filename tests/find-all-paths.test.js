@@ -11,8 +11,8 @@ describe("Circuit class findAllPaths method", () => {
     })
 
     test("find all paths in the fcircuit", () => {
-        circuit.findAllPaths()
-        expect(circuit.allPaths).toEqual([
+        const allPaths = circuit.findAllPaths()
+        expect(allPaths).toEqual([
             [8, 5, 2],
             [8, 6, 1],
             [8, 6, 2],
@@ -36,8 +36,8 @@ describe("MIG class findAllPaths method", () => {
     })
 
     test("find all paths in the MIG", () => {
-        circuit.findAllPaths()
-        expect(circuit.allPaths).toEqual([
+        const allPaths = circuit.findAllPaths()
+        expect(allPaths).toEqual([
             [13, 9, 0],
             [13, 9, 2],
             [13, 9, 11, 5],

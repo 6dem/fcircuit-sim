@@ -11,14 +11,14 @@ describe("Circuit class calculateDepth method", () => {
     })
 
     test("empty paths array", () => {
-        expect(() => circuit.calculateDepth(circuit.allPaths)).toThrow(
+        expect(() => circuit.calculateDepth([])).toThrow(
             "allPaths array is empty"
         )
     })
 
     test("calculate fcircuit depth", () => {
-        circuit.findAllPaths()
-        const depth = circuit.calculateDepth(circuit.allPaths)
+        const allPaths = circuit.findAllPaths()
+        const depth = circuit.calculateDepth(allPaths)
         expect(depth).toEqual(3)
     })
 })
@@ -32,8 +32,8 @@ describe("MIG class calculateDepth method", () => {
     })
 
     test("calculate MIG depth", () => {
-        circuit.findAllPaths()
-        const depth = circuit.calculateDepth(circuit.allPaths)
+        const allPaths = circuit.findAllPaths()
+        const depth = circuit.calculateDepth(allPaths)
         expect(depth).toEqual(4)
     })
 })

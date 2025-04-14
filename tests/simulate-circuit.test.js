@@ -12,18 +12,19 @@ describe("Circuit class simulateCircuit method", () => {
     })
 
     test("empty depths dict", () => {
-        expect(() => circuit.simulateCircuit(circuit.depthsDict)).toThrow(
+        expect(() => circuit.simulateCircuit([])).toThrow(
             "depths dict is empty"
         )
-        expect(() => circuit.simulateCircuit(circuit.xDepthsDict)).toThrow(
+        expect(() => circuit.simulateCircuit([])).toThrow(
             "depths dict is empty"
         )
     })
 
     test("simulate on extended depths dict", () => {
-        circuit.buildXDepthsDict()
+        const allPaths = circuit.findAllPaths()
+        const xDepthsDict = circuit.buildXDepthsDict(allPaths)
         circuit.initializeCircuit(2)
-        expect(circuit.simulateCircuit(circuit.xDepthsDict)).toEqual({
+        expect(circuit.simulateCircuit(xDepthsDict)).toEqual({
             1: {
                 4: { state: "computed", outputValue: 0 },
                 5: { state: "computed", outputValue: 0 },
@@ -40,9 +41,10 @@ describe("Circuit class simulateCircuit method", () => {
     })
 
     test("simulate on depths dict", () => {
-        circuit.buildDepthsDict()
+        const allPaths = circuit.findAllPaths()
+        const depthsDict = circuit.buildDepthsDict(allPaths)
         circuit.initializeCircuit(2)
-        expect(circuit.simulateCircuit(circuit.depthsDict)).toEqual({
+        expect(circuit.simulateCircuit(depthsDict)).toEqual({
             1: {
                 4: { state: "computed", outputValue: 0 },
                 5: { state: "computed", outputValue: 0 },
@@ -68,18 +70,19 @@ describe("MIG class simulateCircuit method", () => {
     })
 
     test("empty depths dict", () => {
-        expect(() => circuit.simulateCircuit(circuit.depthsDict)).toThrow(
+        expect(() => circuit.simulateCircuit([])).toThrow(
             "depths dict is empty"
         )
-        expect(() => circuit.simulateCircuit(circuit.xDepthsDict)).toThrow(
+        expect(() => circuit.simulateCircuit([])).toThrow(
             "depths dict is empty"
         )
     })
 
     test("simulate mig on extended depths dict (5th set)", () => {
-        circuit.buildXDepthsDict()
+        const allPaths = circuit.findAllPaths()
+        const xDepthsDict = circuit.buildXDepthsDict(allPaths)
         circuit.initializeCircuit(5)
-        expect(circuit.simulateCircuit(circuit.xDepthsDict)).toEqual({
+        expect(circuit.simulateCircuit(xDepthsDict)).toEqual({
             1: {
                 6: { state: "computed", outputValue: 0 },
                 7: { state: "uncertain", outputValue: null },
@@ -106,9 +109,10 @@ describe("MIG class simulateCircuit method", () => {
     })
 
     test("simulate  mig on depths dict (2nd set)", () => {
-        circuit.buildDepthsDict()
+        const allPaths = circuit.findAllPaths()
+        const depthsDict = circuit.buildDepthsDict(allPaths)
         circuit.initializeCircuit(2)
-        expect(circuit.simulateCircuit(circuit.depthsDict)).toEqual({
+        expect(circuit.simulateCircuit(depthsDict)).toEqual({
             1: {
                 6: { state: "computed", outputValue: 0 },
                 11: { state: "computed", outputValue: 1 },
