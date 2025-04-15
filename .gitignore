@@ -27,3 +27,4 @@ src/services/results.ndjson
 src/services/test-optimal.js
 src/utils/load-ndjson.js
 .prettierignore
+src/services/results-to-analize.ndjson

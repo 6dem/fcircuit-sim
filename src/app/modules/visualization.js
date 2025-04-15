@@ -20,8 +20,9 @@ const increaseButton = document.getElementById("button--increase")
 const decreaseButton = document.getElementById("button--decrease")
 
 const visualPerformButton = document.getElementById("visual-perform-button")
-const circuitNumberElement = document.querySelector(".circuit-number")
 const progressSliderElement = document.querySelector(".progress-slider")
+const circuitInput = document.getElementById("circuitInput")
+const suggestions = document.getElementById("suggestions")
 const signCheckbox = document.getElementById("sign-checkbox")
 const indexCheckbox = document.getElementById("index-checkbox")
 const signCheckboxWrapper = document.getElementById("sign-checkbox-wrapper")
@@ -66,8 +67,8 @@ function handleFileRead(event) {
 
         removeEventListeners()
 
-        updateUIOnFileLoad()
         setupEventListeners()
+        updateUIOnFileLoad()
 
         showElement(visualizationSection)
         showCircuit()
@@ -139,7 +140,9 @@ function updateSliderSettings() {
         sliderWidth: sliderWidthLocal,
         realSliderWidth: realSliderWidthLocal,
     })
+    const newFontSize = realSliderWidthLocal < 20 ? 16 : 20
     progressSliderElement.style.width = `${realSliderWidthLocal}%`
+    circuitInput.style.fontSize = `${newFontSize}px`
     updateSliderPosition()
 }
 
@@ -197,6 +200,7 @@ function toggleArrowButtons() {
     if (appState.circuitsCount === 1) {
         hideElement(leftArrowButton)
         hideElement(rightArrowButton)
+        disableButton(circuitInput)
     }
 }
 
@@ -219,7 +223,8 @@ function updateSliderPosition() {
 }
 
 function updateCircuitNumber() {
-    circuitNumberElement.textContent = appState.circuitNumber
+    circuitInput.placeholder = appState.circuitNumber
+    circuitInput.value = appState.circuitNumber
 }
 
 function increaseBinary() {
@@ -302,11 +307,7 @@ function handleDecreaseClick() {
     updateSetResults(appState.circuitResultData)
 }
 
-function handleLeftArrowClick() {
-    const circuitIndexLocal =
-        (appState.circuitIndex - 1 + appState.circuitsCount) %
-        appState.circuitsCount
-
+function toggleCircuit(circuitIndexLocal) {
     setState({
         circuitIndex: circuitIndexLocal,
         sliderPosition: circuitIndexLocal * appState.sliderWidth,
@@ -324,25 +325,69 @@ function handleLeftArrowClick() {
     showCircuitFormat()
 }
 
+function handleLeftArrowClick() {
+    const circuitIndexLocal =
+        (appState.circuitIndex - 1 + appState.circuitsCount) %
+        appState.circuitsCount
+
+    toggleCircuit(circuitIndexLocal)
+}
+
 function handleRightArrowClick() {
     const circuitIndexLocal =
         (appState.circuitIndex + 1) % appState.circuitsCount
 
-    setState({
-        circuitIndex: circuitIndexLocal,
-        sliderPosition: circuitIndexLocal * appState.sliderWidth,
-        circuitNumber: appState.jsonData[circuitIndexLocal].number,
+    toggleCircuit(circuitIndexLocal)
+}
+
+function handleCircuitIndexInput() {
+    const query = circuitInput.value.trim()
+    suggestions.innerHTML = ""
+
+    if (query.length < 1) return
+
+    const matches = appState.jsonData.filter((circuit) =>
+        circuit.number.toString().includes(query)
+    )
+
+    const fragment = document.createDocumentFragment()
+
+    matches.slice(0, 10).forEach((match) => {
+        const li = document.createElement("li")
+        li.textContent = match.number
+
+        li.addEventListener("click", () => {
+            circuitInput.value = match.number
+            suggestions.innerHTML = ""
+
+            const circuitIndex = appState.jsonData.findIndex(
+                (circuit) => circuit.number === match.number
+            )
+
+            toggleCircuit(circuitIndex)
+        })
+
+        fragment.appendChild(li)
     })
-    inputField.removeEventListener("click", handleInputClick)
-    updateSliderPosition()
-    updateCircuitNumber()
-    setCheckboxUnchecked(signCheckbox)
-    disableButton(signCheckbox)
-    removeAnimateControls()
-    circuitReset()
-    resetCircuit()
-    showCircuit()
-    showCircuitFormat()
+
+    suggestions.appendChild(fragment)
+}
+
+function addCircuitInputListener() {
+    enableButton(circuitInput)
+    circuitInput.addEventListener("input", handleCircuitIndexInput)
+    document.addEventListener("click", closeSuggestion)
+}
+
+function removeCircuitInputListener() {
+    circuitInput.removeEventListener("input", handleCircuitIndexInput)
+    document.removeEventListener("click", closeSuggestion)
+}
+
+function closeSuggestion(e) {
+    if (!e.target.closest(".circuit-search")) {
+        suggestions.innerHTML = ""
+    }
 }
 
 function setupEventListeners() {
@@ -357,6 +402,7 @@ function setupEventListeners() {
     decreaseButton.addEventListener("click", handleDecreaseClick)
     leftArrowButton.addEventListener("click", handleLeftArrowClick)
     rightArrowButton.addEventListener("click", handleRightArrowClick)
+    addCircuitInputListener()
     addVisualPerformListener()
     addDurationInputListener()
 }
@@ -371,6 +417,7 @@ function removeEventListeners() {
     decreaseButton.removeEventListener("click", handleDecreaseClick)
     leftArrowButton.removeEventListener("click", handleLeftArrowClick)
     rightArrowButton.removeEventListener("click", handleRightArrowClick)
+    removeCircuitInputListener()
     removeVisualPerformListener()
     removeDurationInputListener()
 }
