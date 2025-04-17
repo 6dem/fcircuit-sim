@@ -1,4 +1,4 @@
-import { appState, setState } from "../app.js"
+import { setState } from "../app.js"
 import { Analyzer } from "../services/analyzer.js"
 import { showCustomAlert } from "../utils/alerts.js"
 import { disableButton, enableButton } from "../utils/disable-enable-btn.js"
@@ -145,7 +145,6 @@ async function handleAnalizeFileChange() {
         removeShadowAnimation(analyzeAttachButton)
         analyzeAttachButton.style.boxShadow =
             "inset 1px 1px 1px 0 var(--color-white-25), 5px 4px 10px var(--color-white-50)"
-        console.log("🚀 ~ handleAnalizeFileChange ~ appState:", appState)
     } catch (error) {
         removeShadowAnimation(analyzeAttachButton)
         handleFileReadError(error)

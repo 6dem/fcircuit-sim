@@ -2,6 +2,7 @@ import { appState } from "../app.js"
 import { showCustomAlert } from "../utils/alerts.js"
 import { disableButton, enableButton } from "../utils/disable-enable-btn.js"
 import { hideElement, showElement } from "../utils/show-hide-element.js"
+import { handleCircuitNumberClick } from "./visualization.js"
 
 const analyzationMain = document.getElementById("analyzation-main")
 const analyzeCheckbox = document.getElementById("checkbox-arrow")
@@ -110,33 +111,32 @@ function handleMinCircuitsClick() {
 }
 
 function renderMinimalCircuitsTables(metricsData) {
-    // Очищаем перед вставкой новых данных
     clearMinTables()
+
     const delayTableWrapper = document.createElement("div")
     delayTableWrapper.classList.add("analyze-table-wrapper")
+
     const signDelayTableWrapper = document.createElement("div")
     signDelayTableWrapper.classList.add("analyze-table-wrapper")
 
     for (const [metricName, data] of Object.entries(metricsData)) {
         if (!data.minimalCircuits.length) continue
-        // Заголовок
+
         const title = document.createElement("h3")
         title.classList.add("metrics-title")
         title.textContent = `Minimal ${metricName} schemes`
 
-        if (metricName === "delay") {
-            delayMinContainer.appendChild(title)
-            delayMinContainer.appendChild(delayTableWrapper)
-        } else {
-            signDelayMinContainer.appendChild(title)
-            signDelayMinContainer.appendChild(signDelayTableWrapper)
-        }
+        const container =
+            metricName === "delay" ? delayMinContainer : signDelayMinContainer
+        const wrapper =
+            metricName === "delay" ? delayTableWrapper : signDelayTableWrapper
 
-        // Таблица
+        container.appendChild(title)
+        container.appendChild(wrapper)
+
         const table = document.createElement("table")
         table.classList.add("metrics-table")
 
-        // Заголовок таблицы
         const thead = document.createElement("thead")
         thead.innerHTML = `
             <tr>
@@ -147,24 +147,33 @@ function renderMinimalCircuitsTables(metricsData) {
         `
         table.appendChild(thead)
 
-        // Тело таблицы
         const tbody = document.createElement("tbody")
+
         data.minimalCircuits.forEach((circuit) => {
             const row = document.createElement("tr")
-            row.innerHTML = `
-                <td>${circuit.number}</td>
-                <td>${circuit.metric}</td>
-                <td>${circuit.depth}</td>
-            `
+
+            const numberCell = document.createElement("td")
+            numberCell.textContent = circuit.number
+            numberCell.style.cursor = "pointer"
+            numberCell.addEventListener("click", async () => {
+                await handleCircuitNumberClick(circuit.number)
+            })
+
+            const metricCell = document.createElement("td")
+            metricCell.textContent = circuit.metric
+
+            const depthCell = document.createElement("td")
+            depthCell.textContent = circuit.depth
+
+            row.appendChild(numberCell)
+            row.appendChild(metricCell)
+            row.appendChild(depthCell)
+
             tbody.appendChild(row)
         })
 
         table.appendChild(tbody)
-        if (metricName === "delay") {
-            delayTableWrapper.appendChild(table)
-        } else {
-            signDelayTableWrapper.appendChild(table)
-        }
+        wrapper.appendChild(table)
     }
 }
 

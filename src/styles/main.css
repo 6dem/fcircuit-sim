@@ -894,9 +894,19 @@ input[type="checkbox"]:hover {
     padding: 8px;
     border-bottom: 1px solid var(--color-white);
 }
+
 .metrics-table td {
     text-overflow: ellipsis;
     padding: 8px;
+}
+
+.metrics-table td:first-child {
+    font-weight: 700;
+    color: var(--color-purple-light);
+}
+
+.metrics-table td:first-child:hover {
+    color: var(--color-pink-bg);
 }
 
 @media (min-width: 1440px) {

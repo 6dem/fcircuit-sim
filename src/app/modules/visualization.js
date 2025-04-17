@@ -4,6 +4,7 @@ import {
 } from "../../services/visual-process-circuit.js"
 import { appState, setState } from "../app.js"
 import { Visualizer } from "../services/visualizer.js"
+import { showCustomAlert } from "../utils/alerts.js"
 import { setCheckboxUnchecked } from "../utils/check-uncheck.js"
 import { disableButton, enableButton } from "../utils/disable-enable-btn.js"
 import { handleFileReadError } from "../utils/file-reader-error.js"
@@ -248,18 +249,27 @@ function decreaseBinary() {
 }
 
 function handleVisualizeClick() {
-    const file = fileInput.files[0]
-    if (file) {
+    return new Promise((resolve, reject) => {
+        const file = fileInput.files[0]
+        if (!file) return reject("No file")
+
         try {
             checkFileType(file)
-        } catch {
-            return
+        } catch (e) {
+            return reject("Invalid file type")
         }
 
         const reader = new FileReader()
-        reader.onload = handleFileRead
+        reader.onload = function (event) {
+            handleFileRead(event)
+            resolve()
+        }
+        reader.onerror = function () {
+            reject("File read error")
+        }
+
         reader.readAsText(file)
-    }
+    })
 }
 
 function handleInputClick() {
@@ -371,6 +381,29 @@ function handleCircuitIndexInput() {
     })
 
     suggestions.appendChild(fragment)
+}
+
+async function handleCircuitNumberClick(circuitNumber) {
+    if (!appState.jsonData?.length) {
+        showCustomAlert("No file with the circuits description")
+        return
+    }
+
+    const circuitIndex = appState.jsonData.findIndex(
+        (circuit) => circuit.number === circuitNumber
+    )
+
+    if (circuitIndex === -1) {
+        showCustomAlert("The circuits description file is wrong")
+        return
+    }
+
+    try {
+        await handleVisualizeClick()
+        toggleCircuit(circuitIndex)
+    } catch (error) {
+        showCustomAlert(error)
+    }
 }
 
 function addCircuitInputListener() {
@@ -749,7 +782,9 @@ function removeHoverEffect(inputField) {
 
 export {
     addVisualizeListener,
+    handleCircuitNumberClick,
     removeHoverEffect,
     removeVisualizeListener,
     resetCircuit,
+    toggleCircuit,
 }
