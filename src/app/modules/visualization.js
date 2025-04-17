@@ -401,6 +401,10 @@ async function handleCircuitNumberClick(circuitNumber) {
     try {
         await handleVisualizeClick()
         toggleCircuit(circuitIndex)
+        visualizationSection.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+        })
     } catch (error) {
         showCustomAlert(error)
     }
