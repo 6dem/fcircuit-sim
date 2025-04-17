@@ -206,12 +206,12 @@ function updateTable(direction) {
 
             if (+result.inputSet === 0) {
                 row.innerHTML = `
-                    <td style="padding-top: 25px">${entry.number}</td>
-                    <td style="padding-top: 25px">${entry.depth}</td>
-                    <td style="padding-top: 25px">${result.inputSet}</td>
-                    <td style="padding-top: 25px">${result.outputValue[output]}</td>
-                    <td style="padding-top: 25px">${result.delay}</td>
-                    <td style="padding-top: 25px">${result.signDelay}</td>
+                    <td>${entry.number}</td>
+                    <td>${entry.depth}</td>
+                    <td>${result.inputSet}</td>
+                    <td>${result.outputValue[output]}</td>
+                    <td>${result.delay}</td>
+                    <td>${result.signDelay}</td>
                 `
             } else {
                 row.innerHTML = `
