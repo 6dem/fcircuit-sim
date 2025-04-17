@@ -21,10 +21,12 @@ function handleAnalyzeCheckboxChange(event) {
     const isChecked = event.target.checked
     if (isChecked) {
         showElement(analyzationMain)
+        addCountInputListener()
         addDelayCheckboxListener()
         addSignDelayCheckboxListener()
     } else {
         hideElement(analyzationMain)
+        removeCountInputListener()
         removeDelayCheckboxListener()
         removeSignDelayCheckboxListener()
     }
@@ -38,12 +40,15 @@ function removeAnalyzeCheckboxListener() {
     analyzeCheckbox.removeEventListener("change", handleAnalyzeCheckboxChange)
 }
 
-function updateMinCircuitsButtonState() {
-    const hasMetricsSelected =
+function updateMinCircuitsButtonState(isCountConst = true) {
+    let hasMetricsSelected =
         (delayCheckbox.checked &&
             !appState.analyzer?.metrics?.delay?.minimalCircuits?.length > 0) ||
         (signDelayCheckbox.checked &&
             !appState.analyzer?.metrics?.signDelay?.minimalCircuits?.length > 0)
+    if (!isCountConst) {
+        hasMetricsSelected = delayCheckbox.checked || signDelayCheckbox.checked
+    }
     const hasData = appState.analyzer?.processedData?.length > 0
 
     if (hasMetricsSelected && hasData) {
@@ -51,6 +56,23 @@ function updateMinCircuitsButtonState() {
     } else {
         disableButton(minCircuitsButton)
     }
+}
+
+function handleCountInputChange() {
+    const value = parseInt(countInputElement.value, 10)
+    if (Number.isInteger(value) && value >= 1) {
+        updateMinCircuitsButtonState(false)
+    } else {
+        disableButton(minCircuitsButton)
+    }
+}
+
+function addCountInputListener() {
+    countInputElement.addEventListener("input", handleCountInputChange)
+}
+
+function removeCountInputListener() {
+    countInputElement.removeEventListener("input", handleCountInputChange)
 }
 
 function addDelayCheckboxListener() {
@@ -88,16 +110,8 @@ function handleMinCircuitsClick() {
 
     // Формируем массив выбранных метрик
     const selectedMetrics = []
-    if (
-        delayCheckbox.checked &&
-        !appState.analyzer?.metrics?.delay?.minimalCircuits?.length > 0
-    )
-        selectedMetrics.push("delay")
-    if (
-        signDelayCheckbox.checked &&
-        !appState.analyzer?.metrics?.signDelay?.minimalCircuits?.length > 0
-    )
-        selectedMetrics.push("signDelay")
+    if (delayCheckbox.checked) selectedMetrics.push("delay")
+    if (signDelayCheckbox.checked) selectedMetrics.push("signDelay")
 
     if (selectedMetrics.length === 0) {
         showCustomAlert("Choose at least one metric.")
