@@ -40,15 +40,16 @@ function removeAnalyzeCheckboxListener() {
     analyzeCheckbox.removeEventListener("change", handleAnalyzeCheckboxChange)
 }
 
-function updateMinCircuitsButtonState(isCountConst = true) {
+function updateMinCircuitsButtonState() {
+    const value = parseInt(countInputElement.value, 10)
     let hasMetricsSelected =
         (delayCheckbox.checked &&
-            !appState.analyzer?.metrics?.delay?.minimalCircuits?.length > 0) ||
+            appState.analyzer?.metrics?.delay?.minimalCircuits?.length !==
+                value) ||
         (signDelayCheckbox.checked &&
-            !appState.analyzer?.metrics?.signDelay?.minimalCircuits?.length > 0)
-    if (!isCountConst) {
-        hasMetricsSelected = delayCheckbox.checked || signDelayCheckbox.checked
-    }
+            appState.analyzer?.metrics?.signDelay?.minimalCircuits?.length !==
+                value)
+
     const hasData = appState.analyzer?.processedData?.length > 0
 
     if (hasMetricsSelected && hasData) {
@@ -61,7 +62,7 @@ function updateMinCircuitsButtonState(isCountConst = true) {
 function handleCountInputChange() {
     const value = parseInt(countInputElement.value, 10)
     if (Number.isInteger(value) && value >= 1) {
-        updateMinCircuitsButtonState(false)
+        updateMinCircuitsButtonState()
     } else {
         disableButton(minCircuitsButton)
     }

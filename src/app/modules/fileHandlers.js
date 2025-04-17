@@ -9,6 +9,7 @@ import {
     addShadowAnimation,
     removeShadowAnimation,
 } from "../utils/toggleShadowAnimation.js"
+import { updateCountInput } from "../utils/update-count-input.js"
 import {
     addMinCircuitsListener,
     clearMinTables,
@@ -109,6 +110,7 @@ async function handleFileChange() {
         enableButton(visualizeButton)
         enableButton(analyzeAttachButton)
         showElement(analyzeAttachButton)
+        updateCountInput(jsonDataLocal.length)
 
         addVisualizeListener()
         addPerformEventListener()
@@ -139,6 +141,7 @@ async function handleAnalizeFileChange() {
 
         setState({ processedData: resultDataLocal, analyzer })
 
+        updateCountInput(resultDataLocal.length)
         enableButton(minCircuitsButton)
         addMinCircuitsListener()
 

@@ -4,6 +4,7 @@ import { Analyzer } from "../services/analyzer.js"
 import { disableButton, enableButton } from "../utils/disable-enable-btn.js"
 import { handleFileReadError } from "../utils/file-reader-error.js"
 import { hideElement, showElement } from "../utils/show-hide-element.js"
+import { updateCountInput } from "../utils/update-count-input.js"
 import {
     addMinCircuitsListener,
     clearMinTables,
@@ -57,6 +58,7 @@ async function handleFileLoad(event) {
             analyzer,
         })
 
+        updateCountInput(resultData.length)
         disableButton(analyzeAttachButton)
         hideElement(analyzeAttachButton)
         enableButton(minCircuitsButton)
