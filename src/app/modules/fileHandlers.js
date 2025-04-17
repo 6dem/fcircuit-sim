@@ -1,9 +1,19 @@
-import { setState } from "../app.js"
+import { appState, setState } from "../app.js"
+import { Analyzer } from "../services/analyzer.js"
 import { showCustomAlert } from "../utils/alerts.js"
 import { disableButton, enableButton } from "../utils/disable-enable-btn.js"
 import { handleFileReadError } from "../utils/file-reader-error.js"
 import { fullReset } from "../utils/reset.js"
 import { hideElement, showElement } from "../utils/show-hide-element.js"
+import {
+    addShadowAnimation,
+    removeShadowAnimation,
+} from "../utils/toggleShadowAnimation.js"
+import {
+    addMinCircuitsListener,
+    clearMinTables,
+    removeMinCircuitsListener,
+} from "./analyzation.js"
 import {
     addPerformEventListener,
     removePerformEventListener,
@@ -21,6 +31,9 @@ const fileError = document.getElementById("file-error")
 const fileName = document.getElementById("file-name")
 const visualizeButton = document.getElementById("visualize-button")
 const performButton = document.getElementById("perform-button")
+const analyzeAttachButton = document.getElementById("analyze-attach-button")
+const analyzeFileInputElement = document.getElementById("analyze-file-upload")
+const minCircuitsButton = document.getElementById("min-circuits-button")
 
 function showLoader() {
     hideElement(fileName)
@@ -41,6 +54,10 @@ function showError() {
 
 function handleAttachClick() {
     fileInputElement.click()
+}
+
+function handleAnalizeAttachClick() {
+    analyzeFileInputElement.click()
 }
 
 async function handleSampleClick() {
@@ -66,7 +83,6 @@ async function handleSampleClick() {
         fileInput.dispatchEvent(new Event("change"))
     } catch (error) {
         showError()
-        console.error("Ошибка загрузки:", error)
     }
 }
 
@@ -91,6 +107,8 @@ async function handleFileChange() {
 
         enableButton(performButton)
         enableButton(visualizeButton)
+        enableButton(analyzeAttachButton)
+        showElement(analyzeAttachButton)
 
         addVisualizeListener()
         addPerformEventListener()
@@ -98,6 +116,38 @@ async function handleFileChange() {
         hideLoader()
     } catch (error) {
         showError()
+        handleFileReadError(error)
+    }
+}
+
+async function handleAnalizeFileChange() {
+    analyzeAttachButton.style.boxShadow = ""
+    const file = analyzeFileInputElement.files[0]
+
+    if (!file) {
+        disableButton(minCircuitsButton)
+        return
+    }
+
+    clearMinTables()
+    removeMinCircuitsListener()
+
+    try {
+        addShadowAnimation(analyzeAttachButton)
+        const resultDataLocal = await validateJsonFile(file)
+        const analyzer = new Analyzer(resultDataLocal)
+
+        setState({ processedData: resultDataLocal, analyzer })
+
+        enableButton(minCircuitsButton)
+        addMinCircuitsListener()
+
+        removeShadowAnimation(analyzeAttachButton)
+        analyzeAttachButton.style.boxShadow =
+            "inset 1px 1px 1px 0 var(--color-white-25), 5px 4px 10px var(--color-white-50)"
+        console.log("🚀 ~ handleAnalizeFileChange ~ appState:", appState)
+    } catch (error) {
+        removeShadowAnimation(analyzeAttachButton)
         handleFileReadError(error)
     }
 }
@@ -140,6 +190,8 @@ function addFileEventListeners() {
     attachButton.addEventListener("click", handleAttachClick)
     fileInputElement.addEventListener("change", handleFileChange)
     loadSampleButton.addEventListener("click", handleSampleClick)
+    analyzeAttachButton.addEventListener("click", handleAnalizeAttachClick)
+    analyzeFileInputElement.addEventListener("change", handleAnalizeFileChange)
 }
 
 function removeFileEventListeners() {

@@ -55,4 +55,9 @@
         <path d="m9 9 6 6"/>
     </symbol>
 
+    <symbol id="checkbox-arrow" width="148" height="22" viewBox="0 0 148 22" fill="none">
+        <path d="M74 21L146.395 1.51802" stroke="white" stroke-width="2" stroke-linecap="round" />
+        <path d="M74 21L1.86631 1.4817" stroke="white" stroke-width="2" stroke-linecap="round" />
+    </symbol>
+
 </svg>

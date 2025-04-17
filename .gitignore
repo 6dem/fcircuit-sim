@@ -22,9 +22,11 @@ circuit-descriptions/aig-converted.json
 circuit-descriptions/aig-db.json
 src/app/services/test-analizator.js
 src/services/errors.ndjson
-src/services/optimal-process-circuits.js
 src/services/results.ndjson
-src/services/test-optimal.js
 src/utils/load-ndjson.js
 .prettierignore
 src/services/results-to-analize.ndjson
+src/services/local-process-circuits.js
+src/services/test-local.js
+results-to-analize.json
+src/app/services/test-analyzer.js

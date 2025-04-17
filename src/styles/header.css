@@ -11,7 +11,7 @@
     align-items: center;
     border-radius: 44px;
     background-color: var(--color-blue);
-    box-shadow: 20px 20px 150px 0 rgba(59, 38, 123, 0.7);
+    box-shadow: 0px 0px 100px 0 rgba(59, 38, 123, 0.7);
 }
 
 .file-upload-wrapper {

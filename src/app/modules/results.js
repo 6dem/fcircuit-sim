@@ -1,8 +1,14 @@
 import { processAllCircuits } from "../../services/process-circuits.js"
 import { appState, setState } from "../app.js"
-import { disableButton } from "../utils/disable-enable-btn.js"
+import { Analyzer } from "../services/analyzer.js"
+import { disableButton, enableButton } from "../utils/disable-enable-btn.js"
 import { handleFileReadError } from "../utils/file-reader-error.js"
 import { hideElement, showElement } from "../utils/show-hide-element.js"
+import {
+    addMinCircuitsListener,
+    clearMinTables,
+    removeMinCircuitsListener,
+} from "./analyzation.js"
 import { checkFileType } from "./fileHandlers.js"
 
 const fileInput = document.getElementById("file-upload")
@@ -12,6 +18,8 @@ const resultsSection = document.getElementById("results-section")
 const tableContainer = document.getElementById("table-wrapper")
 const tableBody = document.querySelector("#results-table tbody")
 const saveButton = document.getElementById("save-button")
+const analyzeAttachButton = document.getElementById("analyze-attach-button")
+const minCircuitsButton = document.getElementById("min-circuits-button")
 
 function handlePerformClick() {
     const file = fileInput.files[0]
@@ -37,17 +45,24 @@ async function handleFileLoad(event) {
 
         setState({ jsonData: JSON.parse(event.target.result) })
 
-        let { resultData, errorData } = await processAllCircuits(
-            appState.jsonData
-        )
+        let { resultData, errorData } = processAllCircuits(appState.jsonData)
         resultData = JSON.parse(resultData)
+        const analyzer = new Analyzer(resultData)
 
         setState({
             processedData: resultData,
             loadedSchemes: resultData,
             currentSchemes: resultData.slice(0, 4),
             currentSchemeIndex: 4,
+            analyzer,
         })
+
+        disableButton(analyzeAttachButton)
+        hideElement(analyzeAttachButton)
+        enableButton(minCircuitsButton)
+        clearMinTables()
+        removeMinCircuitsListener()
+        addMinCircuitsListener()
 
         removeSaveListener()
         removeTableScrollListener()

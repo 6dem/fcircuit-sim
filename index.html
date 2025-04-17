@@ -115,84 +115,83 @@
                                 </svg>
                             </button>
                         </div>
-                        </div>
-                </div>
-                    <div class="visualization__main">
-                        <div class="progress-bar-wrapper">
-                            <button class="arrow-button" id="arrow-button-left">
-                                <svg class="icon" width="26px" height="26px" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
-                                    <use href="./assets/sprites.svg#arrow--left"></use>
-                                </svg>
-                            </button>
-                            <div class="progress-bar">
-                                <div class="progress-slider">
-                                    <input type="text" class="circuit-input" id="circuitInput" placeholder="" autocomplete="off" />
-                                    <ul id="suggestions" class="suggestions-list"></ul>
-                                </div>
-                            </div>
-                            <button class="arrow-button" id="arrow-button-right">
-                                <svg class="icon" width="26px" height="26px" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
-                                    <use href="./assets/sprites.svg#arrow--right"></use>
-                                </svg>
-                            </button>
-                        </div>
-                        
-                        <div class="circuit-options-wrapper">
-                            <div class="checkbox-group">
-                                <div class="checkbox-wrapper hover" id="sign-checkbox-wrapper">
-                                    <input type="checkbox" id="sign-checkbox" disabled>
-                                    <svg viewBox="0 0 35.6 35.6">
-                                        <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle>
-                                        <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
-                                        <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
-                                    </svg>
-                                </div>
-                                <label for="sign-checkbox" class="checkbox-label">show Sign Chains</label>
-                            </div>
-                            <div class="circuit-format-info">
-                                <h3 class="circuit-format" id="circuit-format" title="Circuit format"></h3>
-                            </div>
-                            <div class="checkbox-group">
-                                <div class="checkbox-wrapper hover" id="index-checkbox-wrapper">
-                                    <input type="checkbox" id="index-checkbox">
-                                    <svg viewBox="0 0 35.6 35.6">
-                                        <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle>
-                                        <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
-                                        <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
-                                    </svg>
-                                </div>
-                                <label for="index-checkbox" class="checkbox-label">show indexes</label>
-                            </div>
-                        </div>
-
-                        <div class="visualization__container" id="visualization-container"></div>
                     </div>
+                </div>
+                <div class="visualization__main">
+                    <div class="progress-bar-wrapper">
+                        <button class="arrow-button" id="arrow-button-left">
+                            <svg class="icon" width="26px" height="26px" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+                                <use href="./assets/sprites.svg#arrow--left"></use>
+                            </svg>
+                        </button>
+                        <div class="progress-bar">
+                            <div class="progress-slider">
+                                <input type="text" class="circuit-input" id="circuitInput" placeholder="" autocomplete="off" />
+                                <ul id="suggestions" class="suggestions-list"></ul>
+                            </div>
+                        </div>
+                        <button class="arrow-button" id="arrow-button-right">
+                            <svg class="icon" width="26px" height="26px" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+                                <use href="./assets/sprites.svg#arrow--right"></use>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="circuit-options-wrapper">
+                        <div class="checkbox-group">
+                            <div class="checkbox-wrapper hover" id="sign-checkbox-wrapper">
+                                <input type="checkbox" id="sign-checkbox" disabled>
+                                <svg viewBox="0 0 35.6 35.6">
+                                    <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle>
+                                    <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
+                                    <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
+                                </svg>
+                            </div>
+                            <label for="sign-checkbox" class="checkbox-label">show Sign Chains</label>
+                        </div>
+                        <div class="circuit-format-info">
+                            <h3 class="circuit-format" id="circuit-format" title="Circuit format"></h3>
+                        </div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-wrapper hover" id="index-checkbox-wrapper">
+                                <input type="checkbox" id="index-checkbox">
+                                <svg viewBox="0 0 35.6 35.6">
+                                    <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle>
+                                    <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
+                                    <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
+                                </svg>
+                            </div>
+                            <label for="index-checkbox" class="checkbox-label">show indexes</label>
+                        </div>
+                    </div>
+                    <div class="visualization__container" id="visualization-container"></div>
+                </div>
                 <div class="visualization__side-panel visualization__side-panel--right">
                     <div class="field set-results-wrapper">
                         <ul class="set-results" id="set-results"></ul>
                     </div>
                     <button class="btn button--results" id="button--results" disabled>All Results</button>
-                  </div>
-            <div class="modal-overlay hidden" id="modal-overlay">
-                <div class="modal" id="modal">
-                    <h2>Results</h2>
-                    <div class="modal__info" id="modal-info"></div>
-                    <div class="table-wrapper table-wrapper--visual hidden" id="table-wrapper--visual">
-                        <table class="results-table results-table--visual" id="results-table--visual">
-                            <thead>
-                                <tr>
-                                    <th>Set</th>
-                                    <th>Output Value</th>
-                                    <th>Delay</th>
-                                    <th>Sign Delay</th>
-                                </tr>
-                            </thead>
-                            <tbody class="results-table--visual__body"></tbody>
-                        </table>
-                    </div>
-                    <button class="btn modal-close" id="modal-close">Close</button>
                 </div>
-            </div>
+                <div class="modal-overlay hidden" id="modal-overlay">
+                    <div class="modal" id="modal">
+                        <h2>Results</h2>
+                        <div class="modal__info" id="modal-info"></div>
+                        <div class="table-wrapper table-wrapper--visual hidden" id="table-wrapper--visual">
+                            <table class="results-table results-table--visual" id="results-table--visual">
+                                <thead>
+                                    <tr>
+                                        <th>Set</th>
+                                        <th>Output Value</th>
+                                        <th>Delay</th>
+                                        <th>Sign Delay</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="results-table--visual__body"></tbody>
+                            </table>
+                        </div>
+                        <button class="btn modal-close" id="modal-close">Close</button>
+                    </div>
+                </div>
             </section>
             <section class="results hidden" id="results-section">
                 <div class="container">
@@ -214,6 +213,55 @@
                     <div class="table-additional">
                         <button class="btn hidden" id="save-button">Save</button>
                         <div class="error-container field hidden" id="error-container"></div>
+                    </div>
+                </div>
+            </section>
+            <section class="analyzation" id="analyzation-section">
+                <div class="analyzation__wrapper">
+                    <div class="analyzation__header">
+                        <h2>
+                            <label for="checkbox-arrow" class="checkbox-arrow-label">Analyzation</label>
+                        </h2>
+                        <div class="checkbox-arrow-wrapper" id="checkbox-arrow-wrapper">
+                            <input type="checkbox" class="checkbox-arrow" id="checkbox-arrow">
+                            <svg class="checkbox-arrow-icon" width="148" height="22" viewBox="0 0 148 22" preserveAspectRatio="xMidYMid meet">
+                                <use href="./assets/sprites.svg#checkbox-arrow"></use>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="analyzation__main hidden" id="analyzation-main">
+                        <button class="btn btn--attach-analyze" id="analyze-attach-button">Attach file</button>
+                        <input type="file" class="hidden" id="analyze-file-upload">
+                        <div class="min-circuits-wrapper">
+                            <div class="search-min-controls">
+                                <h3>Search minimal circuits</h3>
+                                <div class="metric-input-group">
+                                    <label for="input-count">Count:</label>
+                                    <input class="input-count" id="input-count" type="number" value="10" min="1" step="1"/>
+                                </div>
+                                <div class="metric-checkbox-group">
+                                    <div class="metric-checkbox-wrapper">
+                                        <label class="checkbox-container" >
+                                            <input class="metric-checkbox" id="delay-metric-checkbox" checked="checked" type="checkbox">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label for="delay-metric-checkbox">Delay</label>
+                                    </div>
+                                    <div class="metric-checkbox-wrapper">
+                                        <label class="checkbox-container">
+                                            <input class="metric-checkbox" id="sign-metric-checkbox" checked="checked" type="checkbox">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label for="sign-metric-checkbox">Sign delay</label>
+                                    </div>
+                                </div>
+                                <button class="btn btn--min" id="min-circuits-button" disabled>Search</button>
+                            </div>
+                            <div class="min-circuits-content" id="min-circuits-content">
+                                <div class="min-container" id="delay-min-container"></div>
+                                <div class="min-container" id="sign-delay-min-container"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>

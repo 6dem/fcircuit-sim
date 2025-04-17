@@ -1,21 +1,27 @@
 import { MaxHeap } from "../../utils/max-heap.js"
 
-class Analizator {
-    constructor(data, options = {}) {
-        const { limit = 8 } = options
-        this.validateInput(data, limit)
+class Analyzer {
+    constructor(data) {
+        this.validateInput(data)
         this.processedData = data
-        this.limit = limit
         this.metrics = {
             delay: { minimalCircuits: [], maxMetrics: [] },
             signDelay: { minimalCircuits: [], maxMetrics: [] },
         }
-        this.analyzeMetrics()
     }
 
-    analyzeMetrics() {
-        ;["delay", "signDelay"].forEach((metric) => {
-            const heap = new MaxHeap(this.limit)
+    analyzeMetrics(metrics, limit) {
+        if (!Number.isInteger(limit) || limit < 1) {
+            throw new Error("Limit must be a positive integer")
+        }
+        if (!Array.isArray(metrics)) {
+            throw new Error("Metrics is not an array")
+        }
+        if (!metrics || !metrics.length) {
+            throw new Error("Metrics array is empty")
+        }
+        metrics.forEach((metric) => {
+            const heap = new MaxHeap(limit)
             const maxMetrics = []
 
             this.processedData.forEach((circuit) => {
@@ -37,11 +43,7 @@ class Analizator {
         })
     }
 
-    validateInput(data, limit) {
-        if (!Number.isInteger(limit) || limit < 1) {
-            throw new Error("Limit must be a positive integer")
-        }
-
+    validateInput(data) {
         if (!Array.isArray(data)) {
             throw new Error("Input data must be an array")
         }
@@ -84,4 +86,4 @@ class Analizator {
     }
 }
 
-export { Analizator }
+export { Analyzer }

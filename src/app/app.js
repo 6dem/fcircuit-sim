@@ -1,3 +1,4 @@
+import { addAnalyzeCheckboxListener } from "./modules/analyzation.js"
 import { addFileEventListeners } from "./modules/fileHandlers.js"
 import {
     initKeyboardControls,
@@ -31,6 +32,7 @@ function initApp() {
     addFileEventListeners()
     initShortcutsToggle()
     initKeyboardControls()
+    addAnalyzeCheckboxListener()
 }
 
 export { appState, initApp, setState }
