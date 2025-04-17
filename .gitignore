@@ -1,32 +1,27 @@
 # Dependencies
 node_modules/
 .vscode/
+.prettierignore
 
 # Temporary files
 draft.js
-
-#
-.gitignore
-
-#
-database_dump_MIG.txt
-mig-db.json
-circuit-descriptions/mig-and-error — копия.json
 src/draft.html
 src/draft-data.js
-circuit-descriptions/mig-and-error-9.json
-circuit-descriptions/database_dump_AIG.txt
-circuit-descriptions/aig.txt
-src/utils/circuit-description-formatting.js
-circuit-descriptions/aig-converted.json
-circuit-descriptions/aig-db.json
+
+# Circuits descriptions
+circuit-descriptions/
+!circuit-descriptions/fcircuit-aig-mig.json
+
+# Local tests and utils
+src/app/services/test-analyzer.js
 src/app/services/test-analizator.js
+src/utils/load-ndjson.js
+src/utils/circuit-description-formatting.js
+src/services/test-local.js
+src/services/local-process-circuits.js
+
+# Results
+results-to-analize.json
 src/services/errors.ndjson
 src/services/results.ndjson
-src/utils/load-ndjson.js
-.prettierignore
 src/services/results-to-analize.ndjson
-src/services/local-process-circuits.js
-src/services/test-local.js
-results-to-analize.json
-src/app/services/test-analyzer.js
