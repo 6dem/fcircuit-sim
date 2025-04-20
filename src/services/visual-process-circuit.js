@@ -16,14 +16,13 @@ export function processCircuit(jsonData, circuitIndex) {
 
     const circuitData = jsonData[circuitIndex]
 
-    let circuit
-    const sets = 2 ** circuitData.countInputs
-    const format = circuitData.format
-    let depth
-    const setResults = []
-    let stateHistory = {}
-
     try {
+        let circuit
+        let depth
+        const setResults = []
+        let stateHistory = {}
+        const sets = 2 ** circuitData.countInputs
+        const format = circuitData.format
         for (let set = 0; set < sets; set++) {
             circuit = createCircuit(format)
             circuit.parseCircuit(jsonData, +circuitData.number)

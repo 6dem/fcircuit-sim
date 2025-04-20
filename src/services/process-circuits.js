@@ -24,18 +24,17 @@ export function processAllCircuits(jsonData) {
             break // Прерываем выполнение при установке флага
         }
 
-        let circuit
-        const sets = 2 ** circuitData.countInputs
-        const format = circuitData.format
-        let depth
-        const setResults = []
-        circuit = createCircuit(format)
-        circuit.parseCircuit(jsonData, +circuitData.number)
-        const allPaths = circuit.findAllPaths()
-        const xDepthsDict = circuit.buildXDepthsDict(allPaths)
-        depth = circuit.calculateDepth(allPaths)
-
         try {
+            let circuit
+            let depth
+            const setResults = []
+            const sets = 2 ** circuitData.countInputs
+            const format = circuitData.format
+            circuit = createCircuit(format)
+            circuit.parseCircuit(jsonData, +circuitData.number)
+            const allPaths = circuit.findAllPaths()
+            const xDepthsDict = circuit.buildXDepthsDict(allPaths)
+            depth = circuit.calculateDepth(allPaths)
             for (let set = 0; set < sets; set++) {
                 if (cancelProcessing) {
                     break // Прерываем выполнение при установке флага
