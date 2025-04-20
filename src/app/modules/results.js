@@ -1,4 +1,3 @@
-import { processAllCircuits } from "../../services/process-circuits.js"
 import { appState, setState } from "../app.js"
 import { Analyzer } from "../services/analyzer.js"
 import { disableButton, enableButton } from "../utils/disable-enable-btn.js"
@@ -44,10 +43,20 @@ async function handleFileLoad(event) {
             throw new Error("The JSON data is not an array")
         }
 
-        setState({ jsonData: JSON.parse(event.target.result) })
+        setState({ jsonData: jsonDataLocal })
 
-        let { resultData, errorData } = processAllCircuits(appState.jsonData)
-        resultData = JSON.parse(resultData)
+        const worker = new Worker("src/app/services/process-worker.js", {
+            type: "module",
+        })
+
+        const result = await new Promise((resolve, reject) => {
+            worker.onmessage = (event) => resolve(event.data)
+            worker.onerror = (error) => reject(error)
+            worker.postMessage(jsonDataLocal)
+        })
+
+        const { resultData: rawResultData, errorData } = result
+        const resultData = JSON.parse(rawResultData)
         const analyzer = new Analyzer(resultData)
 
         setState({
