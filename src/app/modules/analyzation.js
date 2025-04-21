@@ -139,7 +139,7 @@ function renderMinimalCircuitsTables(metricsData) {
 
         const title = document.createElement("h3")
         title.classList.add("metrics-title")
-        title.textContent = `Minimal ${metricName} schemes`
+        title.textContent = `Minimal ${metricName} circuits`
 
         const container =
             metricName === "delay" ? delayMinContainer : signDelayMinContainer
