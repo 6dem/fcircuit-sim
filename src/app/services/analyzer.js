@@ -14,7 +14,15 @@ class Analyzer {
             delay: [],
             signDelay: [],
         }
+        this.differenceDistributions = {
+            depthDelay: [],
+            depthSignDelay: [],
+            delaySignDelay: [],
+        }
+
+        // тестовые запуски
         this.calculateMetricDistributions()
+        this.calculateDifferenceDistributions()
     }
 
     calculateMaxMetric(circuit, metric) {
@@ -92,6 +100,75 @@ class Analyzer {
         })
 
         this.metricDistributions = result
+    }
+
+    calculateMetricDifferences() {
+        const differences = this.calculateDifferences()
+
+        const stats = {}
+
+        Object.keys(differences).forEach((key) => {
+            const values = differences[key]
+            const mean = this.calculateMean(values)
+            const variance = this.calculateVariance(values, mean)
+
+            stats[key] = { values, mean, variance }
+        })
+
+        return stats
+    }
+
+    calculateDifferenceDistributions() {
+        const differences = this.calculateDifferences()
+
+        Object.keys(differences).forEach((key) => {
+            const values = differences[key]
+            const distribution = {}
+
+            values.forEach((value) => {
+                if (distribution[value]) {
+                    distribution[value]++
+                } else {
+                    distribution[value] = 1
+                }
+            })
+
+            this.differenceDistributions[key] = distribution
+        })
+    }
+
+    calculateDifferences() {
+        const differences = {
+            depthDelay: [],
+            depthSignDelay: [],
+            delaySignDelay: [],
+        }
+
+        this.processedData.forEach((circuit) => {
+            const depth = circuit.depth
+
+            const delay = this.maxMetrics["delay"].get(circuit.number)
+            const signDelay = this.maxMetrics["signDelay"].get(circuit.number)
+
+            differences.depthDelay.push(depth - delay)
+            differences.depthSignDelay.push(depth - signDelay)
+            differences.delaySignDelay.push(delay - signDelay)
+        })
+
+        return differences
+    }
+
+    calculateMean(values) {
+        const sum = values.reduce((acc, value) => acc + value, 0)
+        return sum / values.length
+    }
+
+    calculateVariance(values, mean) {
+        const sumOfSquares = values.reduce(
+            (acc, value) => acc + Math.pow(value - mean, 2),
+            0
+        )
+        return sumOfSquares / values.length
     }
 
     validateInput(data) {
