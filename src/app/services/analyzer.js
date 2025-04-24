@@ -9,6 +9,12 @@ class Analyzer {
             delay: { minimalCircuits: [] },
             signDelay: { minimalCircuits: [] },
         }
+        this.metricDistributions = {
+            depth: [],
+            delay: [],
+            signDelay: [],
+        }
+        this.calculateMetricDistributions()
     }
 
     calculateMaxMetric(circuit, metric) {
@@ -63,6 +69,29 @@ class Analyzer {
 
             this.minCircuits[metric].minimalCircuits = heap.getSorted()
         })
+    }
+
+    calculateMetricDistributions(metrics = ["depth", "delay", "signDelay"]) {
+        const result = {}
+
+        metrics.forEach((metric) => {
+            const counter = new Map()
+
+            this.processedData.forEach((circuit) => {
+                const value =
+                    metric === "depth"
+                        ? circuit.depth
+                        : this.maxMetrics[metric].get(circuit.number)
+
+                counter.set(value, (counter.get(value) || 0) + 1)
+            })
+
+            result[metric] = Array.from(counter.entries())
+                .map(([value, count]) => ({ value, count }))
+                .sort((a, b) => a.value - b.value)
+        })
+
+        this.metricDistributions = result
     }
 
     validateInput(data) {
