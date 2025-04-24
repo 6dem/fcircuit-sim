@@ -44,11 +44,11 @@ function updateMinCircuitsButtonState() {
     const value = parseInt(countInputElement.value, 10)
     let hasMetricsSelected =
         (delayCheckbox.checked &&
-            appState.analyzer?.metrics?.delay?.minimalCircuits?.length !==
+            appState.analyzer?.minCircuits?.delay?.minimalCircuits?.length !==
                 value) ||
         (signDelayCheckbox.checked &&
-            appState.analyzer?.metrics?.signDelay?.minimalCircuits?.length !==
-                value)
+            appState.analyzer?.minCircuits?.signDelay?.minimalCircuits
+                ?.length !== value)
 
     const hasData = appState.analyzer?.processedData?.length > 0
 
@@ -120,8 +120,8 @@ function handleMinCircuitsClick() {
     }
 
     // Запускаем анализ
-    appState.analyzer.analyzeMetrics(selectedMetrics, count)
-    renderMinimalCircuitsTables(appState.analyzer.metrics)
+    appState.analyzer.findMinimalCircuits(selectedMetrics, count)
+    renderMinimalCircuitsTables(appState.analyzer.minCircuits)
     disableButton(minCircuitsButton)
 }
 

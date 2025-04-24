@@ -4,13 +4,41 @@ class Analyzer {
     constructor(data) {
         this.validateInput(data)
         this.processedData = data
-        this.metrics = {
-            delay: { minimalCircuits: [], maxMetrics: [] },
-            signDelay: { minimalCircuits: [], maxMetrics: [] },
+        this.maxMetrics = this.calculateAllMaxMetrics()
+        this.minCircuits = {
+            delay: { minimalCircuits: [] },
+            signDelay: { minimalCircuits: [] },
         }
     }
 
-    analyzeMetrics(metrics, limit) {
+    calculateMaxMetric(circuit, metric) {
+        let max = -Infinity
+        for (const res of circuit.setResults) {
+            if (res[metric] > max) max = res[metric]
+        }
+        return max
+    }
+
+    calculateAllMaxMetrics(metrics = ["delay", "signDelay"]) {
+        if (!Array.isArray(metrics) || metrics.length === 0) {
+            throw new Error("Metrics must be a non-empty array")
+        }
+
+        const result = {}
+
+        metrics.forEach((metric) => {
+            const metricMap = new Map()
+            this.processedData.forEach((circuit) => {
+                const max = this.calculateMaxMetric(circuit, metric)
+                metricMap.set(circuit.number, max)
+            })
+            result[metric] = metricMap
+        })
+
+        return result
+    }
+
+    findMinimalCircuits(metrics, limit) {
         if (!Number.isInteger(limit) || limit < 1) {
             throw new Error("Limit must be a positive integer")
         }
@@ -22,14 +50,9 @@ class Analyzer {
         }
         metrics.forEach((metric) => {
             const heap = new MaxHeap(limit)
-            const maxMetrics = []
 
             this.processedData.forEach((circuit) => {
-                const maxMetric = this.calculateMaxMetric(circuit, metric)
-                maxMetrics.push({
-                    number: circuit.number,
-                    maxMetric,
-                })
+                const maxMetric = this.maxMetrics[metric].get(circuit.number)
 
                 heap.push({
                     number: circuit.number,
@@ -38,8 +61,7 @@ class Analyzer {
                 })
             })
 
-            this.metrics[metric].minimalCircuits = heap.getSorted()
-            this.metrics[metric].maxMetrics = maxMetrics
+            this.minCircuits[metric].minimalCircuits = heap.getSorted()
         })
     }
 
@@ -75,14 +97,6 @@ class Analyzer {
         })
 
         return true
-    }
-
-    calculateMaxMetric(circuit, metric) {
-        let max = -Infinity
-        for (const res of circuit.setResults) {
-            if (res[metric] > max) max = res[metric]
-        }
-        return max
     }
 }
 
