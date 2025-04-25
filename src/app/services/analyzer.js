@@ -31,6 +31,10 @@ class Analyzer {
             `🚀 ~ Analyzer ~ constructor ~ compareMetricDominance(["signDelay", "delay"]):`,
             this.compareMetricDominance(["signDelay", "delay"])
         )
+        console.log(
+            "🚀 ~ Analyzer ~ constructor ~ this.checkSignificantChainsExistence():",
+            this.checkSignificantChainsExistence()
+        )
     }
 
     calculateMaxMetric(circuit, metric) {
@@ -274,6 +278,36 @@ class Analyzer {
         return {
             metricA,
             metricB,
+            total,
+            count,
+            ratio: total ? count / total : 0,
+        }
+    }
+
+    checkSignificantChainsExistence(perSet = false) {
+        let count = 0
+        let total = 0
+
+        if (perSet) {
+            this.processedData.forEach((circuit) => {
+                circuit.setResults.forEach((res) => {
+                    total++
+                    if (res.signDelay === 0) count++
+                })
+            })
+        } else {
+            const signDelayMap = this.maxMetrics["signDelay"]
+            if (!(signDelayMap instanceof Map)) {
+                throw new Error("maxMetrics.signDelay must be a Map")
+            }
+
+            for (const value of signDelayMap.values()) {
+                total++
+                if (value === 0) count++
+            }
+        }
+
+        return {
             total,
             count,
             ratio: total ? count / total : 0,
