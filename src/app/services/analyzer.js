@@ -23,6 +23,10 @@ class Analyzer {
         // тестовые запуски
         this.calculateMetricDistributions()
         this.calculateDifferenceDistributions()
+        console.log(
+            "🚀 ~ Analyzer ~ constructor ~ this.countMetricEquality():",
+            this.countMetricEquality(["depth", "delay"], true)
+        )
     }
 
     calculateMaxMetric(circuit, metric) {
@@ -192,6 +196,43 @@ class Analyzer {
         })
 
         return result
+    }
+
+    countMetricEquality(
+        metrics = ["depth", "delay", "signDelay"],
+        equal = true
+    ) {
+        if (!Array.isArray(metrics) || metrics.length < 2) {
+            throw new Error(
+                "At least two metrics must be provided for comparison"
+            )
+        }
+
+        let count = 0
+
+        this.processedData.forEach((circuit) => {
+            const values = metrics.map((metric) => {
+                if (metric === "depth") return circuit.depth
+
+                const maxMetric = this.maxMetrics[metric].get(circuit.number)
+                if (!maxMetric)
+                    throw new Error(
+                        `Max metric for circuit ${circuit.number} and metric '${metric}' not found`
+                    )
+                return maxMetric
+            })
+
+            const allEqual = values.every((val) => val === values[0])
+
+            if ((equal && allEqual) || (!equal && !allEqual)) {
+                count++
+            }
+        })
+
+        const total = this.processedData.length
+        const percentage = (count / total) * 100
+
+        return { count, total, percentage }
     }
 
     validateInput(data) {

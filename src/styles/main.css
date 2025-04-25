@@ -708,7 +708,7 @@ input[type="checkbox"]:hover {
 
 .btn--attach-analyze {
     width: 80%;
-    transition: box-shadow 0.5s ease;
+    transition: background 0.3s ease, box-shadow 0.5s ease;
     box-shadow: inset 1px 1px 1px 0 var(--color-white-25),
         0px 0px 0px var(--color-white-50);
 }
