@@ -25,7 +25,11 @@ class Analyzer {
         this.calculateDifferenceDistributions()
         console.log(
             "🚀 ~ Analyzer ~ constructor ~ this.countMetricEquality():",
-            this.countMetricEquality(["depth", "delay"], true)
+            this.countMetricEquality(["signDelay", "delay"], true)
+        )
+        console.log(
+            `🚀 ~ Analyzer ~ constructor ~ compareMetricDominance(["signDelay", "delay"]):`,
+            this.compareMetricDominance(["signDelay", "delay"])
         )
     }
 
@@ -233,6 +237,47 @@ class Analyzer {
         const percentage = (count / total) * 100
 
         return { count, total, percentage }
+    }
+
+    compareMetricDominance([metricA, metricB], perSet = false) {
+        if (!Array.isArray(metricA) && typeof metricA === "string") {
+            ;[metricA, metricB] = [metricA, metricB]
+        }
+
+        let count = 0
+        let total = 0
+
+        if (perSet) {
+            this.processedData.forEach((circuit) => {
+                circuit.setResults.forEach((res) => {
+                    total++
+                    if (res[metricA] > res[metricB]) count++
+                })
+            })
+        } else {
+            const maxA = this.maxMetrics[metricA]
+            const maxB = this.maxMetrics[metricB]
+
+            if (!(maxA instanceof Map) || !(maxB instanceof Map)) {
+                throw new Error("One of the metric maps is invalid.")
+            }
+
+            for (const [circuitNumber, valueA] of maxA.entries()) {
+                const valueB = maxB.get(circuitNumber)
+                if (valueB === undefined) continue
+
+                total++
+                if (valueA > valueB) count++
+            }
+        }
+
+        return {
+            metricA,
+            metricB,
+            total,
+            count,
+            ratio: total ? count / total : 0,
+        }
     }
 
     validateInput(data) {
