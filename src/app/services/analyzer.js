@@ -171,6 +171,29 @@ class Analyzer {
         return sumOfSquares / values.length
     }
 
+    getCircuitMetricsBySet(circuitNumber) {
+        const circuit = this.processedData.find(
+            (c) => c.number === circuitNumber
+        )
+        if (!circuit) {
+            throw new Error(`Circuit with number ${circuitNumber} not found`)
+        }
+
+        const result = {
+            depth: [],
+            delay: [],
+            signDelay: [],
+        }
+
+        circuit.setResults.forEach((set) => {
+            result.push(circuit.depth)
+            result.delay.push(set.delay)
+            result.signDelay.push(set.signDelay)
+        })
+
+        return result
+    }
+
     validateInput(data) {
         if (!Array.isArray(data)) {
             throw new Error("Input data must be an array")
