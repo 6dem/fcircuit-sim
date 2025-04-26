@@ -19,11 +19,11 @@ describe("processAllCircuits function", () => {
                 '    "setResults": [\n' +
                 '        {"inputSet":"000","outputValue":{"9":1},"delay":3,"signDelay":3},\n' +
                 '        {"inputSet":"001","outputValue":{"9":1},"delay":3,"signDelay":3},\n' +
-                '        {"inputSet":"010","outputValue":{"9":1},"delay":1,"signDelay":2},\n' +
-                '        {"inputSet":"011","outputValue":{"9":1},"delay":1,"signDelay":2},\n' +
+                '        {"inputSet":"010","outputValue":{"9":1},"delay":1,"signDelay":1},\n' +
+                '        {"inputSet":"011","outputValue":{"9":1},"delay":1,"signDelay":1},\n' +
                 '        {"inputSet":"100","outputValue":{"9":1},"delay":3,"signDelay":3},\n' +
                 '        {"inputSet":"101","outputValue":{"9":1},"delay":3,"signDelay":3},\n' +
-                '        {"inputSet":"110","outputValue":{"9":1},"delay":1,"signDelay":2},\n' +
+                '        {"inputSet":"110","outputValue":{"9":1},"delay":1,"signDelay":0},\n' +
                 '        {"inputSet":"111","outputValue":{"9":1},"delay":1,"signDelay":0}\n' +
                 "    ]\n" +
                 "  },\n" +

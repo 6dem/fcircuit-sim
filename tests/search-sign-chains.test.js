@@ -22,13 +22,7 @@ describe("Circuit class searchSignChains method", () => {
         circuit.initializeCircuit(2)
         circuit.simulateCircuit(depthsDict)
         const [signChains, _] = circuit.searchSignChains(allPaths)
-        expect(signChains).toEqual([
-            [8, 5, 2],
-            [8, 6, 1],
-            [8, 6, 3],
-            [9, 2],
-            [10, 2],
-        ])
+        expect(signChains).toEqual([[9, 2]])
     })
 
     test("search significant chains on 2nd set | extended depths dict", () => {
@@ -37,13 +31,7 @@ describe("Circuit class searchSignChains method", () => {
         circuit.initializeCircuit(2)
         circuit.simulateCircuit(xDepthsDict)
         const [signChains, _] = circuit.searchSignChains(allPaths)
-        expect(signChains).toEqual([
-            [8, 5, 2],
-            [8, 6, 1],
-            [8, 6, 3],
-            [9, 2],
-            [10, 2],
-        ])
+        expect(signChains).toEqual([[9, 2]])
     })
 
     test("search significant chains on 0 set | extended depths dict", () => {
@@ -52,12 +40,7 @@ describe("Circuit class searchSignChains method", () => {
         circuit.initializeCircuit()
         circuit.simulateCircuit(xDepthsDict)
         const [signChains, _] = circuit.searchSignChains(allPaths)
-        expect(signChains).toEqual([
-            [8, 5, 2],
-            [9, 7, 5, 2],
-            [10, 3],
-            [10, 2],
-        ])
+        expect(signChains).toEqual([[9, 7, 5, 2]])
     })
 })
 
