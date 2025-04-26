@@ -985,6 +985,9 @@ input[type="checkbox"]:hover {
         justify-content: center;
         flex-wrap: wrap;
     }
+    .analyzation-controls {
+        width: 50%;
+    }
 }
 
 @media (max-width: 576px) {
@@ -993,5 +996,8 @@ input[type="checkbox"]:hover {
     }
     .results-table {
         font-size: 20px;
+    }
+    .analyzation-controls {
+        width: 60%;
     }
 }
