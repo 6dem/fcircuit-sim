@@ -11,9 +11,11 @@ import {
 } from "../utils/toggleShadowAnimation.js"
 import { updateCountInput } from "../utils/update-count-input.js"
 import {
-    addMinCircuitsListener,
-    clearMinTables,
-    removeMinCircuitsListener,
+    addAnalyzeListeners,
+    clearAnalyzeContents,
+    disableAnalyzeButtons,
+    enableAnalyzeButtons,
+    removeAnalyzeListeners,
 } from "./analyzation.js"
 import {
     addPerformEventListener,
@@ -127,12 +129,12 @@ async function handleAnalizeFileChange() {
     const file = analyzeFileInputElement.files[0]
 
     if (!file) {
-        disableButton(minCircuitsButton)
+        disableAnalyzeButtons()
         return
     }
 
-    clearMinTables()
-    removeMinCircuitsListener()
+    clearAnalyzeContents()
+    removeAnalyzeListeners()
 
     try {
         addShadowAnimation(analyzeAttachButton)
@@ -142,8 +144,8 @@ async function handleAnalizeFileChange() {
         setState({ processedData: resultDataLocal, analyzer })
 
         updateCountInput(resultDataLocal.length)
-        enableButton(minCircuitsButton)
-        addMinCircuitsListener()
+        enableAnalyzeButtons()
+        addAnalyzeListeners()
 
         removeShadowAnimation(analyzeAttachButton)
         analyzeAttachButton.style.boxShadow =

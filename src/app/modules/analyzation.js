@@ -16,6 +16,10 @@ const signDelayMinContainer = document.getElementById(
 const countInputElement = document.getElementById("input-count")
 const delayCheckbox = document.getElementById("delay-metric-checkbox")
 const signDelayCheckbox = document.getElementById("sign-metric-checkbox")
+const metricDistrWrapper = document.getElementById(
+    "metric-distribution-wrapper"
+)
+const metricDistrButton = document.getElementById("metric-distribution-button")
 
 function handleAnalyzeCheckboxChange(event) {
     const isChecked = event.target.checked
@@ -38,6 +42,31 @@ function addAnalyzeCheckboxListener() {
 
 function removeAnalyzeCheckboxListener() {
     analyzeCheckbox.removeEventListener("change", handleAnalyzeCheckboxChange)
+}
+
+function addAnalyzeListeners() {
+    minCircuitsButton.addEventListener("click", handleMinCircuitsClick)
+    metricDistrButton.addEventListener("click", handleMetricDistrClick)
+}
+
+function removeAnalyzeListeners() {
+    minCircuitsButton.removeEventListener("click", handleMinCircuitsClick)
+    metricDistrButton.removeEventListener("click", handleMetricDistrClick)
+}
+
+function enableAnalyzeButtons() {
+    enableButton(document.getElementById("min-circuits-button"))
+    enableButton(document.getElementById("metric-distribution-button"))
+}
+
+function disableAnalyzeButtons() {
+    disableButton(document.getElementById("min-circuits-button"))
+    disableButton(document.getElementById("metric-distribution-button"))
+}
+
+function clearAnalyzeContents() {
+    clearMinTables()
+    clearMetricDistrCharts()
 }
 
 function updateMinCircuitsButtonState() {
@@ -92,14 +121,6 @@ function removeSignDelayCheckboxListener() {
     signDelayCheckbox.addEventListener("change", updateMinCircuitsButtonState)
 }
 
-function addMinCircuitsListener() {
-    minCircuitsButton.addEventListener("click", handleMinCircuitsClick)
-}
-
-function removeMinCircuitsListener() {
-    minCircuitsButton.removeEventListener("click", handleMinCircuitsClick)
-}
-
 function handleMinCircuitsClick() {
     // Получаем и проверяем количество
     let count = parseInt(countInputElement.value, 10)
@@ -122,6 +143,7 @@ function handleMinCircuitsClick() {
     // Запускаем анализ
     appState.analyzer.findMinimalCircuits(selectedMetrics, count)
     renderMinimalCircuitsTables(appState.analyzer.minCircuits)
+    showElement(minCircuitsContainer)
     disableButton(minCircuitsButton)
 }
 
@@ -205,9 +227,110 @@ function clearMinTables() {
     })
 }
 
+function clearMetricDistrCharts() {
+    const chartDom = document.getElementById("metric-distribution")
+    if (!chartDom) return
+
+    const chartInstance = echarts.getInstanceByDom(chartDom)
+    if (chartInstance) {
+        chartInstance.dispose()
+    }
+
+    chartDom.innerHTML = ""
+    hideElement(document.getElementById("metric-distribution-wrapper"))
+}
+
+function renderMetricDistributionsChart() {
+    const distributions = appState.analyzer.metricDistributions
+    const chartDom = document.getElementById("metric-distribution")
+    const myChart = echarts.init(chartDom)
+
+    const allValuesSet = new Set()
+    for (const metricName in distributions) {
+        distributions[metricName].forEach((item) => {
+            allValuesSet.add(item.value)
+        })
+    }
+    const allValues = Array.from(allValuesSet).sort((a, b) => a - b)
+
+    const colorPalette = ["#3b267b", "#eeedff", "#2e335a"]
+
+    const series = Object.keys(distributions).map((metricName, index) => {
+        const valueToCountMap = new Map()
+        distributions[metricName].forEach((item) => {
+            valueToCountMap.set(item.value, item.count)
+        })
+
+        const data = allValues.map((value) => valueToCountMap.get(value) || 0)
+
+        return {
+            name: metricName,
+            type: "bar",
+            emphasis: { focus: "series" },
+            itemStyle: {
+                color: colorPalette[index % colorPalette.length],
+            },
+            data: data,
+        }
+    })
+
+    const option = {
+        backgroundColor: "transparent",
+        tooltip: {
+            trigger: "axis",
+            axisPointer: {
+                type: "shadow",
+            },
+        },
+        legend: {
+            textStyle: {
+                color: "#ffffff",
+            },
+        },
+        grid: {
+            left: "3%",
+            right: "4%",
+            bottom: "3%",
+            containLabel: true,
+        },
+        xAxis: [
+            {
+                type: "category",
+                data: allValues.map((value) => value.toString()),
+                axisLabel: {
+                    color: "#ffffff",
+                },
+            },
+        ],
+        yAxis: [
+            {
+                type: "value",
+                axisLabel: {
+                    color: "#ffffff",
+                },
+            },
+        ],
+        series: series,
+    }
+
+    myChart.setOption(option)
+    window.addEventListener("resize", function () {
+        myChart.resize()
+    })
+}
+
+function handleMetricDistrClick() {
+    showElement(metricDistrWrapper)
+    appState.analyzer.calculateMetricDistributions()
+    renderMetricDistributionsChart()
+    disableButton(metricDistrButton)
+}
+
 export {
     addAnalyzeCheckboxListener,
-    addMinCircuitsListener,
-    clearMinTables,
-    removeMinCircuitsListener,
+    addAnalyzeListeners,
+    clearAnalyzeContents,
+    disableAnalyzeButtons,
+    enableAnalyzeButtons,
+    removeAnalyzeListeners,
 }

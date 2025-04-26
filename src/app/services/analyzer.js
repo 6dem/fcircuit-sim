@@ -21,7 +21,6 @@ class Analyzer {
         }
 
         // тестовые запуски
-        this.calculateMetricDistributions()
         this.calculateDifferenceDistributions()
         console.log(
             "🚀 ~ Analyzer ~ constructor ~ this.countMetricEquality():",

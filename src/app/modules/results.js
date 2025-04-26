@@ -1,13 +1,14 @@
 import { appState, setState } from "../app.js"
 import { Analyzer } from "../services/analyzer.js"
-import { disableButton, enableButton } from "../utils/disable-enable-btn.js"
+import { disableButton } from "../utils/disable-enable-btn.js"
 import { handleFileReadError } from "../utils/file-reader-error.js"
 import { hideElement, showElement } from "../utils/show-hide-element.js"
 import { updateCountInput } from "../utils/update-count-input.js"
 import {
-    addMinCircuitsListener,
-    clearMinTables,
-    removeMinCircuitsListener,
+    addAnalyzeListeners,
+    clearAnalyzeContents,
+    enableAnalyzeButtons,
+    removeAnalyzeListeners,
 } from "./analyzation.js"
 import { checkFileType } from "./fileHandlers.js"
 
@@ -70,10 +71,10 @@ async function handleFileLoad(event) {
         updateCountInput(resultData.length)
         disableButton(analyzeAttachButton)
         hideElement(analyzeAttachButton)
-        enableButton(minCircuitsButton)
-        clearMinTables()
-        removeMinCircuitsListener()
-        addMinCircuitsListener()
+        enableAnalyzeButtons()
+        clearAnalyzeContents()
+        removeAnalyzeListeners()
+        addAnalyzeListeners()
 
         removeSaveListener()
         removeTableScrollListener()

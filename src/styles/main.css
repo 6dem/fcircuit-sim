@@ -701,7 +701,7 @@ input[type="checkbox"]:hover {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 15px;
+    gap: 20px;
     width: 100%;
     padding: 15px 20px;
 }
@@ -713,7 +713,7 @@ input[type="checkbox"]:hover {
         0px 0px 0px var(--color-white-50);
 }
 
-.min-circuits-wrapper {
+.analyzation-module {
     display: flex;
     align-items: center;
     justify-content: start;
@@ -721,7 +721,7 @@ input[type="checkbox"]:hover {
     width: 100%;
 }
 
-.search-min-controls {
+.analyzation-controls {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -732,10 +732,7 @@ input[type="checkbox"]:hover {
     border-radius: 44px;
     padding: 15px;
     font-size: 20px;
-}
-
-.search-min-controls h3 {
-    text-align: center;
+    width: 30%;
 }
 
 .checkbox-container {
@@ -838,9 +835,8 @@ input[type="checkbox"]:hover {
     border: 2px solid var(--color-white);
 }
 
-.btn--min {
+.btn--analyze {
     font-size: 16px;
-    text-align: center;
 }
 
 @keyframes pulse-shadow {
@@ -945,6 +941,25 @@ input[type="checkbox"]:hover {
     color: var(--color-pink-bg);
 }
 
+.metric-distributions-wrapper {
+    justify-content: space-between;
+}
+
+.metric-distribution-content {
+    background: var(--color-white-25);
+    border: 1px solid var(--color-white);
+    border-radius: 44px;
+    padding: 20px;
+    display: inline-block;
+    width: 100%;
+    max-width: 600px;
+}
+
+.metric-distribution-stage {
+    width: 100%;
+    height: 400px;
+}
+
 @media (min-width: 1440px) {
     .visualization__side-panel {
         max-width: 200px;
@@ -963,6 +978,10 @@ input[type="checkbox"]:hover {
         padding: 0 20px 20px 20px;
     }
     .min-circuits-wrapper {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .metric-distributions-wrapper {
         justify-content: center;
         flex-wrap: wrap;
     }

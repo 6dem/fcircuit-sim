@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <script src="https://unpkg.com/konva@9/konva.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta property="og:title" content="FCircuit Simulator">
@@ -232,8 +233,8 @@
                     <div class="analyzation__main hidden" id="analyzation-main">
                         <button class="btn btn--attach-analyze" id="analyze-attach-button">Attach file</button>
                         <input type="file" class="hidden" id="analyze-file-upload">
-                        <div class="min-circuits-wrapper">
-                            <div class="search-min-controls">
+                        <div class="analyzation-module min-circuits-wrapper">
+                            <div class="analyzation-controls search-min-controls">
                                 <h3>Search minimal circuits</h3>
                                 <div class="metric-input-group">
                                     <label for="input-count">Count:</label>
@@ -255,11 +256,20 @@
                                         <label for="sign-metric-checkbox">Sign delay</label>
                                     </div>
                                 </div>
-                                <button class="btn btn--min" id="min-circuits-button" disabled>Search</button>
+                                <button class="btn btn--analyze" id="min-circuits-button" disabled>Search</button>
                             </div>
-                            <div class="min-circuits-content" id="min-circuits-content">
+                            <div class="min-circuits-content hidden" id="min-circuits-content">
                                 <div class="min-container" id="delay-min-container"></div>
                                 <div class="min-container" id="sign-delay-min-container"></div>
+                            </div>
+                        </div>
+                        <div class="analyzation-module metric-distributions-wrapper">
+                            <div class="analyzation-controls">
+                                <h3>Metric distribution</h3>
+                                <button class="btn btn--analyze" id="metric-distribution-button" disabled>Build Chart</button>
+                            </div>
+                            <div class="metric-distribution-content hidden" id="metric-distribution-wrapper">
+                                <div class="metric-distribution-stage" id="metric-distribution"></div>
                             </div>
                         </div>
                     </div>
