@@ -13,7 +13,6 @@ import { updateCountInput } from "../utils/update-count-input.js"
 import {
     addAnalyzeListeners,
     clearAnalyzeContents,
-    disableAnalyzeButtons,
     enableAnalyzeButtons,
     removeAnalyzeListeners,
 } from "./analyzation.js"
@@ -36,7 +35,6 @@ const visualizeButton = document.getElementById("visualize-button")
 const performButton = document.getElementById("perform-button")
 const analyzeAttachButton = document.getElementById("analyze-attach-button")
 const analyzeFileInputElement = document.getElementById("analyze-file-upload")
-const minCircuitsButton = document.getElementById("min-circuits-button")
 
 function showLoader() {
     hideElement(fileName)
@@ -129,7 +127,6 @@ async function handleAnalizeFileChange() {
     const file = analyzeFileInputElement.files[0]
 
     if (!file) {
-        disableAnalyzeButtons()
         return
     }
 

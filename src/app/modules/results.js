@@ -6,7 +6,6 @@ import { hideElement, showElement } from "../utils/show-hide-element.js"
 import { updateCountInput } from "../utils/update-count-input.js"
 import {
     addAnalyzeListeners,
-    clearAnalyzeContents,
     enableAnalyzeButtons,
     removeAnalyzeListeners,
 } from "./analyzation.js"
@@ -72,7 +71,6 @@ async function handleFileLoad(event) {
         disableButton(analyzeAttachButton)
         hideElement(analyzeAttachButton)
         enableAnalyzeButtons()
-        clearAnalyzeContents()
         removeAnalyzeListeners()
         addAnalyzeListeners()
 

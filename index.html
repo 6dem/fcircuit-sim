@@ -231,8 +231,15 @@
                         </div>
                     </div>
                     <div class="analyzation__main hidden" id="analyzation-main">
-                        <button class="btn btn--attach-analyze" id="analyze-attach-button">Attach file</button>
-                        <input type="file" class="hidden" id="analyze-file-upload">
+                        <div class="analyzation__main-controls">
+                            <button class="btn btn--attach-analyze" id="analyze-attach-button">Attach file</button>
+                            <input type="file" class="hidden" id="analyze-file-upload">
+                            <button class="analyzation-reset" id="analyze-reset-button" >
+                                <svg width="30" height="30" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+                                    <use href="./assets/sprites.svg#list-reset"></use>
+                                </svg>
+                            </button>
+                        </div>
                         <div class="analyzation-module min-circuits-wrapper">
                             <div class="analyzation-controls search-min-controls">
                                 <h3>Search minimal circuits</h3>
@@ -270,6 +277,15 @@
                             </div>
                             <div class="metric-distribution-content hidden" id="metric-distribution-wrapper">
                                 <div class="metric-distribution-stage" id="metric-distribution"></div>
+                            </div>
+                        </div>
+                        <div class="analyzation-module metric-distributions-wrapper">
+                            <div class="analyzation-controls">
+                                <h3>Metric difference distribution</h3>
+                                <button class="btn btn--analyze" id="difference-distribution-button" disabled>Build Chart</button>
+                            </div>
+                            <div class="metric-distribution-content hidden" id="difference-distribution-wrapper">
+                                <div class="metric-distribution-stage" id="difference-distribution"></div>
                             </div>
                         </div>
                     </div>

@@ -7,6 +7,7 @@ import { handleCircuitNumberClick } from "./visualization.js"
 const analyzationMain = document.getElementById("analyzation-main")
 const analyzeCheckbox = document.getElementById("checkbox-arrow")
 const analyzeAttachButton = document.getElementById("analyze-attach-button")
+const analyzeResetButton = document.getElementById("analyze-reset-button")
 const minCircuitsButton = document.getElementById("min-circuits-button")
 const minCircuitsContainer = document.getElementById("min-circuits-content")
 const delayMinContainer = document.getElementById("delay-min-container")
@@ -20,6 +21,12 @@ const metricDistrWrapper = document.getElementById(
     "metric-distribution-wrapper"
 )
 const metricDistrButton = document.getElementById("metric-distribution-button")
+const diffDistrWrapper = document.getElementById(
+    "difference-distribution-wrapper"
+)
+const diffDistrButton = document.getElementById(
+    "difference-distribution-button"
+)
 
 function handleAnalyzeCheckboxChange(event) {
     const isChecked = event.target.checked
@@ -28,11 +35,32 @@ function handleAnalyzeCheckboxChange(event) {
         addCountInputListener()
         addDelayCheckboxListener()
         addSignDelayCheckboxListener()
+        addAnalyzationResetListener()
     } else {
         hideElement(analyzationMain)
         removeCountInputListener()
         removeDelayCheckboxListener()
         removeSignDelayCheckboxListener()
+        removeAnalyzationResetListener()
+    }
+}
+
+function addAnalyzationResetListener() {
+    analyzeResetButton.addEventListener("click", handleAnalyzeResetClick)
+}
+
+function removeAnalyzationResetListener() {
+    analyzeResetButton.addEventListener("click", handleAnalyzeResetClick)
+}
+
+function handleAnalyzeResetClick() {
+    enableButton(analyzeAttachButton)
+    analyzeAttachButton.style.boxShadow = null
+    showElement(analyzeAttachButton)
+
+    clearAnalyzeContents()
+    if (appState.processedData.length) {
+        enableAnalyzeButtons()
     }
 }
 
@@ -47,26 +75,31 @@ function removeAnalyzeCheckboxListener() {
 function addAnalyzeListeners() {
     minCircuitsButton.addEventListener("click", handleMinCircuitsClick)
     metricDistrButton.addEventListener("click", handleMetricDistrClick)
+    diffDistrButton.addEventListener("click", handleDiffDistrClick)
 }
 
 function removeAnalyzeListeners() {
     minCircuitsButton.removeEventListener("click", handleMinCircuitsClick)
     metricDistrButton.removeEventListener("click", handleMetricDistrClick)
+    diffDistrButton.removeEventListener("click", handleDiffDistrClick)
 }
 
 function enableAnalyzeButtons() {
-    enableButton(document.getElementById("min-circuits-button"))
-    enableButton(document.getElementById("metric-distribution-button"))
+    enableButton(minCircuitsButton)
+    enableButton(metricDistrButton)
+    enableButton(diffDistrButton)
 }
 
 function disableAnalyzeButtons() {
-    disableButton(document.getElementById("min-circuits-button"))
-    disableButton(document.getElementById("metric-distribution-button"))
+    disableButton(minCircuitsButton)
+    disableButton(metricDistrButton)
+    disableButton(diffDistrButton)
 }
 
 function clearAnalyzeContents() {
     clearMinTables()
     clearMetricDistrCharts()
+    clearDiffDistrCharts()
 }
 
 function updateMinCircuitsButtonState() {
@@ -324,6 +357,105 @@ function handleMetricDistrClick() {
     appState.analyzer.calculateMetricDistributions()
     renderMetricDistributionsChart()
     disableButton(metricDistrButton)
+}
+
+function clearDiffDistrCharts() {
+    const chartDom = document.getElementById("difference-distribution")
+    if (!chartDom) return
+
+    const chartInstance = echarts.getInstanceByDom(chartDom)
+    if (chartInstance) {
+        chartInstance.dispose()
+    }
+
+    chartDom.innerHTML = ""
+    hideElement(document.getElementById("difference-distribution-wrapper"))
+}
+
+function handleDiffDistrClick() {
+    showElement(diffDistrWrapper)
+    appState.analyzer.calculateDifferenceDistributions()
+    renderDifferenceDistributionChart()
+    disableButton(diffDistrButton)
+}
+
+function renderDifferenceDistributionChart() {
+    function formatMetricName(rawName) {
+        const mappings = {
+            depthDelay: "depth-delay",
+            depthSignDelay: "depth-signDelay",
+            delaySignDelay: "delay-signDelay",
+        }
+        return mappings[rawName] || rawName
+    }
+    const chartDom = document.getElementById("difference-distribution")
+    if (!chartDom) return
+
+    const existingChart = echarts.getInstanceByDom(chartDom)
+    if (existingChart) {
+        existingChart.dispose()
+    }
+
+    const myChart = echarts.init(chartDom)
+
+    const data = appState.analyzer.differenceDistributions
+
+    const allValuesSet = new Set()
+    const series = []
+
+    for (const metricName in data) {
+        const entries = data[metricName]
+        for (const value in entries) {
+            allValuesSet.add(value)
+        }
+    }
+
+    const allValues = Array.from(allValuesSet).sort((a, b) => a - b)
+
+    for (const metricName in data) {
+        const entries = data[metricName]
+        const seriesData = allValues.map((value) => entries[value] || 0)
+
+        series.push({
+            name: formatMetricName(metricName),
+            type: "bar",
+            emphasis: { focus: "series" },
+            data: seriesData,
+        })
+    }
+
+    const option = {
+        backgroundColor: "transparent",
+        tooltip: {
+            trigger: "axis",
+            axisPointer: { type: "shadow" },
+        },
+        legend: {
+            textStyle: { color: "#ffffff" },
+        },
+        grid: {
+            left: "3%",
+            right: "4%",
+            bottom: "3%",
+            containLabel: true,
+        },
+        xAxis: {
+            type: "category",
+            data: allValues.map((v) => v.toString()),
+            axisLabel: { color: "#ffffff" },
+        },
+        yAxis: {
+            type: "value",
+            axisLabel: { color: "#ffffff" },
+        },
+        color: ["#3b267b", "#eeedff", "#2e335a"],
+        series: series,
+    }
+
+    myChart.setOption(option)
+    window.addEventListener("resize", function () {
+        myChart.resize()
+    })
 }
 
 export {

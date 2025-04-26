@@ -703,7 +703,17 @@ input[type="checkbox"]:hover {
     justify-content: center;
     gap: 20px;
     width: 100%;
-    padding: 15px 20px;
+    padding: 20px;
+}
+
+.analyzation__main-controls {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    height: 60px;
 }
 
 .btn--attach-analyze {
@@ -711,6 +721,28 @@ input[type="checkbox"]:hover {
     transition: background 0.3s ease, box-shadow 0.5s ease;
     box-shadow: inset 1px 1px 1px 0 var(--color-white-25),
         0px 0px 0px var(--color-white-50);
+}
+
+.analyzation-reset {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    color: var(--color-white);
+}
+
+.analyzation-reset:hover {
+    color: var(--color-pink-bg);
+}
+
+.analyzation-reset svg {
+    transition: transform 0.1s ease;
+}
+
+.analyzation-reset:active svg {
+    transform: scale(0.95);
 }
 
 .analyzation-module {
@@ -971,6 +1003,9 @@ input[type="checkbox"]:hover {
         justify-content: center;
         flex-wrap: wrap;
     }
+    .analyzation-reset {
+        right: 0;
+    }
 }
 
 @media (max-width: 768px) {
@@ -984,6 +1019,9 @@ input[type="checkbox"]:hover {
     .metric-distributions-wrapper {
         justify-content: center;
         flex-wrap: wrap;
+    }
+    .btn--attach-analyze {
+        width: 70%;
     }
     .analyzation-controls {
         width: 50%;

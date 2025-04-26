@@ -21,7 +21,6 @@ class Analyzer {
         }
 
         // тестовые запуски
-        this.calculateDifferenceDistributions()
         console.log(
             "🚀 ~ Analyzer ~ constructor ~ this.countMetricEquality():",
             this.countMetricEquality(["signDelay", "delay"], true)
