@@ -387,6 +387,9 @@ class Circuit {
         const fullStrPaths = {}
         const dupInpElements = new Set()
         allPaths.forEach((path) => {
+            if (!this.outputNums.includes(path[0])) {
+                return
+            }
             const strPath = path.join("-")
             const forwardStrPath = [...path].reverse().join("-")
             let relevantArr
