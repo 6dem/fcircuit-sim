@@ -664,6 +664,9 @@ function renderRaceLineChart(circuitNumber) {
     }
 
     myChart.setOption(option)
+    window.addEventListener("resize", function () {
+        myChart.resize()
+    })
 }
 
 export {
