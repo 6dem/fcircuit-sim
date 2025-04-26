@@ -27,6 +27,10 @@ const diffDistrWrapper = document.getElementById(
 const diffDistrButton = document.getElementById(
     "difference-distribution-button"
 )
+const raceLineWrapper = document.getElementById("metric-race-line-wrapper")
+const raceLineButton = document.getElementById("race-line-button")
+const numberInputElement = document.getElementById("input-number")
+const analyzeSuggestion = document.getElementById("analyze-suggestions")
 
 function handleAnalyzeCheckboxChange(event) {
     const isChecked = event.target.checked
@@ -76,30 +80,37 @@ function addAnalyzeListeners() {
     minCircuitsButton.addEventListener("click", handleMinCircuitsClick)
     metricDistrButton.addEventListener("click", handleMetricDistrClick)
     diffDistrButton.addEventListener("click", handleDiffDistrClick)
+    raceLineButton.addEventListener("click", handleRaceLineClick)
+    numberInputElement.addEventListener("input", handleNumberInput)
 }
 
 function removeAnalyzeListeners() {
     minCircuitsButton.removeEventListener("click", handleMinCircuitsClick)
     metricDistrButton.removeEventListener("click", handleMetricDistrClick)
     diffDistrButton.removeEventListener("click", handleDiffDistrClick)
+    raceLineButton.removeEventListener("click", handleRaceLineClick)
+    numberInputElement.removeEventListener("input", handleNumberInput)
 }
 
 function enableAnalyzeButtons() {
     enableButton(minCircuitsButton)
     enableButton(metricDistrButton)
     enableButton(diffDistrButton)
+    enableButton(raceLineButton)
 }
 
 function disableAnalyzeButtons() {
     disableButton(minCircuitsButton)
     disableButton(metricDistrButton)
     disableButton(diffDistrButton)
+    disableButton(raceLineButton)
 }
 
 function clearAnalyzeContents() {
     clearMinTables()
     clearMetricDistrCharts()
     clearDiffDistrCharts()
+    clearRaceLineCharts()
 }
 
 function updateMinCircuitsButtonState() {
@@ -340,6 +351,9 @@ function renderMetricDistributionsChart() {
                 type: "value",
                 axisLabel: {
                     color: "#ffffff",
+                    formatter: function (value) {
+                        return Number.isInteger(value) ? value : ""
+                    },
                 },
             },
         ],
@@ -446,7 +460,12 @@ function renderDifferenceDistributionChart() {
         },
         yAxis: {
             type: "value",
-            axisLabel: { color: "#ffffff" },
+            axisLabel: {
+                color: "#ffffff",
+                formatter: function (value) {
+                    return Number.isInteger(value) ? value : ""
+                },
+            },
         },
         color: ["#3b267b", "#eeedff", "#2e335a"],
         series: series,
@@ -456,6 +475,195 @@ function renderDifferenceDistributionChart() {
     window.addEventListener("resize", function () {
         myChart.resize()
     })
+}
+
+function clearRaceLineCharts() {
+    const chartDom = document.getElementById("metric-race-line")
+    if (!chartDom) return
+
+    const chartInstance = echarts.getInstanceByDom(chartDom)
+    if (chartInstance) {
+        chartInstance.dispose()
+    }
+
+    chartDom.innerHTML = ""
+    hideElement(document.getElementById("metric-race-line-wrapper"))
+}
+
+function handleNumberInput() {
+    hideElement(analyzeSuggestion)
+    const query = numberInputElement.value.trim()
+    analyzeSuggestion.innerHTML = ""
+
+    if (query.length < 1) return
+
+    const matches = appState.processedData.filter((circuit) =>
+        circuit.number.toString().includes(query)
+    )
+
+    const fragment = document.createDocumentFragment()
+
+    matches.slice(0, 10).forEach((match) => {
+        const li = document.createElement("li")
+        li.textContent = match.number
+
+        li.addEventListener("mousedown", () => {
+            numberInputElement.value = match.number
+            analyzeSuggestion.innerHTML = ""
+        })
+
+        fragment.appendChild(li)
+    })
+
+    analyzeSuggestion.appendChild(fragment)
+    if (analyzeSuggestion.children.length > 0) {
+        enableButton(raceLineButton)
+        showElement(analyzeSuggestion)
+    }
+}
+
+function handleRaceLineClick() {
+    const number = parseInt(numberInputElement.value, 10)
+
+    if (isNaN(number)) {
+        showCustomAlert("Invalid number")
+        return
+    }
+
+    const circuitExists = appState.processedData.some(
+        (circuit) => circuit.number === number
+    )
+
+    if (!circuitExists) {
+        showCustomAlert("There are no circuits with such a number")
+        return
+    }
+
+    showElement(raceLineWrapper)
+    renderRaceLineChart(number)
+    disableButton(raceLineButton)
+}
+
+function renderRaceLineChart(circuitNumber) {
+    const metrics = appState.analyzer.getCircuitMetricsBySet(circuitNumber)
+
+    const chartDom = document.getElementById("metric-race-line")
+    if (!chartDom) return
+
+    const existingChart = echarts.getInstanceByDom(chartDom)
+    if (existingChart) {
+        existingChart.dispose()
+    }
+
+    const myChart = echarts.init(chartDom)
+
+    const dataset = [
+        ["InputSet", "signDelay", "delay", "depth"],
+        ...metrics.inputSets.map((inputSet, index) => [
+            inputSet,
+            metrics.signDelay[index],
+            metrics.delay[index],
+            metrics.depth[index],
+        ]),
+    ]
+
+    const metricNames = ["signDelay", "delay", "depth"]
+    const colors = ["#3b267b", "#eeedff", "#2e335a"]
+
+    const seriesList = metricNames.map((metricName, idx) => ({
+        type: "line",
+        showSymbol: false,
+        name: metricName,
+        endLabel: {
+            show: true,
+            formatter: function (params) {
+                return `${metricName}: ${params.value[idx + 1]}`
+            },
+        },
+        labelLayout: {
+            moveOverlap: "shiftY",
+        },
+        emphasis: {
+            focus: "series",
+        },
+        lineStyle: {
+            color: colors[idx],
+        },
+        itemStyle: {
+            color: colors[idx],
+        },
+        encode: {
+            x: 0,
+            y: idx + 1,
+            label: [idx + 1],
+            itemName: 0,
+            tooltip: [idx + 1],
+        },
+    }))
+
+    const option = {
+        animationDuration: 10000,
+        backgroundColor: "transparent",
+        dataset: {
+            source: dataset,
+        },
+        title: {
+            text: `Metrics for circuit №${circuitNumber}`,
+            left: "center",
+            textStyle: {
+                color: "#ffffff",
+            },
+        },
+        tooltip: {
+            order: "valueDesc",
+            trigger: "axis",
+        },
+        xAxis: {
+            type: "category",
+            name: "Input Set",
+            nameLocation: "middle",
+            nameGap: 40,
+            nameTextStyle: {
+                color: "#ffffff",
+                padding: [10, 0, 0, 0],
+                fontSize: 14,
+            },
+            axisLabel: {
+                color: "#ffffff",
+                fontSize: 12,
+            },
+            axisLine: {
+                lineStyle: {
+                    color: "#ffffff",
+                },
+            },
+        },
+        yAxis: {
+            name: "Metric Value",
+            axisLabel: {
+                color: "#ffffff",
+                formatter: function (value) {
+                    return Number.isInteger(value) ? value : ""
+                },
+            },
+            axisLine: {
+                lineStyle: {
+                    color: "#ffffff",
+                },
+            },
+        },
+        grid: {
+            left: 20,
+            right: 80,
+            top: 60,
+            bottom: 60,
+            containLabel: true,
+        },
+
+        series: seriesList,
+    }
+
+    myChart.setOption(option)
 }
 
 export {

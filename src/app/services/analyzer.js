@@ -190,13 +190,15 @@ class Analyzer {
         }
 
         const result = {
+            inputSets: [],
             depth: [],
             delay: [],
             signDelay: [],
         }
 
         circuit.setResults.forEach((set) => {
-            result.push(circuit.depth)
+            result.inputSets.push(parseInt(set.inputSet, 2))
+            result.depth.push(circuit.depth)
             result.delay.push(set.delay)
             result.signDelay.push(set.signDelay)
         })
