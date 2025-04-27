@@ -31,7 +31,7 @@ class FunctionalElement extends Vertex {
             let inputFE = circuit.instancesFE[inputNum]
             inputValues[i] = inputFE.outputValue
 
-            if (inputFE.outputValue === null) {
+            if (inputFE.outputValue == null) {
                 nullIndices.push(i)
             }
         }

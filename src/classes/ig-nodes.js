@@ -20,11 +20,11 @@ class InvertElement extends FunctionalElement {
             let inputNum = this.inputsFE[i]
             let inputFE = circuit.instancesFE[inputNum]
             inputValues[i] =
-                inputFE.outputValue === null
+                inputFE.outputValue == null
                     ? inputFE.outputValue
                     : inputFE.outputValue ^ this.inverses[i]
 
-            if (inputFE.outputValue === null) {
+            if (inputFE.outputValue == null) {
                 nullIndices.push(i)
             }
         }
