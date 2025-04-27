@@ -19,20 +19,6 @@ class Analyzer {
             depthSignDelay: [],
             delaySignDelay: [],
         }
-
-        // тестовые запуски
-        console.log(
-            "🚀 ~ Analyzer ~ constructor ~ this.countMetricEquality():",
-            this.countMetricEquality(["signDelay", "delay"], true)
-        )
-        console.log(
-            `🚀 ~ Analyzer ~ constructor ~ compareMetricDominance(["signDelay", "delay"]):`,
-            this.compareMetricDominance(["signDelay", "delay"])
-        )
-        console.log(
-            "🚀 ~ Analyzer ~ constructor ~ this.checkSignificantChainsExistence():",
-            this.checkSignificantChainsExistence()
-        )
     }
 
     calculateMaxMetric(circuit, metric) {
@@ -208,7 +194,8 @@ class Analyzer {
 
     countMetricEquality(
         metrics = ["depth", "delay", "signDelay"],
-        equal = true
+        equal = true,
+        perSet = false
     ) {
         if (!Array.isArray(metrics) || metrics.length < 2) {
             throw new Error(
@@ -217,58 +204,103 @@ class Analyzer {
         }
 
         let count = 0
+        let total = 0
 
         this.processedData.forEach((circuit) => {
-            const values = metrics.map((metric) => {
-                if (metric === "depth") return circuit.depth
+            if (perSet) {
+                circuit.setResults.forEach((res) => {
+                    const values = metrics.map((metric) => {
+                        if (metric === "depth") return circuit.depth
+                        if (!(metric in res))
+                            throw new Error(
+                                `Metric '${metric}' not found in set results`
+                            )
+                        return res[metric]
+                    })
 
-                const maxMetric = this.maxMetrics[metric].get(circuit.number)
-                if (!maxMetric)
-                    throw new Error(
-                        `Max metric for circuit ${circuit.number} and metric '${metric}' not found`
+                    const allEqual = values.every((val) => val === values[0])
+
+                    total++
+                    if ((equal && allEqual) || (!equal && !allEqual)) {
+                        count++
+                    }
+                })
+            } else {
+                const values = metrics.map((metric) => {
+                    if (metric === "depth") return circuit.depth
+
+                    const maxMetric = this.maxMetrics[metric].get(
+                        circuit.number
                     )
-                return maxMetric
-            })
+                    if (maxMetric === undefined)
+                        throw new Error(
+                            `Max metric for circuit ${circuit.number} and metric '${metric}' not found`
+                        )
+                    return maxMetric
+                })
 
-            const allEqual = values.every((val) => val === values[0])
+                const allEqual = values.every((val) => val === values[0])
 
-            if ((equal && allEqual) || (!equal && !allEqual)) {
-                count++
+                total++
+                if ((equal && allEqual) || (!equal && !allEqual)) {
+                    count++
+                }
             }
         })
 
-        const total = this.processedData.length
-        const percentage = (count / total) * 100
+        const ratio = total ? count / total : 0
 
-        return { count, total, percentage }
+        return { count, total, ratio }
     }
 
     compareMetricDominance([metricA, metricB], perSet = false) {
-        if (!Array.isArray(metricA) && typeof metricA === "string") {
-            ;[metricA, metricB] = [metricA, metricB]
-        }
-
         let count = 0
         let total = 0
 
         if (perSet) {
-            this.processedData.forEach((circuit) => {
-                circuit.setResults.forEach((res) => {
-                    total++
-                    if (res[metricA] > res[metricB]) count++
-                })
-            })
-        } else {
-            const maxA = this.maxMetrics[metricA]
-            const maxB = this.maxMetrics[metricB]
+            const isMetricADepth = metricA === "depth"
+            const isMetricBDepth = metricB === "depth"
 
-            if (!(maxA instanceof Map) || !(maxB instanceof Map)) {
+            for (const circuit of this.processedData) {
+                for (const res of circuit.setResults) {
+                    total++
+                    count +=
+                        (isMetricADepth ? circuit.depth : res[metricA]) >
+                        (isMetricBDepth ? circuit.depth : res[metricB])
+                            ? 1
+                            : 0
+                }
+            }
+        } else {
+            const maxA = metricA === "depth" ? null : this.maxMetrics[metricA]
+            const maxB = metricB === "depth" ? null : this.maxMetrics[metricB]
+
+            if (
+                (metricA !== "depth" && !(maxA instanceof Map)) ||
+                (metricB !== "depth" && !(maxB instanceof Map))
+            ) {
                 throw new Error("One of the metric maps is invalid.")
             }
 
-            for (const [circuitNumber, valueA] of maxA.entries()) {
-                const valueB = maxB.get(circuitNumber)
-                if (valueB === undefined) continue
+            const circuitMap = new Map(
+                this.processedData.map((c, i) => [c.number, i])
+            )
+            const circuits = new Set([
+                ...(metricA !== "depth" ? maxA.keys() : []),
+                ...(metricB !== "depth" ? maxB.keys() : []),
+            ])
+
+            for (const cn of circuits) {
+                const idx = circuitMap.get(cn)
+                if (idx === undefined) continue
+
+                const circuit = this.processedData[idx]
+                const valueA =
+                    metricA === "depth" ? circuit.depth : maxA?.get(cn)
+                const valueB =
+                    metricB === "depth" ? circuit.depth : maxB?.get(cn)
+
+                if (valueA === undefined || valueB === undefined) continue
 
                 total++
                 if (valueA > valueB) count++
