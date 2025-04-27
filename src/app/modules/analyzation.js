@@ -31,6 +31,8 @@ const raceLineWrapper = document.getElementById("metric-race-line-wrapper")
 const raceLineButton = document.getElementById("race-line-button")
 const numberInputElement = document.getElementById("input-number")
 const analyzeSuggestion = document.getElementById("analyze-suggestions")
+const statisticTableWrapper = document.getElementById("statistic-table-wrapper")
+const statisticButton = document.getElementById("statistic-button")
 
 function handleAnalyzeCheckboxChange(event) {
     const isChecked = event.target.checked
@@ -82,6 +84,7 @@ function addAnalyzeListeners() {
     diffDistrButton.addEventListener("click", handleDiffDistrClick)
     raceLineButton.addEventListener("click", handleRaceLineClick)
     numberInputElement.addEventListener("input", handleNumberInput)
+    statisticButton.addEventListener("click", handleStatisticClick)
 }
 
 function removeAnalyzeListeners() {
@@ -90,6 +93,7 @@ function removeAnalyzeListeners() {
     diffDistrButton.removeEventListener("click", handleDiffDistrClick)
     raceLineButton.removeEventListener("click", handleRaceLineClick)
     numberInputElement.removeEventListener("input", handleNumberInput)
+    statisticButton.removeEventListener("click", handleStatisticClick)
 }
 
 function enableAnalyzeButtons() {
@@ -97,6 +101,7 @@ function enableAnalyzeButtons() {
     enableButton(metricDistrButton)
     enableButton(diffDistrButton)
     enableButton(raceLineButton)
+    enableButton(statisticButton)
 }
 
 function disableAnalyzeButtons() {
@@ -104,6 +109,7 @@ function disableAnalyzeButtons() {
     disableButton(metricDistrButton)
     disableButton(diffDistrButton)
     disableButton(raceLineButton)
+    disableButton(statisticButton)
 }
 
 function clearAnalyzeContents() {
@@ -111,6 +117,7 @@ function clearAnalyzeContents() {
     clearMetricDistrCharts()
     clearDiffDistrCharts()
     clearRaceLineCharts()
+    clearStatisticTable()
 }
 
 function updateMinCircuitsButtonState() {
@@ -667,6 +674,147 @@ function renderRaceLineChart(circuitNumber) {
     window.addEventListener("resize", function () {
         myChart.resize()
     })
+}
+
+function handleStatisticClick() {
+    disableButton(statisticButton)
+    renderStatisticTable()
+    showElement(statisticTableWrapper)
+}
+
+function clearStatisticTable() {
+    const container = document.getElementById("statistic-table-container")
+
+    while (container.firstChild) {
+        container.removeChild(container.firstChild)
+    }
+}
+
+function renderStatisticTable() {
+    clearStatisticTable()
+    const analyzer = appState.analyzer
+
+    const indicators = [
+        {
+            label: "No Significant Chains",
+            byCircuit: analyzer.checkSignificantChainsExistence(false),
+            bySet: analyzer.checkSignificantChainsExistence(true),
+        },
+        {
+            label: "Sign Delay > Delay",
+            byCircuit: analyzer.compareMetricDominance(
+                ["signDelay", "delay"],
+                false
+            ),
+            bySet: analyzer.compareMetricDominance(
+                ["signDelay", "delay"],
+                true
+            ),
+        },
+        {
+            label: "Sign Delay < Delay",
+            byCircuit: analyzer.compareMetricDominance(
+                ["delay", "signDelay"],
+                false
+            ),
+            bySet: analyzer.compareMetricDominance(
+                ["delay", "signDelay"],
+                true
+            ),
+        },
+        {
+            label: "Sign Delay < Depth",
+            byCircuit: analyzer.compareMetricDominance(
+                ["depth", "signDelay"],
+                false
+            ),
+            bySet: analyzer.compareMetricDominance(
+                ["depth", "signDelay"],
+                true
+            ),
+        },
+        {
+            label: "Delay < Depth",
+            byCircuit: analyzer.compareMetricDominance(
+                ["depth", "delay"],
+                false
+            ),
+            bySet: analyzer.compareMetricDominance(["depth", "delay"], true),
+        },
+        {
+            label: "All Metrics Equal",
+            byCircuit: analyzer.countMetricEquality(
+                ["depth", "delay", "signDelay"],
+                true
+            ),
+            bySet: analyzer.countMetricEquality(
+                ["depth", "delay", "signDelay"],
+                true,
+                true
+            ),
+        },
+        {
+            label: "All Metrics Unequal",
+            byCircuit: analyzer.countMetricEquality(
+                ["depth", "delay", "signDelay"],
+                false
+            ),
+            bySet: analyzer.countMetricEquality(
+                ["depth", "delay", "signDelay"],
+                false,
+                true
+            ),
+        },
+    ]
+
+    const table = document.createElement("table")
+    table.classList.add("statistic-table")
+
+    // Заголовок
+    const thead = document.createElement("thead")
+    thead.innerHTML = `
+        <tr>
+            <th rowspan="2">Indicator</th>
+            <th colspan="2">Values</th>
+        </tr>
+        <tr>
+            <th>By Circuits</th>
+            <th>By Input Sets</th>
+        </tr>
+    `
+    table.appendChild(thead)
+
+    // Тело таблицы
+    const tbody = document.createElement("tbody")
+
+    indicators.forEach((item) => {
+        const row = document.createElement("tr")
+
+        const labelCell = document.createElement("td")
+        labelCell.textContent = item.label
+
+        const circuitValueCell = document.createElement("td")
+        const setValueCell = document.createElement("td")
+
+        circuitValueCell.textContent = `${item.byCircuit.count} (${(
+            item.byCircuit.ratio * 100
+        ).toFixed(2)}%)`
+        setValueCell.textContent = `${item.bySet.count} (${(
+            item.bySet.ratio * 100
+        ).toFixed(2)}%)`
+
+        row.appendChild(labelCell)
+        row.appendChild(circuitValueCell)
+        row.appendChild(setValueCell)
+
+        tbody.appendChild(row)
+    })
+
+    table.appendChild(tbody)
+
+    // Вставляем таблицу в контейнер
+    const container = document.getElementById("statistic-table-container")
+    container.appendChild(table)
 }
 
 export {

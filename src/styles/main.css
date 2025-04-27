@@ -975,7 +975,8 @@ input[type="checkbox"]:hover {
 }
 
 .metric-distributions-wrapper,
-.race-line-wrapper {
+.race-line-wrapper,
+.statistic-wrapper {
     justify-content: space-between;
 }
 
@@ -1018,6 +1019,52 @@ input[type="checkbox"]:hover {
     max-width: 100px;
 }
 
+.statistic-table-container {
+    display: flex;
+    justify-content: center;
+    /* max-height: 550px; */
+    overflow-y: auto;
+    position: relative;
+    scrollbar-width: none;
+}
+
+.statistic-table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    width: min(500px, 100%);
+    color: var(--color-white);
+    background-color: var(--color-white-25);
+    border-radius: 44px;
+    font-size: 20px;
+    text-align: center;
+}
+
+.statistic-table thead th {
+    position: relative;
+    top: 0;
+    padding: 15px 5px;
+    background-color: var(--color-purple-light);
+}
+
+.statistic-table thead tr:first-child th:first-child {
+    box-shadow: 0 0 0 20px var(--color-blue);
+    border-radius: 44px 0 0 0;
+}
+.statistic-table thead tr:first-child th:last-child {
+    box-shadow: 20px 0 0 20px var(--color-blue);
+    border-radius: 0 44px 0 0;
+}
+
+.statistic-table td {
+    padding: 10px;
+}
+
+.statistic-table-content {
+    display: flex;
+    gap: 10px;
+    scrollbar-width: none;
+}
+
 @media (min-width: 1440px) {
     .visualization__side-panel {
         max-width: 200px;
@@ -1040,7 +1087,8 @@ input[type="checkbox"]:hover {
     }
     .min-circuits-wrapper,
     .metric-distributions-wrapper,
-    .race-line-wrapper {
+    .race-line-wrapper,
+    .statistic-wrapper {
         justify-content: center;
         flex-wrap: wrap;
     }
