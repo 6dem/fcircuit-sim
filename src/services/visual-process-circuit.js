@@ -14,6 +14,10 @@ export function processCircuit(jsonData, circuitIndex) {
         throw new Error("Invalid circuit index")
     }
 
+    const circuitMap = new Map()
+    jsonData.forEach((circuit) => {
+        circuitMap.set(circuit.number, circuit)
+    })
     const circuitData = jsonData[circuitIndex]
 
     try {
@@ -25,7 +29,7 @@ export function processCircuit(jsonData, circuitIndex) {
         const format = circuitData.format
         for (let set = 0; set < sets; set++) {
             circuit = createCircuit(format)
-            circuit.parseCircuit(jsonData, +circuitData.number)
+            circuit.parseCircuit(circuitMap, +circuitData.number)
             const allPaths = circuit.findAllPaths()
             const xDepthsDict = circuit.buildXDepthsDict(allPaths)
             depth = circuit.calculateDepth(allPaths)
@@ -68,6 +72,11 @@ export function parseCircuitStructure(jsonData, circuitIndex) {
         throw new Error("The JSON data is not an array")
     }
 
+    const circuitMap = new Map()
+    jsonData.forEach((circuit) => {
+        circuitMap.set(circuit.number, circuit)
+    })
+
     const circuitData = jsonData[circuitIndex]
 
     let circuit
@@ -75,7 +84,7 @@ export function parseCircuitStructure(jsonData, circuitIndex) {
 
     try {
         circuit = createCircuit(format)
-        circuit.parseCircuit(jsonData, +circuitData.number)
+        circuit.parseCircuit(circuitMap, +circuitData.number)
         const allPaths = circuit.findAllPaths()
         const depthsDict = circuit.buildDepthsDict(allPaths)
         return depthsDict

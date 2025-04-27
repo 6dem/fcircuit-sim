@@ -15,7 +15,11 @@ describe("Circuit class parseCircuit method", () => {
     })
 
     test("parses a valid fcircuit format", () => {
-        circuit.parseCircuit(mockData, 1)
+        const circuitMap = new Map()
+        mockData.forEach((circuit) => {
+            circuitMap.set(circuit.number, circuit)
+        })
+        circuit.parseCircuit(circuitMap, 1)
 
         expect(circuit.format).toBe("fcircuit")
         expect(circuit.number).toBe(1)
@@ -29,20 +33,32 @@ describe("Circuit class parseCircuit method", () => {
     })
 
     test("throws error for invalid circuit number", () => {
-        expect(() => circuit.parseCircuit(mockData, 2)).toThrow(
+        const circuitMap = new Map()
+        mockData.forEach((circuit) => {
+            circuitMap.set(circuit.number, circuit)
+        })
+        expect(() => circuit.parseCircuit(circuitMap, 2)).toThrow(
             "Invalid format or circuit number: 2"
         )
     })
 
     test("throws error for invalid format", () => {
         const invalidFormat = [{ format: "unknown", number: 1 }]
-        expect(() => circuit.parseCircuit(invalidFormat, 1)).toThrow(
+        const circuitMap = new Map()
+        invalidFormat.forEach((circuit) => {
+            circuitMap.set(circuit.number, circuit)
+        })
+        expect(() => circuit.parseCircuit(circuitMap, 1)).toThrow(
             "Invalid format or circuit number: 1"
         )
     })
 
     test("throws error for invalid input FE", () => {
-        expect(() => circuit.parseCircuit(invalidInputFE, 1)).toThrow(
+        const circuitMap = new Map()
+        invalidInputFE.forEach((circuit) => {
+            circuitMap.set(circuit.number, circuit)
+        })
+        expect(() => circuit.parseCircuit(circuitMap, 1)).toThrow(
             "Invalid input index (12) of a functional element (9)"
         )
     })
@@ -56,7 +72,11 @@ describe("MIG class parseCircuit method", () => {
     })
 
     test("parses a valid mig format", () => {
-        circuit.parseCircuit(mockMIG, 23839913)
+        const circuitMap = new Map()
+        mockMIG.forEach((circuit) => {
+            circuitMap.set(circuit.number, circuit)
+        })
+        circuit.parseCircuit(circuitMap, 23839913)
 
         expect(circuit.format).toBe("mig")
         expect(circuit.number).toBe(23839913)
@@ -72,20 +92,32 @@ describe("MIG class parseCircuit method", () => {
     })
 
     test("throws error for invalid mig number", () => {
-        expect(() => circuit.parseCircuit(mockData, 1703)).toThrow(
+        const circuitMap = new Map()
+        mockMIG.forEach((circuit) => {
+            circuitMap.set(circuit.number, circuit)
+        })
+        expect(() => circuit.parseCircuit(circuitMap, 1703)).toThrow(
             "Invalid format or circuit number: 1703"
         )
     })
 
     test("throws error for invalid format", () => {
         const invalidFormat = [{ format: "unknown", number: 1703 }]
-        expect(() => circuit.parseCircuit(invalidFormat, 1703)).toThrow(
+        const circuitMap = new Map()
+        invalidFormat.forEach((circuit) => {
+            circuitMap.set(circuit.number, circuit)
+        })
+        expect(() => circuit.parseCircuit(circuitMap, 1703)).toThrow(
             "Invalid format or circuit number: 1703"
         )
     })
 
     test("throws error for invalid input FE", () => {
-        expect(() => circuit.parseCircuit(invalidInputMIE, 23839913)).toThrow(
+        const circuitMap = new Map()
+        invalidInputMIE.forEach((circuit) => {
+            circuitMap.set(circuit.number, circuit)
+        })
+        expect(() => circuit.parseCircuit(circuitMap, 23839913)).toThrow(
             "Invalid input index (15) of a functional element (11)"
         )
     })

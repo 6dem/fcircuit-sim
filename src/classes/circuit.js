@@ -28,10 +28,8 @@ class Circuit {
         }
     }
 
-    parseCircuit(jsonData, circuitNumber) {
-        const circuit = jsonData.find(
-            (circuit) => circuit.number === circuitNumber
-        )
+    parseCircuit(circuitMap, circuitNumber) {
+        const circuit = circuitMap.get(circuitNumber)
 
         this.validateCircuit(circuit, circuitNumber)
 

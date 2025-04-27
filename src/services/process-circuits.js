@@ -15,6 +15,10 @@ export function processAllCircuits(jsonData) {
         throw new Error("The JSON data is empty")
     }
 
+    const circuitMap = new Map()
+    jsonData.forEach((circuit) => {
+        circuitMap.set(circuit.number, circuit)
+    })
     const resultData = []
     const errorData = [] // Массив для ошибок
     let processedCircuits = 0
@@ -31,7 +35,7 @@ export function processAllCircuits(jsonData) {
             const sets = 2 ** circuitData.countInputs
             const format = circuitData.format
             circuit = createCircuit(format)
-            circuit.parseCircuit(jsonData, +circuitData.number)
+            circuit.parseCircuit(circuitMap, +circuitData.number)
             const allPaths = circuit.findAllPaths()
             const xDepthsDict = circuit.buildXDepthsDict(allPaths)
             depth = circuit.calculateDepth(allPaths)
@@ -43,7 +47,7 @@ export function processAllCircuits(jsonData) {
                 let stateHistory = {}
 
                 circuit = createCircuit(format)
-                circuit.parseCircuit(jsonData, +circuitData.number)
+                circuit.parseCircuit(circuitMap, +circuitData.number)
                 circuit.initializeCircuit(set)
                 stateHistory = circuit.simulateCircuit(xDepthsDict)
                 const outputValues = circuit.calculateOutput()

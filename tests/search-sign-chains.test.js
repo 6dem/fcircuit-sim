@@ -7,7 +7,11 @@ describe("Circuit class searchSignChains method", () => {
 
     beforeEach(() => {
         circuit = new Circuit()
-        circuit.parseCircuit(mockData, 1)
+        const circuitMap = new Map()
+        mockData.forEach((circuit) => {
+            circuitMap.set(circuit.number, circuit)
+        })
+        circuit.parseCircuit(circuitMap, 1)
     })
 
     test("empty argument", () => {
@@ -49,7 +53,11 @@ describe("MIG class searchSignChains method", () => {
 
     beforeEach(() => {
         circuit = new MIG()
-        circuit.parseCircuit(mockMIG, 23839913)
+        const circuitMap = new Map()
+        mockMIG.forEach((circuit) => {
+            circuitMap.set(circuit.number, circuit)
+        })
+        circuit.parseCircuit(circuitMap, 23839913)
         circuit.findAllPaths()
     })
 
