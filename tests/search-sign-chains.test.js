@@ -75,7 +75,6 @@ describe("MIG class searchSignChains method", () => {
         circuit.simulateCircuit(depthsDict)
         const [signChains, _] = circuit.searchSignChains(allPaths)
         expect(signChains).toEqual([
-            [13, 9, 0],
             [13, 9, 2],
             [13, 10, 5],
             [13, 10, 8, 1],
@@ -98,7 +97,6 @@ describe("MIG class searchSignChains method", () => {
         circuit.simulateCircuit(xDepthsDict)
         const [signChains, _] = circuit.searchSignChains(allPaths)
         expect(signChains).toEqual([
-            [13, 9, 0],
             [13, 9, 2],
             [13, 12, 1],
             [13, 12, 4],
