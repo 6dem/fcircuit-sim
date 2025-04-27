@@ -21,7 +21,7 @@ src/services/test-local.js
 src/services/local-process-circuits.js
 
 # Results
-results-to-analize.json
+*.json
 src/services/errors.ndjson
 src/services/results.ndjson
 src/services/results-to-analize.ndjson
