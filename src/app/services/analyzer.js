@@ -5,20 +5,6 @@ class Analyzer {
         this.validateInput(data)
         this.processedData = data
         this.maxMetrics = this.calculateAllMaxMetrics()
-        this.minCircuits = {
-            delay: { minimalCircuits: [] },
-            signDelay: { minimalCircuits: [] },
-        }
-        this.metricDistributions = {
-            depth: [],
-            delay: [],
-            signDelay: [],
-        }
-        this.differenceDistributions = {
-            depthDelay: [],
-            depthSignDelay: [],
-            delaySignDelay: [],
-        }
     }
 
     calculateMaxMetric(circuit, metric) {
@@ -29,7 +15,10 @@ class Analyzer {
         return max
     }
 
-    calculateAllMaxMetrics(metrics = ["delay", "signDelay"]) {
+    calculateAllMaxMetrics(
+        metrics = ["delay", "signDelay"],
+        processedData = this.processedData
+    ) {
         if (!Array.isArray(metrics) || metrics.length === 0) {
             throw new Error("Metrics must be a non-empty array")
         }
@@ -38,7 +27,7 @@ class Analyzer {
 
         metrics.forEach((metric) => {
             const metricMap = new Map()
-            this.processedData.forEach((circuit) => {
+            processedData.forEach((circuit) => {
                 const max = this.calculateMaxMetric(circuit, metric)
                 metricMap.set(circuit.number, max)
             })
@@ -48,7 +37,12 @@ class Analyzer {
         return result
     }
 
-    findMinimalCircuits(metrics, limit) {
+    findMinimalCircuits(
+        metrics,
+        limit,
+        maxMetrics = this.maxMetrics,
+        processedData = this.processedData
+    ) {
         if (!Number.isInteger(limit) || limit < 1) {
             throw new Error("Limit must be a positive integer")
         }
@@ -58,11 +52,15 @@ class Analyzer {
         if (!metrics || !metrics.length) {
             throw new Error("Metrics array is empty")
         }
+        const minCircuits = {
+            delay: { minimalCircuits: [] },
+            signDelay: { minimalCircuits: [] },
+        }
         metrics.forEach((metric) => {
             const heap = new MaxHeap(limit)
 
-            this.processedData.forEach((circuit) => {
-                const maxMetric = this.maxMetrics[metric].get(circuit.number)
+            processedData.forEach((circuit) => {
+                const maxMetric = maxMetrics[metric].get(circuit.number)
 
                 heap.push({
                     number: circuit.number,
@@ -71,17 +69,21 @@ class Analyzer {
                 })
             })
 
-            this.minCircuits[metric].minimalCircuits = heap.getSorted()
+            minCircuits[metric].minimalCircuits = heap.getSorted()
         })
+        return minCircuits
     }
 
-    calculateMetricDistributions(metrics = ["depth", "delay", "signDelay"]) {
-        const result = {}
+    calculateMetricDistributions(
+        metrics = ["depth", "delay", "signDelay"],
+        processedData = this.processedData
+    ) {
+        const metricDistributions = {}
 
         metrics.forEach((metric) => {
             const counter = new Map()
 
-            this.processedData.forEach((circuit) => {
+            processedData.forEach((circuit) => {
                 const value =
                     metric === "depth"
                         ? circuit.depth
@@ -90,12 +92,12 @@ class Analyzer {
                 counter.set(value, (counter.get(value) || 0) + 1)
             })
 
-            result[metric] = Array.from(counter.entries())
+            metricDistributions[metric] = Array.from(counter.entries())
                 .map(([value, count]) => ({ value, count }))
                 .sort((a, b) => a.value - b.value)
         })
 
-        this.metricDistributions = result
+        return metricDistributions
     }
 
     calculateMetricDifferences() {
@@ -116,6 +118,11 @@ class Analyzer {
 
     calculateDifferenceDistributions() {
         const differences = this.calculateDifferences()
+        const differenceDistributions = {
+            depthDelay: [],
+            depthSignDelay: [],
+            delaySignDelay: [],
+        }
 
         Object.keys(differences).forEach((key) => {
             const values = differences[key]
@@ -129,8 +136,9 @@ class Analyzer {
                 }
             })
 
-            this.differenceDistributions[key] = distribution
+            differenceDistributions[key] = distribution
         })
+        return differenceDistributions
     }
 
     calculateDifferences() {
@@ -167,10 +175,8 @@ class Analyzer {
         return sumOfSquares / values.length
     }
 
-    getCircuitMetricsBySet(circuitNumber) {
-        const circuit = this.processedData.find(
-            (c) => c.number === circuitNumber
-        )
+    getCircuitMetricsBySet(circuitNumber, circuitsData = this.processedData) {
+        const circuit = circuitsData.find((c) => c.number === circuitNumber)
         if (!circuit) {
             throw new Error(`Circuit with number ${circuitNumber} not found`)
         }

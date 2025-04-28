@@ -22,6 +22,7 @@ const appState = {
     currentSchemeIndex: 0,
     loadedSchemes: [],
     scrollLoading: false,
+    analysisData: {},
 }
 
 function setState(newState) {

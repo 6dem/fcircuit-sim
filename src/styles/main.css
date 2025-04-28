@@ -709,11 +709,78 @@ input[type="checkbox"]:hover {
 .analyzation__main-controls {
     position: relative;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 10px;
     width: 100%;
-    height: 60px;
+    max-height: 130px;
+}
+
+/* From Uiverse.io by Pradeepsaranbishnoi */
+.radio__tabs {
+    display: flex;
+    position: relative;
+    background-color: var(--color-purple-light);
+    box-shadow: 0 0 1px 0 var(--color-pink-bg),
+        0 1px 10px 0 var(--color-pink-bg);
+    padding: 0.75rem;
+    border-radius: 44px;
+}
+
+.radio__tabs * {
+    z-index: 2;
+}
+
+.radio__container input[type="radio"] {
+    display: none;
+}
+
+.radio__tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    width: 50px;
+    font-size: 0.8rem;
+    color: var(--color-white);
+    font-weight: 500;
+    border-radius: 44px;
+    cursor: pointer;
+    transition: color 0.15s ease-in;
+}
+
+.radio__container input[type="radio"]:checked + label {
+    color: var(--color-purple-dark);
+}
+
+.radio__container input[id="radio-1"]:checked ~ .radio__glider {
+    transform: translateX(0);
+}
+
+.radio__container input[id="radio-2"]:checked ~ .radio__glider {
+    transform: translateX(100%);
+}
+
+.radio__container input[id="radio-3"]:checked ~ .radio__glider {
+    transform: translateX(200%);
+}
+
+.radio__glider {
+    position: absolute;
+    display: flex;
+    height: 30px;
+    width: 50px;
+    background-color: var(--color-pink-bg);
+    z-index: 1;
+    border-radius: 44px;
+    transition: 0.25s ease-out;
+}
+
+@media (max-width: 700px) {
+    .radio__tabs {
+        transform: scale(0.6);
+    }
 }
 
 .btn--attach-analyze {

@@ -1,4 +1,7 @@
-import { appState } from "../app.js"
+import { aigAnalysisData } from "../../../analysis-results/aig-analysis-results.js"
+import { migAnalysisData } from "../../../analysis-results/mig-analysis-results.js"
+import { appState, setState } from "../app.js"
+import { Analyzer } from "../services/analyzer.js"
 import { showCustomAlert } from "../utils/alerts.js"
 import { disableButton, enableButton } from "../utils/disable-enable-btn.js"
 import { hideElement, showElement } from "../utils/show-hide-element.js"
@@ -34,6 +37,9 @@ const analyzeSuggestion = document.getElementById("analyze-suggestions")
 const statisticTableWrapper = document.getElementById("statistic-table-wrapper")
 const statisticButton = document.getElementById("statistic-button")
 
+const radioContainer = document.getElementById("radio-container")
+let selectedRadio = document.querySelector('input[name="radio__tabs"]:checked')
+
 function handleAnalyzeCheckboxChange(event) {
     const isChecked = event.target.checked
     if (isChecked) {
@@ -42,12 +48,14 @@ function handleAnalyzeCheckboxChange(event) {
         addDelayCheckboxListener()
         addSignDelayCheckboxListener()
         addAnalyzationResetListener()
+        radioContainer.addEventListener("change", handleRadioChange)
     } else {
         hideElement(analyzationMain)
         removeCountInputListener()
         removeDelayCheckboxListener()
         removeSignDelayCheckboxListener()
         removeAnalyzationResetListener()
+        radioContainer.removeEventListener("change", handleRadioChange)
     }
 }
 
@@ -192,8 +200,55 @@ function handleMinCircuitsClick() {
     }
 
     // Запускаем анализ
-    appState.analyzer.findMinimalCircuits(selectedMetrics, count)
-    renderMinimalCircuitsTables(appState.analyzer.minCircuits)
+    let minCircuits
+
+    if (selectedRadio.id === "radio-1") {
+        minCircuits = appState.analyzer.findMinimalCircuits(
+            selectedMetrics,
+            count
+        )
+    } else if (selectedRadio.id === "radio-2") {
+        const processedData = aigAnalysisData.minCircuits.delay
+        const maxMetrics = appState.analyzer.calculateAllMaxMetrics(
+            undefined,
+            processedData
+        )
+        minCircuits = appState.analyzer.findMinimalCircuits(
+            selectedMetrics,
+            count,
+            maxMetrics,
+            processedData
+        )
+    } else if (selectedRadio.id === "radio-3") {
+        const circuitList = migAnalysisData.minCircuits.delay
+
+        migAnalysisData.minCircuits.signDelay.forEach((circuit) => {
+            const exists = circuitList.some(
+                (existingCircuit) => existingCircuit.number === circuit.number
+            )
+            if (!exists) {
+                circuitList.push(circuit)
+            }
+        })
+        const maxMetrics = appState.analyzer.calculateAllMaxMetrics(
+            undefined,
+            circuitList
+        )
+        minCircuits = appState.analyzer.findMinimalCircuits(
+            selectedMetrics,
+            count,
+            maxMetrics,
+            circuitList
+        )
+    }
+
+    console.log("🚀 ~ handleMinCircuitsClick ~ minCircuits:", minCircuits)
+    setState({
+        analysisData: {
+            minCircuits: minCircuits,
+        },
+    })
+    renderMinimalCircuitsTables(appState.analysisData.minCircuits)
     showElement(minCircuitsContainer)
     disableButton(minCircuitsButton)
 }
@@ -291,8 +346,7 @@ function clearMetricDistrCharts() {
     hideElement(document.getElementById("metric-distribution-wrapper"))
 }
 
-function renderMetricDistributionsChart() {
-    const distributions = appState.analyzer.metricDistributions
+function renderMetricDistributionsChart(distributions) {
     const chartDom = document.getElementById("metric-distribution")
     const myChart = echarts.init(chartDom)
 
@@ -375,8 +429,23 @@ function renderMetricDistributionsChart() {
 
 function handleMetricDistrClick() {
     showElement(metricDistrWrapper)
-    appState.analyzer.calculateMetricDistributions()
-    renderMetricDistributionsChart()
+
+    let metricDistribution
+
+    if (selectedRadio.id === "radio-1") {
+        metricDistribution = appState.analyzer.calculateMetricDistributions()
+    } else if (selectedRadio.id === "radio-2") {
+        metricDistribution = aigAnalysisData.metricDistribution
+    } else if (selectedRadio.id === "radio-3") {
+        metricDistribution = migAnalysisData.metricDistribution
+    }
+
+    setState({
+        analysisData: {
+            metricDistributions: metricDistribution,
+        },
+    })
+    renderMetricDistributionsChart(appState.analysisData.metricDistributions)
     disableButton(metricDistrButton)
 }
 
@@ -395,12 +464,27 @@ function clearDiffDistrCharts() {
 
 function handleDiffDistrClick() {
     showElement(diffDistrWrapper)
-    appState.analyzer.calculateDifferenceDistributions()
-    renderDifferenceDistributionChart()
+
+    let diffDistribution
+
+    if (selectedRadio.id === "radio-1") {
+        diffDistribution = appState.analyzer.calculateDifferenceDistributions()
+    } else if (selectedRadio.id === "radio-2") {
+        diffDistribution = aigAnalysisData.diffDistribution
+    } else if (selectedRadio.id === "radio-3") {
+        diffDistribution = migAnalysisData.diffDistribution
+    }
+
+    setState({
+        analysisData: {
+            diffDistribution: diffDistribution,
+        },
+    })
+    renderDifferenceDistributionChart(appState.analysisData.diffDistribution)
     disableButton(diffDistrButton)
 }
 
-function renderDifferenceDistributionChart() {
+function renderDifferenceDistributionChart(data) {
     function formatMetricName(rawName) {
         const mappings = {
             depthDelay: "depth-delay",
@@ -418,8 +502,6 @@ function renderDifferenceDistributionChart() {
     }
 
     const myChart = echarts.init(chartDom)
-
-    const data = appState.analyzer.differenceDistributions
 
     const allValuesSet = new Set()
     const series = []
@@ -504,10 +586,32 @@ function handleNumberInput() {
 
     if (query.length < 1) return
 
-    const matches = appState.processedData.filter((circuit) =>
-        circuit.number.toString().includes(query)
-    )
+    let matches
 
+    if (selectedRadio.id === "radio-1") {
+        matches = appState.processedData.filter((circuit) =>
+            circuit.number.toString().includes(query)
+        )
+    } else if (selectedRadio.id === "radio-2") {
+        matches = aigAnalysisData.minCircuits.delay.filter((circuit) =>
+            circuit.number.toString().includes(query)
+        )
+    } else if (selectedRadio.id === "radio-3") {
+        const circuitList = migAnalysisData.minCircuits.delay
+
+        migAnalysisData.minCircuits.signDelay.forEach((circuit) => {
+            const exists = circuitList.some(
+                (existingCircuit) => existingCircuit.number === circuit.number
+            )
+            if (!exists) {
+                circuitList.push(circuit)
+            }
+        })
+
+        matches = circuitList.filter((circuit) =>
+            circuit.number.toString().includes(query)
+        )
+    }
     const fragment = document.createDocumentFragment()
 
     matches.slice(0, 10).forEach((match) => {
@@ -541,19 +645,51 @@ function handleRaceLineClick() {
         (circuit) => circuit.number === number
     )
 
-    if (!circuitExists) {
+    if (!circuitExists && selectedRadio.id === "radio-1") {
         showCustomAlert("There are no circuits with such a number")
         return
     }
 
     showElement(raceLineWrapper)
-    renderRaceLineChart(number)
+
+    let circuitMetrics
+
+    if (selectedRadio.id === "radio-1") {
+        circuitMetrics = appState.analyzer.getCircuitMetricsBySet(number)
+    } else if (selectedRadio.id === "radio-2") {
+        circuitMetrics = appState.analyzer.getCircuitMetricsBySet(
+            number,
+            aigAnalysisData.minCircuits.delay.concat(
+                aigAnalysisData.minCircuits.signDelay
+            )
+        )
+    } else if (selectedRadio.id === "radio-3") {
+        const circuitList = migAnalysisData.minCircuits.delay
+
+        migAnalysisData.minCircuits.signDelay.forEach((circuit) => {
+            const exists = circuitList.some(
+                (existingCircuit) => existingCircuit.number === circuit.number
+            )
+            if (!exists) {
+                circuitList.push(circuit)
+            }
+        })
+        circuitMetrics = appState.analyzer.getCircuitMetricsBySet(
+            number,
+            circuitList
+        )
+    }
+
+    setState({
+        analysisData: {
+            circuitMetrics: circuitMetrics,
+        },
+    })
+    renderRaceLineChart(appState.analysisData.circuitMetrics, number)
     disableButton(raceLineButton)
 }
 
-function renderRaceLineChart(circuitNumber) {
-    const metrics = appState.analyzer.getCircuitMetricsBySet(circuitNumber)
-
+function renderRaceLineChart(metrics, circuitNumber) {
     const chartDom = document.getElementById("metric-race-line")
     if (!chartDom) return
 
@@ -678,7 +814,91 @@ function renderRaceLineChart(circuitNumber) {
 
 function handleStatisticClick() {
     disableButton(statisticButton)
-    renderStatisticTable()
+    const analyzer = appState.analyzer
+    let indicators
+    if (selectedRadio.id === "radio-1") {
+        indicators = [
+            {
+                label: "No Significant Chains",
+                byCircuit: analyzer.checkSignificantChainsExistence(false),
+                bySet: analyzer.checkSignificantChainsExistence(true),
+            },
+            {
+                label: "Sign Delay > Delay",
+                byCircuit: analyzer.compareMetricDominance(
+                    ["signDelay", "delay"],
+                    false
+                ),
+                bySet: analyzer.compareMetricDominance(
+                    ["signDelay", "delay"],
+                    true
+                ),
+            },
+            {
+                label: "Sign Delay < Delay",
+                byCircuit: analyzer.compareMetricDominance(
+                    ["delay", "signDelay"],
+                    false
+                ),
+                bySet: analyzer.compareMetricDominance(
+                    ["delay", "signDelay"],
+                    true
+                ),
+            },
+            {
+                label: "Sign Delay < Depth",
+                byCircuit: analyzer.compareMetricDominance(
+                    ["depth", "signDelay"],
+                    false
+                ),
+                bySet: analyzer.compareMetricDominance(
+                    ["depth", "signDelay"],
+                    true
+                ),
+            },
+            {
+                label: "Delay < Depth",
+                byCircuit: analyzer.compareMetricDominance(
+                    ["depth", "delay"],
+                    false
+                ),
+                bySet: analyzer.compareMetricDominance(
+                    ["depth", "delay"],
+                    true
+                ),
+            },
+            {
+                label: "All Metrics Equal",
+                byCircuit: analyzer.countMetricEquality(
+                    ["depth", "delay", "signDelay"],
+                    true
+                ),
+                bySet: analyzer.countMetricEquality(
+                    ["depth", "delay", "signDelay"],
+                    true,
+                    true
+                ),
+            },
+            {
+                label: "All Metrics Unequal",
+                byCircuit: analyzer.countMetricEquality(
+                    ["depth", "delay", "signDelay"],
+                    false
+                ),
+                bySet: analyzer.countMetricEquality(
+                    ["depth", "delay", "signDelay"],
+                    false,
+                    true
+                ),
+            },
+        ]
+    } else if (selectedRadio.id === "radio-2") {
+        indicators = aigAnalysisData.indicators
+    } else if (selectedRadio.id === "radio-3") {
+        indicators = migAnalysisData.indicators
+    }
+    setState({ analysisData: { indicators } })
+    renderStatisticTable(appState.analysisData.indicators)
     showElement(statisticTableWrapper)
 }
 
@@ -690,82 +910,8 @@ function clearStatisticTable() {
     }
 }
 
-function renderStatisticTable() {
+function renderStatisticTable(indicators) {
     clearStatisticTable()
-    const analyzer = appState.analyzer
-
-    const indicators = [
-        {
-            label: "No Significant Chains",
-            byCircuit: analyzer.checkSignificantChainsExistence(false),
-            bySet: analyzer.checkSignificantChainsExistence(true),
-        },
-        {
-            label: "Sign Delay > Delay",
-            byCircuit: analyzer.compareMetricDominance(
-                ["signDelay", "delay"],
-                false
-            ),
-            bySet: analyzer.compareMetricDominance(
-                ["signDelay", "delay"],
-                true
-            ),
-        },
-        {
-            label: "Sign Delay < Delay",
-            byCircuit: analyzer.compareMetricDominance(
-                ["delay", "signDelay"],
-                false
-            ),
-            bySet: analyzer.compareMetricDominance(
-                ["delay", "signDelay"],
-                true
-            ),
-        },
-        {
-            label: "Sign Delay < Depth",
-            byCircuit: analyzer.compareMetricDominance(
-                ["depth", "signDelay"],
-                false
-            ),
-            bySet: analyzer.compareMetricDominance(
-                ["depth", "signDelay"],
-                true
-            ),
-        },
-        {
-            label: "Delay < Depth",
-            byCircuit: analyzer.compareMetricDominance(
-                ["depth", "delay"],
-                false
-            ),
-            bySet: analyzer.compareMetricDominance(["depth", "delay"], true),
-        },
-        {
-            label: "All Metrics Equal",
-            byCircuit: analyzer.countMetricEquality(
-                ["depth", "delay", "signDelay"],
-                true
-            ),
-            bySet: analyzer.countMetricEquality(
-                ["depth", "delay", "signDelay"],
-                true,
-                true
-            ),
-        },
-        {
-            label: "All Metrics Unequal",
-            byCircuit: analyzer.countMetricEquality(
-                ["depth", "delay", "signDelay"],
-                false
-            ),
-            bySet: analyzer.countMetricEquality(
-                ["depth", "delay", "signDelay"],
-                false,
-                true
-            ),
-        },
-    ]
 
     const table = document.createElement("table")
     table.classList.add("statistic-table")
@@ -815,6 +961,48 @@ function renderStatisticTable() {
     // Вставляем таблицу в контейнер
     const container = document.getElementById("statistic-table-container")
     container.appendChild(table)
+}
+
+function handleRadioChange(event) {
+    selectedRadio = event.target
+    clearAnalyzeContents()
+    if (appState.processedData.length && selectedRadio.id === "radio-1") {
+        enableAnalyzeButtons()
+    }
+    if (!appState.processedData.length && selectedRadio.id === "radio-1") {
+        disableAnalyzeButtons()
+    }
+
+    if (selectedRadio.id === "radio-2") {
+        if (appState.analyzer == null) {
+            setState({
+                analyzer: new Analyzer(aigAnalysisData.minCircuits.delay),
+            })
+        }
+    }
+    if (selectedRadio.id === "radio-3") {
+        if (appState.analyzer == null) {
+            const circuitList = migAnalysisData.minCircuits.delay
+
+            migAnalysisData.minCircuits.signDelay.forEach((circuit) => {
+                const exists = circuitList.some(
+                    (existingCircuit) =>
+                        existingCircuit.number === circuit.number
+                )
+                if (!exists) {
+                    circuitList.push(circuit)
+                }
+            })
+            setState({
+                analyzer: new Analyzer(circuitList),
+            })
+        }
+    }
+    if (selectedRadio.id === "radio-2" || selectedRadio.id === "radio-3") {
+        addAnalyzeListeners()
+        addAnalyzeListeners()
+        enableAnalyzeButtons()
+    }
 }
 
 export {

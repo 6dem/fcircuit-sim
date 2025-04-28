@@ -13,12 +13,14 @@ circuit-descriptions/
 !circuit-descriptions/fcircuit-aig-mig.json
 
 # Local tests and utils
+local-analysys/
 src/app/services/test-analyzer.js
 src/app/services/test-analizator.js
 src/utils/load-ndjson.js
 src/utils/circuit-description-formatting.js
 src/services/test-local.js
 src/services/local-process-circuits.js
+src/services/local-analyze-circuits.js
 
 # Results
 *.json
