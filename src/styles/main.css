@@ -777,12 +777,6 @@ input[type="checkbox"]:hover {
     transition: 0.25s ease-out;
 }
 
-@media (max-width: 700px) {
-    .radio__tabs {
-        transform: scale(0.6);
-    }
-}
-
 .btn--attach-analyze {
     width: 80%;
     transition: background 0.3s ease, box-shadow 0.5s ease;
