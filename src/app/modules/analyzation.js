@@ -380,6 +380,33 @@ function renderMetricDistributionsChart(distributions) {
     })
 
     const option = {
+        title: {
+            text: `Distribution of metrics`,
+            left: "center",
+            textStyle: {
+                color: "#ffffff",
+            },
+        },
+        toolbox: {
+            show: true,
+            backgroundColor: "#48319d",
+            right: 10,
+            top: 10,
+            feature: {
+                saveAsImage: {
+                    title: "Save as png",
+                    backgroundColor: "rgba(255,255,255,0.25)",
+                    iconStyle: {
+                        borderColor: "#ffffff",
+                    },
+                    emphasis: {
+                        iconStyle: {
+                            borderColor: "#eeedff",
+                        },
+                    },
+                },
+            },
+        },
         backgroundColor: "transparent",
         tooltip: {
             trigger: "axis",
@@ -388,6 +415,7 @@ function renderMetricDistributionsChart(distributions) {
             },
         },
         legend: {
+            top: 30,
             textStyle: {
                 color: "#ffffff",
             },
@@ -528,12 +556,40 @@ function renderDifferenceDistributionChart(data) {
     }
 
     const option = {
+        title: {
+            text: "Distribution of metrics differences",
+            left: "center",
+            textStyle: {
+                color: "#ffffff",
+            },
+        },
+        toolbox: {
+            show: true,
+            backgroundColor: "#48319d",
+            right: 10,
+            top: 10,
+            feature: {
+                saveAsImage: {
+                    title: "Save as png",
+                    backgroundColor: "rgba(255,255,255,0.25)",
+                    iconStyle: {
+                        borderColor: "#ffffff",
+                    },
+                    emphasis: {
+                        iconStyle: {
+                            borderColor: "#eeedff",
+                        },
+                    },
+                },
+            },
+        },
         backgroundColor: "transparent",
         tooltip: {
             trigger: "axis",
             axisPointer: { type: "shadow" },
         },
         legend: {
+            top: 30,
             textStyle: { color: "#ffffff" },
         },
         grid: {
@@ -745,6 +801,26 @@ function renderRaceLineChart(metrics, circuitNumber) {
     }))
 
     const option = {
+        toolbox: {
+            show: true,
+            backgroundColor: "#48319d",
+            right: 10,
+            top: 10,
+            feature: {
+                saveAsImage: {
+                    title: "Save as png",
+                    backgroundColor: "rgba(255,255,255,0.25)",
+                    iconStyle: {
+                        borderColor: "#ffffff",
+                    },
+                    emphasis: {
+                        iconStyle: {
+                            borderColor: "#eeedff",
+                        },
+                    },
+                },
+            },
+        },
         animationDuration: 10000,
         backgroundColor: "transparent",
         dataset: {
@@ -798,7 +874,6 @@ function renderRaceLineChart(metrics, circuitNumber) {
         grid: {
             left: 20,
             right: 80,
-            top: 60,
             bottom: 60,
             containLabel: true,
         },
