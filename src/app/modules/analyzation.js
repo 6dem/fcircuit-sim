@@ -14,22 +14,14 @@ const analyzeResetButton = document.getElementById("analyze-reset-button")
 const minCircuitsButton = document.getElementById("min-circuits-button")
 const minCircuitsContainer = document.getElementById("min-circuits-content")
 const delayMinContainer = document.getElementById("delay-min-container")
-const signDelayMinContainer = document.getElementById(
-    "sign-delay-min-container"
-)
+const signDelayMinContainer = document.getElementById("sign-delay-min-container")
 const countInputElement = document.getElementById("input-count")
 const delayCheckbox = document.getElementById("delay-metric-checkbox")
 const signDelayCheckbox = document.getElementById("sign-metric-checkbox")
-const metricDistrWrapper = document.getElementById(
-    "metric-distribution-wrapper"
-)
+const metricDistrWrapper = document.getElementById("metric-distribution-wrapper")
 const metricDistrButton = document.getElementById("metric-distribution-button")
-const diffDistrWrapper = document.getElementById(
-    "difference-distribution-wrapper"
-)
-const diffDistrButton = document.getElementById(
-    "difference-distribution-button"
-)
+const diffDistrWrapper = document.getElementById("difference-distribution-wrapper")
+const diffDistrButton = document.getElementById("difference-distribution-button")
 const raceLineWrapper = document.getElementById("metric-race-line-wrapper")
 const raceLineButton = document.getElementById("race-line-button")
 const numberInputElement = document.getElementById("input-number")
@@ -131,12 +123,8 @@ function clearAnalyzeContents() {
 function updateMinCircuitsButtonState() {
     const value = parseInt(countInputElement.value, 10)
     let hasMetricsSelected =
-        (delayCheckbox.checked &&
-            appState.analyzer?.minCircuits?.delay?.minimalCircuits?.length !==
-                value) ||
-        (signDelayCheckbox.checked &&
-            appState.analyzer?.minCircuits?.signDelay?.minimalCircuits
-                ?.length !== value)
+        (delayCheckbox.checked && appState.analyzer?.minCircuits?.delay?.minimalCircuits?.length !== value) ||
+        (signDelayCheckbox.checked && appState.analyzer?.minCircuits?.signDelay?.minimalCircuits?.length !== value)
 
     const hasData = appState.analyzer?.processedData?.length > 0
 
@@ -203,43 +191,22 @@ function handleMinCircuitsClick() {
     let minCircuits
 
     if (selectedRadio.id === "radio-1") {
-        minCircuits = appState.analyzer.findMinimalCircuits(
-            selectedMetrics,
-            count
-        )
+        minCircuits = appState.analyzer.findMinimalCircuits(selectedMetrics, count)
     } else if (selectedRadio.id === "radio-2") {
         const processedData = aigAnalysisData.minCircuits.delay
-        const maxMetrics = appState.analyzer.calculateAllMaxMetrics(
-            undefined,
-            processedData
-        )
-        minCircuits = appState.analyzer.findMinimalCircuits(
-            selectedMetrics,
-            count,
-            maxMetrics,
-            processedData
-        )
+        const maxMetrics = appState.analyzer.calculateAllMaxMetrics(undefined, processedData)
+        minCircuits = appState.analyzer.findMinimalCircuits(selectedMetrics, count, maxMetrics, processedData)
     } else if (selectedRadio.id === "radio-3") {
         const circuitList = migAnalysisData.minCircuits.delay
 
         migAnalysisData.minCircuits.signDelay.forEach((circuit) => {
-            const exists = circuitList.some(
-                (existingCircuit) => existingCircuit.number === circuit.number
-            )
+            const exists = circuitList.some((existingCircuit) => existingCircuit.number === circuit.number)
             if (!exists) {
                 circuitList.push(circuit)
             }
         })
-        const maxMetrics = appState.analyzer.calculateAllMaxMetrics(
-            undefined,
-            circuitList
-        )
-        minCircuits = appState.analyzer.findMinimalCircuits(
-            selectedMetrics,
-            count,
-            maxMetrics,
-            circuitList
-        )
+        const maxMetrics = appState.analyzer.calculateAllMaxMetrics(undefined, circuitList)
+        minCircuits = appState.analyzer.findMinimalCircuits(selectedMetrics, count, maxMetrics, circuitList)
     }
 
     console.log("🚀 ~ handleMinCircuitsClick ~ minCircuits:", minCircuits)
@@ -269,10 +236,8 @@ function renderMinimalCircuitsTables(metricsData) {
         title.classList.add("metrics-title")
         title.textContent = `Minimal ${metricName} circuits`
 
-        const container =
-            metricName === "delay" ? delayMinContainer : signDelayMinContainer
-        const wrapper =
-            metricName === "delay" ? delayTableWrapper : signDelayTableWrapper
+        const container = metricName === "delay" ? delayMinContainer : signDelayMinContainer
+        const wrapper = metricName === "delay" ? delayTableWrapper : signDelayTableWrapper
 
         container.appendChild(title)
         container.appendChild(wrapper)
@@ -322,9 +287,7 @@ function renderMinimalCircuitsTables(metricsData) {
 
 function clearMinTables() {
     const delayMinContainer = document.getElementById("delay-min-container")
-    const signDelayMinContainer = document.getElementById(
-        "sign-delay-min-container"
-    )
+    const signDelayMinContainer = document.getElementById("sign-delay-min-container")
 
     ;[delayMinContainer, signDelayMinContainer].forEach((container) => {
         while (container.firstChild) {
@@ -395,7 +358,7 @@ function renderMetricDistributionsChart(distributions) {
             feature: {
                 saveAsImage: {
                     title: "Save as png",
-                    backgroundColor: "rgba(255,255,255,0.25)",
+                    backgroundColor: "#626683",
                     iconStyle: {
                         borderColor: "#ffffff",
                     },
@@ -571,7 +534,7 @@ function renderDifferenceDistributionChart(data) {
             feature: {
                 saveAsImage: {
                     title: "Save as png",
-                    backgroundColor: "rgba(255,255,255,0.25)",
+                    backgroundColor: "#626683",
                     iconStyle: {
                         borderColor: "#ffffff",
                     },
@@ -645,28 +608,20 @@ function handleNumberInput() {
     let matches
 
     if (selectedRadio.id === "radio-1") {
-        matches = appState.processedData.filter((circuit) =>
-            circuit.number.toString().includes(query)
-        )
+        matches = appState.processedData.filter((circuit) => circuit.number.toString().includes(query))
     } else if (selectedRadio.id === "radio-2") {
-        matches = aigAnalysisData.minCircuits.delay.filter((circuit) =>
-            circuit.number.toString().includes(query)
-        )
+        matches = aigAnalysisData.minCircuits.delay.filter((circuit) => circuit.number.toString().includes(query))
     } else if (selectedRadio.id === "radio-3") {
         const circuitList = migAnalysisData.minCircuits.delay
 
         migAnalysisData.minCircuits.signDelay.forEach((circuit) => {
-            const exists = circuitList.some(
-                (existingCircuit) => existingCircuit.number === circuit.number
-            )
+            const exists = circuitList.some((existingCircuit) => existingCircuit.number === circuit.number)
             if (!exists) {
                 circuitList.push(circuit)
             }
         })
 
-        matches = circuitList.filter((circuit) =>
-            circuit.number.toString().includes(query)
-        )
+        matches = circuitList.filter((circuit) => circuit.number.toString().includes(query))
     }
     const fragment = document.createDocumentFragment()
 
@@ -697,9 +652,7 @@ function handleRaceLineClick() {
         return
     }
 
-    const circuitExists = appState.processedData.some(
-        (circuit) => circuit.number === number
-    )
+    const circuitExists = appState.processedData.some((circuit) => circuit.number === number)
 
     if (!circuitExists && selectedRadio.id === "radio-1") {
         showCustomAlert("There are no circuits with such a number")
@@ -715,25 +668,18 @@ function handleRaceLineClick() {
     } else if (selectedRadio.id === "radio-2") {
         circuitMetrics = appState.analyzer.getCircuitMetricsBySet(
             number,
-            aigAnalysisData.minCircuits.delay.concat(
-                aigAnalysisData.minCircuits.signDelay
-            )
+            aigAnalysisData.minCircuits.delay.concat(aigAnalysisData.minCircuits.signDelay)
         )
     } else if (selectedRadio.id === "radio-3") {
         const circuitList = migAnalysisData.minCircuits.delay
 
         migAnalysisData.minCircuits.signDelay.forEach((circuit) => {
-            const exists = circuitList.some(
-                (existingCircuit) => existingCircuit.number === circuit.number
-            )
+            const exists = circuitList.some((existingCircuit) => existingCircuit.number === circuit.number)
             if (!exists) {
                 circuitList.push(circuit)
             }
         })
-        circuitMetrics = appState.analyzer.getCircuitMetricsBySet(
-            number,
-            circuitList
-        )
+        circuitMetrics = appState.analyzer.getCircuitMetricsBySet(number, circuitList)
     }
 
     setState({
@@ -778,6 +724,7 @@ function renderRaceLineChart(metrics, circuitNumber) {
             formatter: function (params) {
                 return `${metricName}: ${params.value[idx + 1]}`
             },
+            color: "#ffffff",
         },
         labelLayout: {
             moveOverlap: "shiftY",
@@ -787,6 +734,7 @@ function renderRaceLineChart(metrics, circuitNumber) {
         },
         lineStyle: {
             color: colors[idx],
+            width: 3,
         },
         itemStyle: {
             color: colors[idx],
@@ -809,7 +757,7 @@ function renderRaceLineChart(metrics, circuitNumber) {
             feature: {
                 saveAsImage: {
                     title: "Save as png",
-                    backgroundColor: "rgba(255,255,255,0.25)",
+                    backgroundColor: "#626683",
                     iconStyle: {
                         borderColor: "#ffffff",
                     },
@@ -900,71 +848,33 @@ function handleStatisticClick() {
             },
             {
                 label: "Sign Delay > Delay",
-                byCircuit: analyzer.compareMetricDominance(
-                    ["signDelay", "delay"],
-                    false
-                ),
-                bySet: analyzer.compareMetricDominance(
-                    ["signDelay", "delay"],
-                    true
-                ),
+                byCircuit: analyzer.compareMetricDominance(["signDelay", "delay"], false),
+                bySet: analyzer.compareMetricDominance(["signDelay", "delay"], true),
             },
             {
                 label: "Sign Delay < Delay",
-                byCircuit: analyzer.compareMetricDominance(
-                    ["delay", "signDelay"],
-                    false
-                ),
-                bySet: analyzer.compareMetricDominance(
-                    ["delay", "signDelay"],
-                    true
-                ),
+                byCircuit: analyzer.compareMetricDominance(["delay", "signDelay"], false),
+                bySet: analyzer.compareMetricDominance(["delay", "signDelay"], true),
             },
             {
                 label: "Sign Delay < Depth",
-                byCircuit: analyzer.compareMetricDominance(
-                    ["depth", "signDelay"],
-                    false
-                ),
-                bySet: analyzer.compareMetricDominance(
-                    ["depth", "signDelay"],
-                    true
-                ),
+                byCircuit: analyzer.compareMetricDominance(["depth", "signDelay"], false),
+                bySet: analyzer.compareMetricDominance(["depth", "signDelay"], true),
             },
             {
                 label: "Delay < Depth",
-                byCircuit: analyzer.compareMetricDominance(
-                    ["depth", "delay"],
-                    false
-                ),
-                bySet: analyzer.compareMetricDominance(
-                    ["depth", "delay"],
-                    true
-                ),
+                byCircuit: analyzer.compareMetricDominance(["depth", "delay"], false),
+                bySet: analyzer.compareMetricDominance(["depth", "delay"], true),
             },
             {
                 label: "All Metrics Equal",
-                byCircuit: analyzer.countMetricEquality(
-                    ["depth", "delay", "signDelay"],
-                    true
-                ),
-                bySet: analyzer.countMetricEquality(
-                    ["depth", "delay", "signDelay"],
-                    true,
-                    true
-                ),
+                byCircuit: analyzer.countMetricEquality(["depth", "delay", "signDelay"], true),
+                bySet: analyzer.countMetricEquality(["depth", "delay", "signDelay"], true, true),
             },
             {
                 label: "All Metrics Unequal",
-                byCircuit: analyzer.countMetricEquality(
-                    ["depth", "delay", "signDelay"],
-                    false
-                ),
-                bySet: analyzer.countMetricEquality(
-                    ["depth", "delay", "signDelay"],
-                    false,
-                    true
-                ),
+                byCircuit: analyzer.countMetricEquality(["depth", "delay", "signDelay"], false),
+                bySet: analyzer.countMetricEquality(["depth", "delay", "signDelay"], false, true),
             },
         ]
     } else if (selectedRadio.id === "radio-2") {
@@ -1017,12 +927,8 @@ function renderStatisticTable(indicators) {
         const circuitValueCell = document.createElement("td")
         const setValueCell = document.createElement("td")
 
-        circuitValueCell.textContent = `${item.byCircuit.count} (${(
-            item.byCircuit.ratio * 100
-        ).toFixed(2)}%)`
-        setValueCell.textContent = `${item.bySet.count} (${(
-            item.bySet.ratio * 100
-        ).toFixed(2)}%)`
+        circuitValueCell.textContent = `${item.byCircuit.count} (${(item.byCircuit.ratio * 100).toFixed(2)}%)`
+        setValueCell.textContent = `${item.bySet.count} (${(item.bySet.ratio * 100).toFixed(2)}%)`
 
         row.appendChild(labelCell)
         row.appendChild(circuitValueCell)
@@ -1060,10 +966,7 @@ function handleRadioChange(event) {
             const circuitList = migAnalysisData.minCircuits.delay
 
             migAnalysisData.minCircuits.signDelay.forEach((circuit) => {
-                const exists = circuitList.some(
-                    (existingCircuit) =>
-                        existingCircuit.number === circuit.number
-                )
+                const exists = circuitList.some((existingCircuit) => existingCircuit.number === circuit.number)
                 if (!exists) {
                     circuitList.push(circuit)
                 }
