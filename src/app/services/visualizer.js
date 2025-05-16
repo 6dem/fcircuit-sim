@@ -12,6 +12,8 @@ class Visualizer {
             height: this.height,
         })
 
+        this.ringLayer = new Konva.Layer()
+        this.stage.add(this.ringLayer)
         this.layer = new Konva.Layer()
         this.stage.add(this.layer)
 
@@ -36,6 +38,7 @@ class Visualizer {
     }
 
     showError() {
+        this.ringLayer.clear()
         this.layer.clear()
         const centerX = this.stage.width() / 2
         const centerY = this.stage.height() / 2
@@ -189,9 +192,7 @@ class Visualizer {
             }
 
             if (stepTime === 0) {
-                connectionsToAnimate.forEach((conn) =>
-                    this.updateConnectionGradient(conn, 1)
-                )
+                connectionsToAnimate.forEach((conn) => this.updateConnectionGradient(conn, 1))
                 animateStep(stepIndex + 1)
                 return
             }
@@ -223,14 +224,7 @@ class Visualizer {
         const { fromColor, toColor } = this.calculateConnectionColors(conn)
 
         if (this.stepTime === 0) {
-            conn.shape.attrs.strokeLinearGradientColorStops = [
-                0,
-                fromColor,
-                0.59,
-                fromColor,
-                0.61,
-                toColor,
-            ]
+            conn.shape.attrs.strokeLinearGradientColorStops = [0, fromColor, 0.59, fromColor, 0.61, toColor]
             return
         }
 
@@ -261,10 +255,7 @@ class Visualizer {
     }
 
     initializeZeroStep(stateHistory) {
-        stateHistory[0] =
-            this.circuitData.format === "mig"
-                ? { 0: { state: "computed" } }
-                : {}
+        stateHistory[0] = this.circuitData.format === "mig" ? { 0: { state: "computed" } } : {}
 
         for (let i = 1; i <= this.circuitData.countInputs; i++) {
             stateHistory[0][i] = { state: "computed" }
@@ -272,16 +263,12 @@ class Visualizer {
     }
 
     calculateConnectionColors(conn) {
-        const [fromId, inputIndex, toId] =
-            conn.key?.split("-") ?? conn.split("-")
+        const [fromId, inputIndex, toId] = conn.key?.split("-") ?? conn.split("-")
         const value = this.elements[fromId].value
         let fromColor = value === 1 ? "white" : "black"
         let toColor = fromColor
 
-        if (
-            this.circuitData.format === "mig" ||
-            this.circuitData.format === "aig"
-        ) {
+        if (this.circuitData.format === "mig" || this.circuitData.format === "aig") {
             const fe = this.circuitData.instancesFE.find((fe) => fe.id == toId)
             const inverseValue = value ^ fe.inverses[inputIndex]
             toColor = inverseValue === 1 ? "white" : "black"
@@ -341,41 +328,22 @@ class Visualizer {
         const elemShift = 30
 
         Object.entries(this.depthDict).forEach(([depth, nodes]) => {
-            const sortedNodes =
-                depth === "0" ? [...nodes].sort((a, b) => a - b) : [...nodes]
+            const sortedNodes = depth === "0" ? [...nodes].sort((a, b) => a - b) : [...nodes]
 
             sortedNodes.forEach((nodeId, index) => {
                 const elementType = this.getElementType(nodeId)
-                const { x, y } = this.calculatePosition(
-                    depth,
-                    index,
-                    sortedNodes.length
-                )
+                const { x, y } = this.calculatePosition(depth, index, sortedNodes.length)
 
                 let element
                 switch (elementType) {
                     case "ZeroElement":
-                        element = new ZeroElement(
-                            this.layer,
-                            x - elemShift,
-                            y,
-                            nodeId,
-                            this.isIndexShow
-                        )
+                        element = new ZeroElement(this.layer, x - elemShift, y, nodeId, this.isIndexShow)
                         break
                     case "InputElement":
-                        element = new InputElement(
-                            this.layer,
-                            x,
-                            y + elemShift,
-                            nodeId,
-                            this.isIndexShow
-                        )
+                        element = new InputElement(this.layer, x, y + elemShift, nodeId, this.isIndexShow)
                         break
                     case "FunctionalElement":
-                        const outputId =
-                            this.circuitData.output ||
-                            this.circuitData.outputNums
+                        const outputId = this.circuitData.output || this.circuitData.outputNums
                         const isOutput = outputId.includes(nodeId)
                         element = new FunctionalElement(
                             this.layer,
@@ -395,33 +363,53 @@ class Visualizer {
     }
 
     buildConnections() {
-        Object.entries(this.circuitData.instancesFE).forEach(
-            ([index, feData]) => {
-                const feId = feData.id
-                feData.inputsFE.forEach((inputId, index) => {
-                    const fromElement = this.elements[inputId]
-                    const toElement = this.elements[feId]
+        Object.entries(this.circuitData.instancesFE).forEach(([index, feData]) => {
+            const feId = feData.id
+            feData.inputsFE.forEach((inputId, index) => {
+                const fromElement = this.elements[inputId]
+                const toElement = this.elements[feId]
 
-                    if (!fromElement || !toElement) return
+                if (!fromElement || !toElement) return
 
-                    const points = [
-                        fromElement.outputCoords?.[0] ??
-                            fromElement.centerCoords[0],
-                        fromElement.outputCoords?.[1] ??
-                            fromElement.centerCoords[1],
-                        toElement.centerCoords[0],
-                        toElement.centerCoords[1],
-                    ]
+                const x1 = fromElement.outputCoords?.[0] ?? fromElement.centerCoords[0]
+                const y1 = fromElement.outputCoords?.[1] ?? fromElement.centerCoords[1]
+                const x2 = toElement.centerCoords[0]
+                const y2 = toElement.centerCoords[1]
 
-                    const key = `${inputId}-${index}-${feId}`
-                    this.connections[key] = new Connection(
-                        this.layer,
-                        points,
-                        key
-                    )
-                })
-            }
-        )
+                const points = [x1, y1, x2, y2]
+
+                const key = `${inputId}-${index}-${feId}`
+                this.connections[key] = new Connection(this.layer, points, key)
+
+                if (this.circuitData.format === "mig" || this.circuitData.format === "aig") {
+                    const fe = this.circuitData.instancesFE.find((fe) => fe.id == feId)
+                    const isInverse = !!fe.inverses[index]
+
+                    if (isInverse) {
+                        const yTarget = y2 - 25
+                        let xRing,
+                            yRing = yTarget
+
+                        const t = (yTarget - y1) / (y2 - y1)
+                        xRing = x1 + t * (x2 - x1)
+
+                        const ring = new Konva.Ring({
+                            x: xRing,
+                            y: yRing,
+                            innerRadius: 3,
+                            outerRadius: 4,
+                            fill: "#808080",
+                            stroke: "#808080",
+                            strokeWidth: 1,
+                            opacity: 0.5,
+                        })
+
+                        this.ringLayer.add(ring)
+                    }
+                }
+            })
+        })
+        this.ringLayer.draw()
         this.layer.draw()
     }
 
@@ -461,9 +449,7 @@ class Visualizer {
     }
 
     calculateInitialScale() {
-        const [circuitWidth, circuitHeight] = this.calculateCircuitSize(
-            this.depthDict
-        )
+        const [circuitWidth, circuitHeight] = this.calculateCircuitSize(this.depthDict)
         this.circuitWidth = circuitWidth
         this.circuitHeight = circuitHeight
 
@@ -493,8 +479,7 @@ class Visualizer {
             })
             value.forEach((path) => {
                 path.split("_").forEach((conn) => {
-                    delete this.connections[conn].shape.attrs
-                        .strokeLinearGradientColorStops
+                    delete this.connections[conn].shape.attrs.strokeLinearGradientColorStops
                     this.connections[conn].shape.opacity(1)
                     this.connections[conn].shape.stroke("#48319d")
                 })
@@ -512,12 +497,9 @@ class Visualizer {
             value.forEach((path) => {
                 path.split("_").forEach((conn) => {
                     this.connections[conn].shape.opacity(0.5)
-                    const { fromColor, toColor } =
-                        this.calculateConnectionColors(conn)
+                    const { fromColor, toColor } = this.calculateConnectionColors(conn)
 
-                    this.connections[
-                        conn
-                    ].shape.attrs.strokeLinearGradientColorStops = [
+                    this.connections[conn].shape.attrs.strokeLinearGradientColorStops = [
                         0,
                         fromColor,
                         0.59,
@@ -721,10 +703,7 @@ class FunctionalElement extends BaseElement {
         this.height = 85 * 0.75
         this.calculateCenter()
         this.outputCoords = [this.centerCoords[0], this.y + this.height - 2]
-        this.centerCoords = [
-            this.centerCoords[0],
-            this.centerCoords[1] - this.height / 4,
-        ]
+        this.centerCoords = [this.centerCoords[0], this.centerCoords[1] - this.height / 4]
 
         this.shape = this.createShape(this.x, this.y)
         this.applyGradient()
