@@ -10,6 +10,8 @@ html {
 }
 
 body {
+    display: flex;
+    flex-direction: column;
     min-height: 100vh;
     margin: 0;
     font-family: "Roboto", sans-serif;
@@ -104,8 +106,7 @@ label {
     font-size: 24px;
     outline: none;
     border: 2px solid transparent;
-    box-shadow: inset 1px 1px 1px 0 var(--color-white-25),
-        5px 4px 10px var(--color-black-25);
+    box-shadow: inset 1px 1px 1px 0 var(--color-white-25), 5px 4px 10px var(--color-black-25);
     transition: background 0.3s ease;
 }
 

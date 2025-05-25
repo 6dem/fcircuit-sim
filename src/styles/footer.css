@@ -1,0 +1,69 @@
+.footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: end;
+    border-top: 2px solid var(--color-blue);
+    padding: 20px 10px;
+    /* min-height: 15dvh; */
+    color: var(--color-white);
+}
+
+.footer__contacts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 5px;
+    min-height: 80px;
+}
+
+.footer__title {
+    font-size: 20px;
+}
+
+.text-gradient {
+    background-image: linear-gradient(
+        45deg,
+        var(--color-purple-dark),
+        var(--color-blue),
+        var(--color-pink-bg),
+        var(--color-purple-light),
+        var(--color-purple-dark),
+        var(--color-blue)
+    );
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: flow 4s linear infinite;
+}
+
+@keyframes flow {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+.footer__repo-wrapper {
+    transition: color 0.3s ease;
+}
+
+.footer__repo-wrapper:hover {
+    color: var(--color-purple-dark);
+}
+
+.footer__repo-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.footer__repo-title {
+    align-self: center;
+}

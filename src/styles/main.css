@@ -1,5 +1,6 @@
 .main {
     padding: 0 10px 35px 10px;
+    flex: 1;
 }
 
 .visualization {
@@ -123,8 +124,7 @@
     outline: none;
     border-width: 1px;
     border-color: var(--color-white-50);
-    box-shadow: inset 1px 1px 0 var(--color-white-25),
-        5px 4px 10px var(--color-black-25);
+    box-shadow: inset 1px 1px 0 var(--color-white-25), 5px 4px 10px var(--color-black-25);
     transition: width 0.3s ease;
 }
 
@@ -722,8 +722,7 @@ input[type="checkbox"]:hover {
     display: flex;
     position: relative;
     background-color: var(--color-purple-light);
-    box-shadow: 0 0 1px 0 var(--color-pink-bg),
-        0 1px 10px 0 var(--color-pink-bg);
+    box-shadow: 0 0 1px 0 var(--color-pink-bg), 0 1px 10px 0 var(--color-pink-bg);
     padding: 0.75rem;
     border-radius: 44px;
 }
@@ -780,8 +779,7 @@ input[type="checkbox"]:hover {
 .btn--attach-analyze {
     width: 80%;
     transition: background 0.3s ease, box-shadow 0.5s ease;
-    box-shadow: inset 1px 1px 1px 0 var(--color-white-25),
-        0px 0px 0px var(--color-white-50);
+    box-shadow: inset 1px 1px 1px 0 var(--color-white-25), 0px 0px 0px var(--color-white-50);
 }
 
 .analyzation-reset {
@@ -936,18 +934,15 @@ input[type="checkbox"]:hover {
 @keyframes pulse-shadow {
     0%,
     100% {
-        box-shadow: inset 1px 1px 1px 0 var(--color-white-25),
-            5px 4px 5px var(--color-white-50);
+        box-shadow: inset 1px 1px 1px 0 var(--color-white-25), 5px 4px 5px var(--color-white-50);
     }
     50% {
-        box-shadow: inset 1px 1px 1px 0 var(--color-white-25),
-            5px 4px 20px var(--color-white-50);
+        box-shadow: inset 1px 1px 1px 0 var(--color-white-25), 5px 4px 20px var(--color-white-50);
     }
 }
 
 .animated-shadow {
-    box-shadow: inset 1px 1px 1px 0 var(--color-white-25),
-        5px 4px 5px var(--color-white-50);
+    box-shadow: inset 1px 1px 1px 0 var(--color-white-25), 5px 4px 5px var(--color-white-50);
     animation: pulse-shadow 2s ease-out infinite;
 }
 
