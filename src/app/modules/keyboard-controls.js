@@ -100,18 +100,43 @@ const keyBindings = [
         code: "KeyS",
         action: () => document.getElementById("save-button")?.click(),
     },
+    {
+        code: "KeyA",
+        action: () => document.getElementById("checkbox-arrow")?.click(),
+    },
+    {
+        code: "KeyF",
+        alt: true,
+        action: () => document.getElementById("analyze-attach-button")?.click(),
+    },
+    {
+        code: "KeyC",
+        alt: true,
+        action: () => document.getElementById("radio-1")?.click(),
+    },
+    {
+        code: "KeyA",
+        alt: true,
+        action: () => document.getElementById("radio-2")?.click(),
+    },
+    {
+        code: "KeyM",
+        alt: true,
+        action: () => document.getElementById("radio-3")?.click(),
+    },
+    {
+        code: "KeyR",
+        alt: true,
+        action: () => document.getElementById("analyze-reset-button")?.click(),
+    },
 ]
 
 function handleKeydown(event) {
-    const matchingBindings = keyBindings.filter(
-        (binding) => binding.code === event.code
-    )
+    const matchingBindings = keyBindings.filter((binding) => binding.code === event.code)
 
     matchingBindings.sort((a, b) => {
-        const aHasModifiers =
-            a.ctrl !== undefined || a.shift !== undefined || a.alt !== undefined
-        const bHasModifiers =
-            b.ctrl !== undefined || b.shift !== undefined || b.alt !== undefined
+        const aHasModifiers = a.ctrl !== undefined || a.shift !== undefined || a.alt !== undefined
+        const bHasModifiers = b.ctrl !== undefined || b.shift !== undefined || b.alt !== undefined
         return bHasModifiers - aHasModifiers
     })
 
