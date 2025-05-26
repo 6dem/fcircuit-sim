@@ -141,11 +141,10 @@ function handleKeydown(event) {
     })
 
     for (const binding of matchingBindings) {
-        if (
-            (binding.ctrl === undefined || binding.ctrl === event.ctrlKey) &&
-            (binding.shift === undefined || binding.shift === event.shiftKey) &&
-            (binding.alt === undefined || binding.alt === event.altKey)
-        ) {
+        const ctrl = !!binding.ctrl
+        const shift = !!binding.shift
+        const alt = !!binding.alt
+        if (event.ctrlKey === ctrl && event.shiftKey === shift && event.altKey === alt) {
             event.preventDefault()
             binding.action()
             break
