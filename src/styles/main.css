@@ -521,7 +521,6 @@ input[type="checkbox"]:disabled {
 }
 
 .results-table {
-    border-collapse: collapse;
     width: 100%;
     color: var(--color-white);
     font-size: 24px;
@@ -547,6 +546,8 @@ input[type="checkbox"]:disabled {
     z-index: 1;
     padding: 20px 5px 20px 5px;
     background: var(--color-blue);
+    box-shadow: 1px 0 0 0.5px var(--color-blue), -1px 0 0 0.5px var(--color-blue);
+    margin: 0 -0.5px;
 }
 
 .results-table thead th:first-child {
@@ -1172,7 +1173,8 @@ input[type="checkbox"]:hover {
     .button--perform,
     .button--results,
     .input-set,
-    .duration__btns-wrapper {
+    .duration__btns-wrapper,
+    .btn--save {
         width: 90px !important;
         height: 38px;
         font-size: 16px;
@@ -1201,14 +1203,15 @@ input[type="checkbox"]:hover {
     .set-results li:last-child {
         margin-top: 0;
     }
+
+    .results-table {
+        font-size: 16px;
+    }
 }
 
 @media (max-width: 576px) {
     .main {
         padding: 0 10px 10px 10px;
-    }
-    .results-table {
-        font-size: 20px;
     }
     .analyzation-controls {
         width: 60%;
