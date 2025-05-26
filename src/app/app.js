@@ -1,9 +1,6 @@
 import { addAnalyzeCheckboxListener } from "./modules/analyzation.js"
-import { addFileEventListeners } from "./modules/fileHandlers.js"
-import {
-    initKeyboardControls,
-    initShortcutsToggle,
-} from "./modules/keyboard-controls.js"
+import { addFileEventListeners, addFileTipListener } from "./modules/fileHandlers.js"
+import { initKeyboardControls, initShortcutsToggle } from "./modules/keyboard-controls.js"
 
 const appState = {
     jsonData: null,
@@ -30,6 +27,7 @@ function setState(newState) {
 }
 
 function initApp() {
+    addFileTipListener()
     addFileEventListeners()
     initShortcutsToggle()
     initKeyboardControls()

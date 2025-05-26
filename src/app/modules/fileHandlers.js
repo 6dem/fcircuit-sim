@@ -5,10 +5,7 @@ import { disableButton, enableButton } from "../utils/disable-enable-btn.js"
 import { handleFileReadError } from "../utils/file-reader-error.js"
 import { fullReset } from "../utils/reset.js"
 import { hideElement, showElement } from "../utils/show-hide-element.js"
-import {
-    addShadowAnimation,
-    removeShadowAnimation,
-} from "../utils/toggleShadowAnimation.js"
+import { addShadowAnimation, removeShadowAnimation } from "../utils/toggleShadowAnimation.js"
 import { updateCountInput } from "../utils/update-count-input.js"
 import {
     addAnalyzeListeners,
@@ -16,14 +13,8 @@ import {
     enableAnalyzeButtons,
     removeAnalyzeListeners,
 } from "./analyzation.js"
-import {
-    addPerformEventListener,
-    removePerformEventListener,
-} from "./results.js"
-import {
-    addVisualizeListener,
-    removeVisualizeListener,
-} from "./visualization.js"
+import { addPerformEventListener, removePerformEventListener } from "./results.js"
+import { addVisualizeListener, removeVisualizeListener } from "./visualization.js"
 
 const fileInputElement = document.getElementById("file-upload")
 const attachButton = document.getElementById("attach-file-button")
@@ -35,6 +26,8 @@ const visualizeButton = document.getElementById("visualize-button")
 const performButton = document.getElementById("perform-button")
 const analyzeAttachButton = document.getElementById("analyze-attach-button")
 const analyzeFileInputElement = document.getElementById("analyze-file-upload")
+const fileTipButton = document.getElementById("file-tip-button")
+const alertContent = document.getElementById("custom-alert-content")
 
 function showLoader() {
     hideElement(fileName)
@@ -64,9 +57,7 @@ function handleAnalizeAttachClick() {
 async function handleSampleClick() {
     try {
         showLoader()
-        const response = await fetch(
-            "circuit-descriptions/fcircuit-aig-mig.json"
-        )
+        const response = await fetch("circuit-descriptions/fcircuit-aig-mig.json")
 
         if (!response.ok) throw new Error("Ошибка загрузки файла")
 
@@ -201,4 +192,38 @@ function removeFileEventListeners() {
     loadSampleButton.removeEventListener("click", handleSampleClick)
 }
 
-export { addFileEventListeners, checkFileType }
+async function handleFileTipClick() {
+    const response = await fetch("circuit-descriptions/fcircuit-aig-mig.json")
+    const jsonData = await response.json()
+    const prettyJson = JSON.stringify(jsonData, null, 4)
+
+    showCustomAlert("Sample Input File:")
+
+    const extra = document.getElementById("custom-alert-extra")
+    const scrollBox = document.getElementById("alert-scrollbox")
+    const downloadButton = document.getElementById("custom-alert-download")
+
+    showElement(extra)
+    showElement(downloadButton)
+
+    const pre = document.createElement("pre")
+    pre.textContent = prettyJson
+    pre.classList.add("alert-pre")
+    scrollBox.appendChild(pre)
+
+    downloadButton.onclick = () => {
+        const blob = new Blob([prettyJson], { type: "application/json" })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement("a")
+        a.href = url
+        a.download = "sample.json"
+        a.click()
+        URL.revokeObjectURL(url)
+    }
+}
+
+function addFileTipListener() {
+    fileTipButton.addEventListener("click", handleFileTipClick)
+}
+
+export { addFileEventListeners, addFileTipListener, checkFileType }

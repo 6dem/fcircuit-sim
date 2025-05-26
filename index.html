@@ -23,6 +23,11 @@
                     <use href="./assets/sprites.svg#icon-keyboard"></use>
                 </svg>
             </button>
+            <button class="btn btn--file-tip" id="file-tip-button">
+                <svg width="20" height="20" viewBox="0 0 20 20" preserveAspectRatio="xMidYMid meet">
+                    <use href="./assets/sprites.svg#file-question"></use>
+                </svg>
+            </button>
             <div class="field field--shortcuts hidden" id="shortcuts-field">
                 <ul class="field--shortcuts__list">
                     <li>Keyboard shortcuts <span class="field--shortcuts__keys">?</span></li>
@@ -357,11 +362,20 @@
         </div>
     </footer>
 
-
     <div id="custom-alert" class="hidden">
-        <div class="custom-alert-content">
-          <p id="custom-alert-message"></p>
-          <button id="custom-alert-ok" class="btn btn--alert">OK</button>
+        <div class="custom-alert-content" id="custom-alert-content">
+            <p id="custom-alert-message"></p>
+            <div id="custom-alert-extra" class="hidden">
+                <div class="alert-scrollbox" id="alert-scrollbox"></div>
+            </div>
+            <div class="custom-alert-btns" id="custom-alert-btns">
+                <button id="custom-alert-ok" class="btn btn--alert">OK</button>
+                <button id="custom-alert-download" class="btn btn--alert hidden">
+                    <svg class="footer__repo-icon" width="24" height="24" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+                        <use href="./assets/sprites.svg#file-download"></use>
+                    </svg>
+                </button>
+            </div>
         </div>
     </div>
 
