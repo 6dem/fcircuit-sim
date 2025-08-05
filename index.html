@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <script src="https://unpkg.com/konva@9/konva.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta property="og:title" content="FCircuit Simulator">
@@ -18,7 +17,8 @@
 <body>
     <header class="header">
         <div class="container">
-            <button class="btn btn--shortcuts" id="shortcuts-button" title="Show shortcuts" aria-label="Keyboard shortcuts">
+            <button class="btn btn--shortcuts" id="shortcuts-button" title="Show shortcuts"
+                aria-label="Keyboard shortcuts">
                 <svg width="20" height="20" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
                     <use href="./assets/sprites.svg#icon-keyboard"></use>
                 </svg>
@@ -75,7 +75,8 @@
                         <span>{</span><span>}</span>
                     </div>
                     <span class="file-name" id="file-name">No file chosen</span>
-                    <svg id="file-error" class="file-error hidden" width="30" height="30" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+                    <svg id="file-error" class="file-error hidden" width="30" height="30" viewBox="0 0 24 24"
+                        preserveAspectRatio="xMidYMid meet">
                         <use href="./assets/sprites.svg#error"></use>
                     </svg>
                 </div>
@@ -83,280 +84,292 @@
                     <button class="btn" id="visualize-button" disabled>Visualize</button>
                     <button class="btn" id="perform-button" disabled>Perform</button>
                 </div>
-                </div>
+            </div>
         </div>
     </header>
 
-        <main class="main">
-            <section class="visualization hidden" id="visualization-section">
-                <div class="visualization__side-panel visualization__side-panel--left">
-                    <div class="binary-input">
-                        <div class="binary-input__controls">
-                            <button class="set-button" id="button--increase" aria-label="Increase" disabled>
-                                <svg width="30" height="30" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
-                                    <use href="./assets/sprites.svg#chevron-up"></use>
-                                </svg>
-                            </button>
-                            <input class="input-set" id="input-set" type="text" value="00000" readonly />
-                            <button class="set-button" id="button--decrease" aria-label="Decrease" disabled>
-                                <svg width="30" height="30" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
-                                    <use href="./assets/sprites.svg#chevron-down"></use>
-                                </svg>
-                            </button>
-                          </div>
-                    </div>
-                    <button class="btn button--perform" id="visual-perform-button">Perform</button>
-                    <div class="field duration">
-                        <div class="duration__input-wrapper">
-                            <label for="duration__input">Duration:</label>
-                            <input id="duration__input" class="duration__input" type="number" value="1" min="0" max="10" step="0.1">
-                        </div>
-                        <div class="duration__btns-wrapper" id="animate-buttons-wrapper">
-                            <button class="btn duration__btn button--pause hidden" id="pause-button">
-                                <svg width="24" height="24" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
-                                    <use href="./assets/sprites.svg#pause"></use>
-                                </svg>
-                            </button>
-                            <button class="btn duration__btn button--play" id="play-button" disabled>
-                                <svg width="24" height="24" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
-                                    <use href="./assets/sprites.svg#play"></use>
-                                </svg>
-                            </button>
-                            <button class="btn duration__btn button--restart hidden" id="restart-button">
-                                <svg width="24" height="24" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
-                                    <use href="./assets/sprites.svg#restart"></use>
-                                </svg>
-                            </button>
-                        </div>
+    <main class="main">
+        <section class="visualization hidden" id="visualization-section">
+            <div class="visualization__side-panel visualization__side-panel--left">
+                <div class="binary-input">
+                    <div class="binary-input__controls">
+                        <button class="set-button" id="button--increase" aria-label="Increase" disabled>
+                            <svg width="30" height="30" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+                                <use href="./assets/sprites.svg#chevron-up"></use>
+                            </svg>
+                        </button>
+                        <input class="input-set" id="input-set" type="text" value="00000" readonly />
+                        <button class="set-button" id="button--decrease" aria-label="Decrease" disabled>
+                            <svg width="30" height="30" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+                                <use href="./assets/sprites.svg#chevron-down"></use>
+                            </svg>
+                        </button>
                     </div>
                 </div>
-                <div class="visualization__main">
-                    <div class="progress-bar-wrapper">
-                        <button class="arrow-button" id="arrow-button-left">
-                            <svg class="icon" width="26px" height="26px" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
-                                <use href="./assets/sprites.svg#arrow--left"></use>
+                <button class="btn button--perform" id="visual-perform-button">Perform</button>
+                <div class="field duration">
+                    <div class="duration__input-wrapper">
+                        <label for="duration__input">Duration:</label>
+                        <input id="duration__input" class="duration__input" type="number" value="1" min="0" max="10"
+                            step="0.1">
+                    </div>
+                    <div class="duration__btns-wrapper" id="animate-buttons-wrapper">
+                        <button class="btn duration__btn button--pause hidden" id="pause-button">
+                            <svg width="24" height="24" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+                                <use href="./assets/sprites.svg#pause"></use>
                             </svg>
                         </button>
-                        <div class="progress-bar">
-                            <div class="progress-slider">
-                                <input type="text" class="circuit-input" id="circuitInput" placeholder="" autocomplete="off" />
-                                <ul id="suggestions" class="suggestions-list"></ul>
-                            </div>
-                        </div>
-                        <button class="arrow-button" id="arrow-button-right">
-                            <svg class="icon" width="26px" height="26px" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
-                                <use href="./assets/sprites.svg#arrow--right"></use>
+                        <button class="btn duration__btn button--play" id="play-button" disabled>
+                            <svg width="24" height="24" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+                                <use href="./assets/sprites.svg#play"></use>
+                            </svg>
+                        </button>
+                        <button class="btn duration__btn button--restart hidden" id="restart-button">
+                            <svg width="24" height="24" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+                                <use href="./assets/sprites.svg#restart"></use>
                             </svg>
                         </button>
                     </div>
+                </div>
+            </div>
+            <div class="visualization__main">
+                <div class="progress-bar-wrapper">
+                    <button class="arrow-button" id="arrow-button-left">
+                        <svg class="icon" width="26px" height="26px" viewBox="0 0 24 24"
+                            preserveAspectRatio="xMidYMid meet">
+                            <use href="./assets/sprites.svg#arrow--left"></use>
+                        </svg>
+                    </button>
+                    <div class="progress-bar">
+                        <div class="progress-slider">
+                            <input type="text" class="circuit-input" id="circuitInput" placeholder=""
+                                autocomplete="off" />
+                            <ul id="suggestions" class="suggestions-list"></ul>
+                        </div>
+                    </div>
+                    <button class="arrow-button" id="arrow-button-right">
+                        <svg class="icon" width="26px" height="26px" viewBox="0 0 24 24"
+                            preserveAspectRatio="xMidYMid meet">
+                            <use href="./assets/sprites.svg#arrow--right"></use>
+                        </svg>
+                    </button>
+                </div>
 
-                    <div class="circuit-options-wrapper">
-                        <div class="checkbox-group">
-                            <div class="checkbox-wrapper hover" id="sign-checkbox-wrapper">
-                                <input type="checkbox" id="sign-checkbox" disabled>
-                                <svg viewBox="0 0 35.6 35.6">
-                                    <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle>
-                                    <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
-                                    <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
-                                </svg>
-                            </div>
-                            <label for="sign-checkbox" class="checkbox-label">show Sign Chains</label>
+                <div class="circuit-options-wrapper">
+                    <div class="checkbox-group">
+                        <div class="checkbox-wrapper hover" id="sign-checkbox-wrapper">
+                            <input type="checkbox" id="sign-checkbox" disabled>
+                            <svg viewBox="0 0 35.6 35.6">
+                                <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle>
+                                <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
+                                <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
+                            </svg>
                         </div>
-                        <div class="circuit-format-info">
-                            <h3 class="circuit-format" id="circuit-format" title="Circuit format"></h3>
-                        </div>
-                        <div class="checkbox-group">
-                            <div class="checkbox-wrapper hover" id="index-checkbox-wrapper">
-                                <input type="checkbox" id="index-checkbox">
-                                <svg viewBox="0 0 35.6 35.6">
-                                    <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle>
-                                    <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
-                                    <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
-                                </svg>
-                            </div>
-                            <label for="index-checkbox" class="checkbox-label">show indexes</label>
-                        </div>
+                        <label for="sign-checkbox" class="checkbox-label">show Sign Chains</label>
                     </div>
-                    <div class="visualization__container" id="visualization-container"></div>
-                </div>
-                <div class="visualization__side-panel visualization__side-panel--right">
-                    <div class="field set-results-wrapper">
-                        <ul class="set-results" id="set-results"></ul>
+                    <div class="circuit-format-info">
+                        <h3 class="circuit-format" id="circuit-format" title="Circuit format"></h3>
                     </div>
-                    <button class="btn button--results" id="button--results" disabled>All Results</button>
-                </div>
-                <div class="modal-overlay hidden" id="modal-overlay">
-                    <div class="modal" id="modal">
-                        <h2>Results</h2>
-                        <div class="modal__info" id="modal-info"></div>
-                        <div class="table-wrapper table-wrapper--visual hidden" id="table-wrapper--visual">
-                            <table class="results-table results-table--visual" id="results-table--visual">
-                                <thead>
-                                    <tr>
-                                        <th>Set</th>
-                                        <th>Output Value</th>
-                                        <th>Delay</th>
-                                        <th>Sign Delay</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="results-table--visual__body"></tbody>
-                            </table>
+                    <div class="checkbox-group">
+                        <div class="checkbox-wrapper hover" id="index-checkbox-wrapper">
+                            <input type="checkbox" id="index-checkbox">
+                            <svg viewBox="0 0 35.6 35.6">
+                                <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle>
+                                <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
+                                <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
+                            </svg>
                         </div>
-                        <button class="btn modal-close" id="modal-close">Close</button>
+                        <label for="index-checkbox" class="checkbox-label">show indexes</label>
                     </div>
                 </div>
-            </section>
-            <section class="results hidden" id="results-section">
-                <div class="container">
-                    <div class="table-wrapper" id="table-wrapper">
-                        <table class="results-table" id="results-table">
+                <div class="visualization__container" id="visualization-container"></div>
+            </div>
+            <div class="visualization__side-panel visualization__side-panel--right">
+                <div class="field set-results-wrapper">
+                    <ul class="set-results" id="set-results"></ul>
+                </div>
+                <button class="btn button--results" id="button--results" disabled>All Results</button>
+            </div>
+            <div class="modal-overlay hidden" id="modal-overlay">
+                <div class="modal" id="modal">
+                    <h2>Results</h2>
+                    <div class="modal__info" id="modal-info"></div>
+                    <div class="table-wrapper table-wrapper--visual hidden" id="table-wrapper--visual">
+                        <table class="results-table results-table--visual" id="results-table--visual">
                             <thead>
                                 <tr>
-                                    <th>Number</th>
-                                    <th>Depth</th>
                                     <th>Set</th>
                                     <th>Output Value</th>
                                     <th>Delay</th>
                                     <th>Sign Delay</th>
                                 </tr>
                             </thead>
-                            <tbody class="results-table__body"></tbody>
+                            <tbody class="results-table--visual__body"></tbody>
                         </table>
                     </div>
-                    <div class="table-additional">
-                        <button class="btn btn--save hidden" id="save-button">Save</button>
-                        <div class="error-container field hidden" id="error-container"></div>
+                    <button class="btn modal-close" id="modal-close">Close</button>
+                </div>
+            </div>
+        </section>
+        <section class="results hidden" id="results-section">
+            <div class="container">
+                <div class="table-wrapper" id="table-wrapper">
+                    <table class="results-table" id="results-table">
+                        <thead>
+                            <tr>
+                                <th>Number</th>
+                                <th>Depth</th>
+                                <th>Set</th>
+                                <th>Output Value</th>
+                                <th>Delay</th>
+                                <th>Sign Delay</th>
+                            </tr>
+                        </thead>
+                        <tbody class="results-table__body"></tbody>
+                    </table>
+                </div>
+                <div class="table-additional">
+                    <button class="btn btn--save hidden" id="save-button">Save</button>
+                    <div class="error-container field hidden" id="error-container"></div>
+                </div>
+            </div>
+        </section>
+        <section class="analyzation" id="analyzation-section">
+            <div class="analyzation__wrapper">
+                <div class="analyzation__header">
+                    <h2>
+                        <label for="checkbox-arrow" class="checkbox-arrow-label">Analyzation</label>
+                    </h2>
+                    <div class="checkbox-arrow-wrapper" id="checkbox-arrow-wrapper">
+                        <input type="checkbox" class="checkbox-arrow" id="checkbox-arrow">
+                        <svg class="checkbox-arrow-icon" width="148" height="22" viewBox="0 0 148 22"
+                            preserveAspectRatio="xMidYMid meet">
+                            <use href="./assets/sprites.svg#checkbox-arrow"></use>
+                        </svg>
                     </div>
                 </div>
-            </section>
-            <section class="analyzation" id="analyzation-section">
-                <div class="analyzation__wrapper">
-                    <div class="analyzation__header">
-                        <h2>
-                            <label for="checkbox-arrow" class="checkbox-arrow-label">Analyzation</label>
-                        </h2>
-                        <div class="checkbox-arrow-wrapper" id="checkbox-arrow-wrapper">
-                            <input type="checkbox" class="checkbox-arrow" id="checkbox-arrow">
-                            <svg class="checkbox-arrow-icon" width="148" height="22" viewBox="0 0 148 22" preserveAspectRatio="xMidYMid meet">
-                                <use href="./assets/sprites.svg#checkbox-arrow"></use>
+                <div class="analyzation__main hidden" id="analyzation-main">
+                    <div class="analyzation__main-controls">
+                        <div class="radio__container" id="radio-container">
+                            <div class="radio__tabs">
+                                <input type="radio" id="radio-1" name="radio__tabs" checked="">
+                                <label class="radio__tab" for="radio-1">Current</label>
+                                <input type="radio" id="radio-2" name="radio__tabs">
+                                <label class="radio__tab" for="radio-2">AIG</label>
+                                <input type="radio" id="radio-3" name="radio__tabs">
+                                <label class="radio__tab" for="radio-3">MIG</label>
+                                <span class="radio__glider"></span>
+                            </div>
+                        </div>
+                        <button class="btn btn--attach-analyze" id="analyze-attach-button">Attach file</button>
+                        <input type="file" class="hidden" id="analyze-file-upload">
+                        <button class="analyzation-reset" id="analyze-reset-button">
+                            <svg width="30" height="30" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+                                <use href="./assets/sprites.svg#list-reset"></use>
                             </svg>
+                        </button>
+                    </div>
+                    <div class="analyzation-module min-circuits-wrapper">
+                        <div class="analyzation-controls search-min-controls">
+                            <h3>Search minimal circuits</h3>
+                            <div class="metric-input-group">
+                                <label for="input-count">Count:</label>
+                                <input class="input-count" id="input-count" type="number" value="10" min="1" step="1" />
+                            </div>
+                            <div class="metric-checkbox-group">
+                                <div class="metric-checkbox-wrapper">
+                                    <label class="checkbox-container">
+                                        <input class="metric-checkbox" id="delay-metric-checkbox" checked="checked"
+                                            type="checkbox">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label for="delay-metric-checkbox">Delay</label>
+                                </div>
+                                <div class="metric-checkbox-wrapper">
+                                    <label class="checkbox-container">
+                                        <input class="metric-checkbox" id="sign-metric-checkbox" checked="checked"
+                                            type="checkbox">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label for="sign-metric-checkbox">Sign delay</label>
+                                </div>
+                            </div>
+                            <button class="btn btn--analyze" id="min-circuits-button" disabled>Search</button>
+                        </div>
+                        <div class="min-circuits-content hidden" id="min-circuits-content">
+                            <div class="min-container" id="delay-min-container"></div>
+                            <div class="min-container" id="sign-delay-min-container"></div>
                         </div>
                     </div>
-                    <div class="analyzation__main hidden" id="analyzation-main">
-                        <div class="analyzation__main-controls">
-                            <div class="radio__container" id="radio-container">
-                                <div class="radio__tabs">
-                                    <input type="radio" id="radio-1" name="radio__tabs" checked="">
-                                    <label class="radio__tab" for="radio-1">Current</label>
-                                    <input type="radio" id="radio-2" name="radio__tabs">
-                                    <label class="radio__tab" for="radio-2">AIG</label>
-                                    <input type="radio" id="radio-3" name="radio__tabs">
-                                    <label class="radio__tab" for="radio-3">MIG</label>
-                                    <span class="radio__glider"></span>
-                                </div>
-                            </div>
-                            <button class="btn btn--attach-analyze" id="analyze-attach-button">Attach file</button>
-                            <input type="file" class="hidden" id="analyze-file-upload">
-                            <button class="analyzation-reset" id="analyze-reset-button" >
-                                <svg width="30" height="30" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
-                                    <use href="./assets/sprites.svg#list-reset"></use>
-                                </svg>
-                            </button>
+                    <div class="analyzation-module metric-distributions-wrapper">
+                        <div class="analyzation-controls">
+                            <h3>Metric distribution</h3>
+                            <button class="btn btn--analyze" id="metric-distribution-button" disabled>Build
+                                Chart</button>
                         </div>
-                        <div class="analyzation-module min-circuits-wrapper">
-                            <div class="analyzation-controls search-min-controls">
-                                <h3>Search minimal circuits</h3>
-                                <div class="metric-input-group">
-                                    <label for="input-count">Count:</label>
-                                    <input class="input-count" id="input-count" type="number" value="10" min="1" step="1"/>
-                                </div>
-                                <div class="metric-checkbox-group">
-                                    <div class="metric-checkbox-wrapper">
-                                        <label class="checkbox-container" >
-                                            <input class="metric-checkbox" id="delay-metric-checkbox" checked="checked" type="checkbox">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                        <label for="delay-metric-checkbox">Delay</label>
-                                    </div>
-                                    <div class="metric-checkbox-wrapper">
-                                        <label class="checkbox-container">
-                                            <input class="metric-checkbox" id="sign-metric-checkbox" checked="checked" type="checkbox">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                        <label for="sign-metric-checkbox">Sign delay</label>
-                                    </div>
-                                </div>
-                                <button class="btn btn--analyze" id="min-circuits-button" disabled>Search</button>
-                            </div>
-                            <div class="min-circuits-content hidden" id="min-circuits-content">
-                                <div class="min-container" id="delay-min-container"></div>
-                                <div class="min-container" id="sign-delay-min-container"></div>
-                            </div>
+                        <div class="metric-distribution-content hidden" id="metric-distribution-wrapper">
+                            <div class="metric-distribution-stage" id="metric-distribution"></div>
                         </div>
-                        <div class="analyzation-module metric-distributions-wrapper">
-                            <div class="analyzation-controls">
-                                <h3>Metric distribution</h3>
-                                <button class="btn btn--analyze" id="metric-distribution-button" disabled>Build Chart</button>
-                            </div>
-                            <div class="metric-distribution-content hidden" id="metric-distribution-wrapper">
-                                <div class="metric-distribution-stage" id="metric-distribution"></div>
-                            </div>
+                    </div>
+                    <div class="analyzation-module metric-distributions-wrapper">
+                        <div class="analyzation-controls">
+                            <h3>Metric difference distribution</h3>
+                            <button class="btn btn--analyze" id="difference-distribution-button" disabled>Build
+                                Chart</button>
                         </div>
-                        <div class="analyzation-module metric-distributions-wrapper">
-                            <div class="analyzation-controls">
-                                <h3>Metric difference distribution</h3>
-                                <button class="btn btn--analyze" id="difference-distribution-button" disabled>Build Chart</button>
-                            </div>
-                            <div class="metric-distribution-content hidden" id="difference-distribution-wrapper">
-                                <div class="metric-distribution-stage" id="difference-distribution"></div>
-                            </div>
+                        <div class="metric-distribution-content hidden" id="difference-distribution-wrapper">
+                            <div class="metric-distribution-stage" id="difference-distribution"></div>
                         </div>
-                        <div class="analyzation-module race-line-wrapper">
-                            <div class="analyzation-controls">
-                                <h3>Circuit metrics curve</h3>
-                                <div class="metric-input-group">
-                                    <label for="input-number">Number:</label>
-                                    <input class="input-count input-number" id="input-number" type="number"/>
-                                    <ul class="suggestions-list analyze-suggestions-list hidden" id="analyze-suggestions"></ul>
-                                </div>
-                                <button class="btn btn--analyze" id="race-line-button" disabled>Build Chart</button>
+                    </div>
+                    <div class="analyzation-module race-line-wrapper">
+                        <div class="analyzation-controls">
+                            <h3>Circuit metrics curve</h3>
+                            <div class="metric-input-group">
+                                <label for="input-number">Number:</label>
+                                <input class="input-count input-number" id="input-number" type="number" />
+                                <ul class="suggestions-list analyze-suggestions-list hidden" id="analyze-suggestions">
+                                </ul>
                             </div>
-                            <div class="metric-distribution-content hidden" id="metric-race-line-wrapper">
-                                <div class="metric-distribution-stage" id="metric-race-line"></div>
-                            </div>
+                            <button class="btn btn--analyze" id="race-line-button" disabled>Build Chart</button>
                         </div>
-                        <div class="analyzation-module statistic-wrapper">
-                            <div class="analyzation-controls">
-                                <h3>Statistical analysis</h3>
-                                <button class="btn btn--analyze" id="statistic-button" disabled>Analyze</button>
-                            </div>
-                            <div class="statistic-table-content hidden" id="statistic-table-wrapper">
-                                <div class="statistic-table-container" id="statistic-table-container"></div>
-                            </div>
+                        <div class="metric-distribution-content hidden" id="metric-race-line-wrapper">
+                            <div class="metric-distribution-stage" id="metric-race-line"></div>
+                        </div>
+                    </div>
+                    <div class="analyzation-module statistic-wrapper">
+                        <div class="analyzation-controls">
+                            <h3>Statistical analysis</h3>
+                            <button class="btn btn--analyze" id="statistic-button" disabled>Analyze</button>
+                        </div>
+                        <div class="statistic-table-content hidden" id="statistic-table-wrapper">
+                            <div class="statistic-table-container" id="statistic-table-container"></div>
                         </div>
                     </div>
                 </div>
-            </section>
-        </main>
+            </div>
+        </section>
+    </main>
 
     <footer class="footer">
         <div class="container">
             <div class="footer__contacts">
 
-            <h2 class="footer__title text-gradient">
-                <a href="https://github.com/6dem" target="_blank" rel="noopener noreferrer">
-                Edem Ablaev
-                </a>
-            </h2>
+                <h2 class="footer__title text-gradient">
+                    <a href="https://github.com/6dem" target="_blank" rel="noopener noreferrer">
+                        Edem Ablaev
+                    </a>
+                </h2>
 
-            <div class="footer__repo-wrapper">
-                <a class="footer__repo-link" href="https://github.com/6dem/fcircuit-sim" target="_blank" rel="noopener noreferrer">
-                <svg class="footer__repo-icon" width="24" height="24" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
-                    <use href="./assets/sprites.svg#folder-git"></use>
-                </svg>
-                <p class="footer__repo-title">Repository</p>
-                </a>
-            </div>
+                <div class="footer__repo-wrapper">
+                    <a class="footer__repo-link" href="https://github.com/6dem/fcircuit-sim" target="_blank"
+                        rel="noopener noreferrer">
+                        <svg class="footer__repo-icon" width="24" height="24" viewBox="0 0 24 24"
+                            preserveAspectRatio="xMidYMid meet">
+                            <use href="./assets/sprites.svg#folder-git"></use>
+                        </svg>
+                        <p class="footer__repo-title">Repository</p>
+                    </a>
+                </div>
 
             </div>
         </div>
@@ -371,7 +384,8 @@
             <div class="custom-alert-btns" id="custom-alert-btns">
                 <button id="custom-alert-ok" class="btn btn--alert">OK</button>
                 <button id="custom-alert-download" class="btn btn--alert hidden">
-                    <svg class="footer__repo-icon" width="24" height="24" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+                    <svg class="footer__repo-icon" width="24" height="24" viewBox="0 0 24 24"
+                        preserveAspectRatio="xMidYMid meet">
                         <use href="./assets/sprites.svg#file-download"></use>
                     </svg>
                 </button>
@@ -381,4 +395,5 @@
 
     <script type="module" src="./index.js"></script>
 </body>
+
 </html>

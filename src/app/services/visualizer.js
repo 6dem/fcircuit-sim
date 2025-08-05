@@ -1,3 +1,4 @@
+import Konva from 'konva'
 import { removeDuplicateComputedElements } from "../../utils/stateHistoryNormilize.js"
 import { toBinary } from "../../utils/to-binary.js"
 class Visualizer {
@@ -744,3 +745,4 @@ class Connection {
 }
 
 export { Visualizer }
+

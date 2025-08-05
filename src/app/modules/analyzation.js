@@ -1,3 +1,4 @@
+import * as echarts from 'echarts'
 import { aigAnalysisData } from "../../../analysis-results/aig-analysis-results.js"
 import { migAnalysisData } from "../../../analysis-results/mig-analysis-results.js"
 import { appState, setState } from "../app.js"
@@ -289,11 +290,11 @@ function clearMinTables() {
     const delayMinContainer = document.getElementById("delay-min-container")
     const signDelayMinContainer = document.getElementById("sign-delay-min-container")
 
-    ;[delayMinContainer, signDelayMinContainer].forEach((container) => {
-        while (container.firstChild) {
-            container.removeChild(container.firstChild)
-        }
-    })
+        ;[delayMinContainer, signDelayMinContainer].forEach((container) => {
+            while (container.firstChild) {
+                container.removeChild(container.firstChild)
+            }
+        })
 }
 
 function clearMetricDistrCharts() {
@@ -989,5 +990,6 @@ export {
     clearAnalyzeContents,
     disableAnalyzeButtons,
     enableAnalyzeButtons,
-    removeAnalyzeListeners,
+    removeAnalyzeListeners
 }
+
