@@ -1,0 +1,91 @@
+<svg fill="none" xmlns="http://www.w3.org/2000/svg" >
+    <symbol id="arrow--right" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right-icon lucide-arrow-right">
+        <path d="M5 12h14"/>
+        <path d="m12 5 7 7-7 7"/>
+    </symbol>
+
+    <symbol id="arrow--left" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left-icon lucide-arrow-left">
+        <path d="m12 19-7-7 7-7"/>
+        <path d="M19 12H5"/>
+    </symbol>
+
+    <symbol id="icon-keyboard" width="24" height="24" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+        <rect width="20" height="16" x="2" y="4" rx="2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <path d="M10 8h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12 12h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M14 8h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M16 12h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M18 8h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M6 8h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M7 16h10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M8 12h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+
+    <symbol id="chevron-up" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-up-icon lucide-chevron-up">
+        <path d="m18 15-6-6-6 6"/>
+    </symbol>
+
+    <symbol id="chevron-down" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down-icon lucide-chevron-down">
+        <path d="m6 9 6 6 6-6"/>
+    </symbol>
+
+    <symbol id="play" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-play-icon lucide-play">
+        <polygon points="6 3 20 12 6 21 6 3"/>
+    </symbol>
+
+    <symbol id="pause" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pause-icon lucide-pause">
+        <rect x="14" y="4" width="4" height="16" rx="1"/>
+        <rect x="6" y="4" width="4" height="16" rx="1"/>
+    </symbol>
+
+    <symbol id="restart" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rotate-ccw-icon lucide-rotate-ccw">
+        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
+    </symbol>
+    
+    <symbol id="file-json" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-json2-icon lucide-file-json-2">
+        <path d="M4 22h14a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v4"/>
+        <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
+        <path d="M4 12a1 1 0 0 0-1 1v1a1 1 0 0 1-1 1 1 1 0 0 1 1 1v1a1 1 0 0 0 1 1"/>
+        <path d="M8 18a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1 1 1 0 0 1-1-1v-1a1 1 0 0 0-1-1"/>
+    </symbol>
+    
+    <symbol id="error" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x-icon lucide-circle-x">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="m15 9-6 6"/>
+        <path d="m9 9 6 6"/>
+    </symbol>
+
+    <symbol id="checkbox-arrow" width="148" height="22" viewBox="0 0 148 22" fill="none">
+        <path d="M74 21L146.395 1.51802" stroke="white" stroke-width="2" stroke-linecap="round" />
+        <path d="M74 21L1.86631 1.4817" stroke="white" stroke-width="2" stroke-linecap="round" />
+    </symbol>
+    
+    <symbol id="list-reset" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-restart-icon lucide-list-restart">
+        <path d="M21 6H3"/>
+        <path d="M7 12H3"/>
+        <path d="M7 18H3"/>
+        <path d="M12 18a5 5 0 0 0 9-3 4.5 4.5 0 0 0-4.5-4.5c-1.33 0-2.54.54-3.41 1.41L11 14"/>
+        <path d="M11 10v4h4"/>
+    </symbol>
+
+    <symbol id="folder-git" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-folder-git-icon lucide-folder-git">
+        <circle cx="12" cy="13" r="2"/>
+        <path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>
+        <path d="M14 13h3"/>
+        <path d="M7 13h3"/>
+    </symbol>
+
+    <symbol id="file-question" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-question-icon lucide-file-question">
+        <path d="M12 17h.01"/>
+        <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/>
+        <path d="M9.1 9a3 3 0 0 1 5.82 1c0 2-3 3-3 3"/>
+    </symbol>
+
+    <symbol id="file-download" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-down-icon lucide-file-down">
+    <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
+    <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
+    <path d="M12 18v-6"/>
+    <path d="m9 15 3 3 3-3"/>
+    </symbol>
+
+</svg>

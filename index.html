@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="FCircuit Simulator">
+    <meta property="og:description" content="Веб-симулятор СФЭ с задержкой">
+    <meta property="og:image" content="https://6dem.github.io/fcircuit-sim/assets/og.png">
+    <meta property="og:url" content="https://6dem.github.io/fcircuit-sim/">
+    <meta property="og:type" content="website">
+    <link rel="icon" href="/fcircuit-sim/assets/favicon-BZccqfSO.png" type="image/x-icon">
+    <title>fcircuit-sim</title>
+  <script type="module" crossorigin src="/fcircuit-sim/assets/index-CsUmDVUE.js"></script>
+  <link rel="stylesheet" crossorigin href="/fcircuit-sim/assets/index-DmKs4v2_.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <button class="btn btn--shortcuts" id="shortcuts-button" title="Show shortcuts"
+                aria-label="Keyboard shortcuts">
+                <svg width="20" height="20" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+                    <use href="/fcircuit-sim/assets/sprites-j4wa0qYv.svg#icon-keyboard"></use>
+                </svg>
+            </button>
+            <button class="btn btn--file-tip" id="file-tip-button">
+                <svg width="20" height="20" viewBox="0 0 20 20" preserveAspectRatio="xMidYMid meet">
+                    <use href="/fcircuit-sim/assets/sprites-j4wa0qYv.svg#file-question"></use>
+                </svg>
+            </button>
+            <div class="field field--shortcuts hidden" id="shortcuts-field">
+                <ul class="field--shortcuts__list">
+                    <li>Keyboard shortcuts <span class="field--shortcuts__keys">?</span></li>
+                    <li>Attach file <span class="field--shortcuts__keys">F</span></li>
+                    <li>Upload sample file <span class="field--shortcuts__keys">U</span></li>
+                    <li>Visualize <span class="field--shortcuts__keys">V</span></li>
+                    <li>Perform <span class="field--shortcuts__keys">P</span></li>
+                    <div class="field--shortcuts__title">Visualize section</div>
+                    <li>Sign Chains <span class="field--shortcuts__keys">Shift + S</span></li>
+                    <li>Show indexes <span class="field--shortcuts__keys">Shift + I</span></li>
+                    <li>Next circuit <span class="field--shortcuts__keys">Shift + ⇨</span></li>
+                    <li>Prev circuit <span class="field--shortcuts__keys">Shift + ⇦</span></li>
+                    <li>Increase set <span class="field--shortcuts__keys">Shift + ⇧</span></li>
+                    <li>Zero set <span class="field--shortcuts__keys">Shift + Z</span></li>
+                    <li>Decrease set <span class="field--shortcuts__keys">Shift + ⇩</span></li>
+                    <li>Perform circuit <span class="field--shortcuts__keys">Shift + P</span></li>
+                    <li>Start/Stop<span class="field--shortcuts__keys">Shift + Space</span></li>
+                    <li>Duration focus <span class="field--shortcuts__keys">Shift + D</span></li>
+                    <li>Circuit results <span class="field--shortcuts__keys">R</span></li>
+                    <li>Close modal <span class="field--shortcuts__keys">Esc</span></li>
+                    <div class="field--shortcuts__title">Perform section</div>
+                    <li>Save results <span class="field--shortcuts__keys">S</span></li>
+                    <div class="field--shortcuts__title">Analyze section</div>
+                    <li>Analyzation<span class="field--shortcuts__keys">A</span></li>
+                    <li>Attach file<span class="field--shortcuts__keys">Alt + F</span></li>
+                    <li>Current<span class="field--shortcuts__keys">Alt + C</span></li>
+                    <li>AIG<span class="field--shortcuts__keys">Alt + A</span></li>
+                    <li>MIG<span class="field--shortcuts__keys">Alt + M</span></li>
+                    <li>Reset charts<span class="field--shortcuts__keys">Alt + R</span></li>
+                </ul>
+            </div>
+            <div class="shortcuts-wrapper hidden"></div>
+            <div class="header-wrapper">
+                <div class="file-upload-wrapper">
+                    <div class="file-btn-group">
+                        <button class="btn btn--attach" id="attach-file-button">Attach file</button>
+                        <button class="btn btn--sample" id="load-sample-button" title="Upload sample file">
+                            <svg width="30" height="30" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+                                <use href="/fcircuit-sim/assets/sprites-j4wa0qYv.svg#file-json"></use>
+                            </svg>
+                        </button>
+                    </div>
+                    <input type="file" class="hidden" id="file-upload">
+                    <div class="code-loader hidden" id="code-loader">
+                        <span>{</span><span>}</span>
+                    </div>
+                    <span class="file-name" id="file-name">No file chosen</span>
+                    <svg id="file-error" class="file-error hidden" width="30" height="30" viewBox="0 0 24 24"
+                        preserveAspectRatio="xMidYMid meet">
+                        <use href="/fcircuit-sim/assets/sprites-j4wa0qYv.svg#error"></use>
+                    </svg>
+                </div>
+                <div class="process-btn-group">
+                    <button class="btn" id="visualize-button" disabled>Visualize</button>
+                    <button class="btn" id="perform-button" disabled>Perform</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <section class="visualization hidden" id="visualization-section">
+            <div class="visualization__side-panel visualization__side-panel--left">
+                <div class="binary-input">
+                    <div class="binary-input__controls">
+                        <button class="set-button" id="button--increase" aria-label="Increase" disabled>
+                            <svg width="30" height="30" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+                                <use href="/fcircuit-sim/assets/sprites-j4wa0qYv.svg#chevron-up"></use>
+                            </svg>
+                        </button>
+                        <input class="input-set" id="input-set" type="text" value="00000" readonly />
+                        <button class="set-button" id="button--decrease" aria-label="Decrease" disabled>
+                            <svg width="30" height="30" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+                                <use href="/fcircuit-sim/assets/sprites-j4wa0qYv.svg#chevron-down"></use>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <button class="btn button--perform" id="visual-perform-button">Perform</button>
+                <div class="field duration">
+                    <div class="duration__input-wrapper">
+                        <label for="duration__input">Duration:</label>
+                        <input id="duration__input" class="duration__input" type="number" value="1" min="0" max="10"
+                            step="0.1">
+                    </div>
+                    <div class="duration__btns-wrapper" id="animate-buttons-wrapper">
+                        <button class="btn duration__btn button--pause hidden" id="pause-button">
+                            <svg width="24" height="24" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+                                <use href="/fcircuit-sim/assets/sprites-j4wa0qYv.svg#pause"></use>
+                            </svg>
+                        </button>
+                        <button class="btn duration__btn button--play" id="play-button" disabled>
+                            <svg width="24" height="24" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+                                <use href="/fcircuit-sim/assets/sprites-j4wa0qYv.svg#play"></use>
+                            </svg>
+                        </button>
+                        <button class="btn duration__btn button--restart hidden" id="restart-button">
+                            <svg width="24" height="24" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+                                <use href="/fcircuit-sim/assets/sprites-j4wa0qYv.svg#restart"></use>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="visualization__main">
+                <div class="progress-bar-wrapper">
+                    <button class="arrow-button" id="arrow-button-left">
+                        <svg class="icon" width="26px" height="26px" viewBox="0 0 24 24"
+                            preserveAspectRatio="xMidYMid meet">
+                            <use href="/fcircuit-sim/assets/sprites-j4wa0qYv.svg#arrow--left"></use>
+                        </svg>
+                    </button>
+                    <div class="progress-bar">
+                        <div class="progress-slider">
+                            <input type="text" class="circuit-input" id="circuitInput" placeholder=""
+                                autocomplete="off" />
+                            <ul id="suggestions" class="suggestions-list"></ul>
+                        </div>
+                    </div>
+                    <button class="arrow-button" id="arrow-button-right">
+                        <svg class="icon" width="26px" height="26px" viewBox="0 0 24 24"
+                            preserveAspectRatio="xMidYMid meet">
+                            <use href="/fcircuit-sim/assets/sprites-j4wa0qYv.svg#arrow--right"></use>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="circuit-options-wrapper">
+                    <div class="checkbox-group">
+                        <div class="checkbox-wrapper hover" id="sign-checkbox-wrapper">
+                            <input type="checkbox" id="sign-checkbox" disabled>
+                            <svg viewBox="0 0 35.6 35.6">
+                                <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle>
+                                <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
+                                <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
+                            </svg>
+                        </div>
+                        <label for="sign-checkbox" class="checkbox-label">show Sign Chains</label>
+                    </div>
+                    <div class="circuit-format-info">
+                        <h3 class="circuit-format" id="circuit-format" title="Circuit format"></h3>
+                    </div>
+                    <div class="checkbox-group">
+                        <div class="checkbox-wrapper hover" id="index-checkbox-wrapper">
+                            <input type="checkbox" id="index-checkbox">
+                            <svg viewBox="0 0 35.6 35.6">
+                                <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle>
+                                <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
+                                <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
+                            </svg>
+                        </div>
+                        <label for="index-checkbox" class="checkbox-label">show indexes</label>
+                    </div>
+                </div>
+                <div class="visualization__container" id="visualization-container"></div>
+            </div>
+            <div class="visualization__side-panel visualization__side-panel--right">
+                <div class="field set-results-wrapper">
+                    <ul class="set-results" id="set-results"></ul>
+                </div>
+                <button class="btn button--results" id="button--results" disabled>All Results</button>
+            </div>
+            <div class="modal-overlay hidden" id="modal-overlay">
+                <div class="modal" id="modal">
+                    <h2>Results</h2>
+                    <div class="modal__info" id="modal-info"></div>
+                    <div class="table-wrapper table-wrapper--visual hidden" id="table-wrapper--visual">
+                        <table class="results-table results-table--visual" id="results-table--visual">
+                            <thead>
+                                <tr>
+                                    <th>Set</th>
+                                    <th>Output Value</th>
+                                    <th>Delay</th>
+                                    <th>Sign Delay</th>
+                                </tr>
+                            </thead>
+                            <tbody class="results-table--visual__body"></tbody>
+                        </table>
+                    </div>
+                    <button class="btn modal-close" id="modal-close">Close</button>
+                </div>
+            </div>
+        </section>
+        <section class="results hidden" id="results-section">
+            <div class="container">
+                <div class="table-wrapper" id="table-wrapper">
+                    <table class="results-table" id="results-table">
+                        <thead>
+                            <tr>
+                                <th>Number</th>
+                                <th>Depth</th>
+                                <th>Set</th>
+                                <th>Output Value</th>
+                                <th>Delay</th>
+                                <th>Sign Delay</th>
+                            </tr>
+                        </thead>
+                        <tbody class="results-table__body"></tbody>
+                    </table>
+                </div>
+                <div class="table-additional">
+                    <button class="btn btn--save hidden" id="save-button">Save</button>
+                    <div class="error-container field hidden" id="error-container"></div>
+                </div>
+            </div>
+        </section>
+        <section class="analyzation" id="analyzation-section">
+            <div class="analyzation__wrapper">
+                <div class="analyzation__header">
+                    <h2>
+                        <label for="checkbox-arrow" class="checkbox-arrow-label">Analyzation</label>
+                    </h2>
+                    <div class="checkbox-arrow-wrapper" id="checkbox-arrow-wrapper">
+                        <input type="checkbox" class="checkbox-arrow" id="checkbox-arrow">
+                        <svg class="checkbox-arrow-icon" width="148" height="22" viewBox="0 0 148 22"
+                            preserveAspectRatio="xMidYMid meet">
+                            <use href="/fcircuit-sim/assets/sprites-j4wa0qYv.svg#checkbox-arrow"></use>
+                        </svg>
+                    </div>
+                </div>
+                <div class="analyzation__main hidden" id="analyzation-main">
+                    <div class="analyzation__main-controls">
+                        <div class="radio__container" id="radio-container">
+                            <div class="radio__tabs">
+                                <input type="radio" id="radio-1" name="radio__tabs" checked="">
+                                <label class="radio__tab" for="radio-1">Current</label>
+                                <input type="radio" id="radio-2" name="radio__tabs">
+                                <label class="radio__tab" for="radio-2">AIG</label>
+                                <input type="radio" id="radio-3" name="radio__tabs">
+                                <label class="radio__tab" for="radio-3">MIG</label>
+                                <span class="radio__glider"></span>
+                            </div>
+                        </div>
+                        <button class="btn btn--attach-analyze" id="analyze-attach-button">Attach file</button>
+                        <input type="file" class="hidden" id="analyze-file-upload">
+                        <button class="analyzation-reset" id="analyze-reset-button">
+                            <svg width="30" height="30" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+                                <use href="/fcircuit-sim/assets/sprites-j4wa0qYv.svg#list-reset"></use>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="analyzation-module min-circuits-wrapper">
+                        <div class="analyzation-controls search-min-controls">
+                            <h3>Search minimal circuits</h3>
+                            <div class="metric-input-group">
+                                <label for="input-count">Count:</label>
+                                <input class="input-count" id="input-count" type="number" value="10" min="1" step="1" />
+                            </div>
+                            <div class="metric-checkbox-group">
+                                <div class="metric-checkbox-wrapper">
+                                    <label class="checkbox-container">
+                                        <input class="metric-checkbox" id="delay-metric-checkbox" checked="checked"
+                                            type="checkbox">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label for="delay-metric-checkbox">Delay</label>
+                                </div>
+                                <div class="metric-checkbox-wrapper">
+                                    <label class="checkbox-container">
+                                        <input class="metric-checkbox" id="sign-metric-checkbox" checked="checked"
+                                            type="checkbox">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label for="sign-metric-checkbox">Sign delay</label>
+                                </div>
+                            </div>
+                            <button class="btn btn--analyze" id="min-circuits-button" disabled>Search</button>
+                        </div>
+                        <div class="min-circuits-content hidden" id="min-circuits-content">
+                            <div class="min-container" id="delay-min-container"></div>
+                            <div class="min-container" id="sign-delay-min-container"></div>
+                        </div>
+                    </div>
+                    <div class="analyzation-module metric-distributions-wrapper">
+                        <div class="analyzation-controls">
+                            <h3>Metric distribution</h3>
+                            <button class="btn btn--analyze" id="metric-distribution-button" disabled>Build
+                                Chart</button>
+                        </div>
+                        <div class="metric-distribution-content hidden" id="metric-distribution-wrapper">
+                            <div class="metric-distribution-stage" id="metric-distribution"></div>
+                        </div>
+                    </div>
+                    <div class="analyzation-module metric-distributions-wrapper">
+                        <div class="analyzation-controls">
+                            <h3>Metric difference distribution</h3>
+                            <button class="btn btn--analyze" id="difference-distribution-button" disabled>Build
+                                Chart</button>
+                        </div>
+                        <div class="metric-distribution-content hidden" id="difference-distribution-wrapper">
+                            <div class="metric-distribution-stage" id="difference-distribution"></div>
+                        </div>
+                    </div>
+                    <div class="analyzation-module race-line-wrapper">
+                        <div class="analyzation-controls">
+                            <h3>Circuit metrics curve</h3>
+                            <div class="metric-input-group">
+                                <label for="input-number">Number:</label>
+                                <input class="input-count input-number" id="input-number" type="number" />
+                                <ul class="suggestions-list analyze-suggestions-list hidden" id="analyze-suggestions">
+                                </ul>
+                            </div>
+                            <button class="btn btn--analyze" id="race-line-button" disabled>Build Chart</button>
+                        </div>
+                        <div class="metric-distribution-content hidden" id="metric-race-line-wrapper">
+                            <div class="metric-distribution-stage" id="metric-race-line"></div>
+                        </div>
+                    </div>
+                    <div class="analyzation-module statistic-wrapper">
+                        <div class="analyzation-controls">
+                            <h3>Statistical analysis</h3>
+                            <button class="btn btn--analyze" id="statistic-button" disabled>Analyze</button>
+                        </div>
+                        <div class="statistic-table-content hidden" id="statistic-table-wrapper">
+                            <div class="statistic-table-container" id="statistic-table-container"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__contacts">
+
+                <h2 class="footer__title text-gradient">
+                    <a href="https://6dem.ru" target="_blank" rel="noopener noreferrer">
+                        Edem Ablaev
+                    </a>
+                </h2>
+
+                <div class="footer__repo-wrapper">
+                    <a class="footer__repo-link" href="https://github.com/6dem/fcircuit-sim" target="_blank"
+                        rel="noopener noreferrer">
+                        <svg class="footer__repo-icon" width="24" height="24" viewBox="0 0 24 24"
+                            preserveAspectRatio="xMidYMid meet">
+                            <use href="/fcircuit-sim/assets/sprites-j4wa0qYv.svg#folder-git"></use>
+                        </svg>
+                        <p class="footer__repo-title">Repository</p>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+    <div id="custom-alert" class="hidden">
+        <div class="custom-alert-content" id="custom-alert-content">
+            <p id="custom-alert-message"></p>
+            <div id="custom-alert-extra" class="hidden">
+                <div class="alert-scrollbox" id="alert-scrollbox"></div>
+            </div>
+            <div class="custom-alert-btns" id="custom-alert-btns">
+                <button id="custom-alert-ok" class="btn btn--alert">OK</button>
+                <button id="custom-alert-download" class="btn btn--alert hidden">
+                    <svg class="footer__repo-icon" width="24" height="24" viewBox="0 0 24 24"
+                        preserveAspectRatio="xMidYMid meet">
+                        <use href="/fcircuit-sim/assets/sprites-j4wa0qYv.svg#file-download"></use>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
