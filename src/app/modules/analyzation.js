@@ -1,4 +1,4 @@
-import * as echarts from 'echarts'
+import * as echarts from "echarts"
 import { aigAnalysisData } from "../../../analysis-results/aig-analysis-results.js"
 import { migAnalysisData } from "../../../analysis-results/mig-analysis-results.js"
 import { appState, setState } from "../app.js"

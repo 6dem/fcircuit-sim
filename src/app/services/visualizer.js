@@ -1,4 +1,4 @@
-import Konva from 'konva'
+import Konva from "konva"
 import { removeDuplicateComputedElements } from "../../utils/stateHistoryNormilize.js"
 import { toBinary } from "../../utils/to-binary.js"
 class Visualizer {
