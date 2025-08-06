@@ -8,10 +8,6 @@ draft.js
 src/draft.html
 src/draft-data.js
 
-# Circuits descriptions
-circuit-descriptions/
-!circuit-descriptions/fcircuit-aig-mig.json
-
 # Local tests and utils
 local-analysys/
 src/app/services/test-analyzer.js
@@ -27,3 +23,10 @@ src/services/local-analyze-circuits.js
 src/services/errors.ndjson
 src/services/results.ndjson
 src/services/results-to-analize.ndjson
+
+# Circuits descriptions
+circuit-descriptions/
+!public/sample-file/fcircuit-aig-mig.json
+
+# dist
+dist/

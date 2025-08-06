@@ -45,7 +45,7 @@ async function handleFileLoad(event) {
 
         setState({ jsonData: jsonDataLocal })
 
-        const worker = new Worker("src/app/services/process-worker.js", {
+        const worker = new Worker(new URL("../services/process-worker.js", import.meta.url), {
             type: "module",
         })
 
@@ -249,3 +249,4 @@ function updateTable(direction) {
 }
 
 export { addPerformEventListener, removePerformEventListener }
+
