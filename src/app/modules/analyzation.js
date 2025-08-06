@@ -210,7 +210,6 @@ function handleMinCircuitsClick() {
         minCircuits = appState.analyzer.findMinimalCircuits(selectedMetrics, count, maxMetrics, circuitList)
     }
 
-    console.log("🚀 ~ handleMinCircuitsClick ~ minCircuits:", minCircuits)
     setState({
         analysisData: {
             minCircuits: minCircuits,

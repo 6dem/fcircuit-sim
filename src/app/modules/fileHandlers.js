@@ -193,7 +193,7 @@ function removeFileEventListeners() {
 }
 
 async function handleFileTipClick() {
-    const response = await fetch("circuit-descriptions/fcircuit-aig-mig.json")
+    const response = await fetch("sample-file/fcircuit-aig-mig.json")
     const jsonData = await response.json()
     const prettyJson = JSON.stringify(jsonData, null, 4)
 
