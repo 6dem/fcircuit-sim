@@ -61,13 +61,24 @@ function removeAnalyzationResetListener() {
 }
 
 function handleAnalyzeResetClick() {
-    enableButton(analyzeAttachButton)
-    analyzeAttachButton.style.boxShadow = null
-    showElement(analyzeAttachButton)
+    if (selectedRadio.id === "radio-1") {
+        toggleAnalyzeAttachButton(true)
+    }
 
     clearAnalyzeContents()
     if (appState.processedData.length) {
         enableAnalyzeButtons()
+    }
+}
+
+function toggleAnalyzeAttachButton(mode) {
+    if (mode === true) {
+        enableButton(analyzeAttachButton)
+        analyzeAttachButton.style.boxShadow = null
+        showElement(analyzeAttachButton)
+    } else {
+        disableButton(analyzeAttachButton)
+        hideElement(analyzeAttachButton)
     }
 }
 
@@ -955,6 +966,7 @@ function handleRadioChange(event) {
     }
 
     if (selectedRadio.id === "radio-2") {
+        toggleAnalyzeAttachButton(false)
         if (appState.analyzer == null) {
             setState({
                 analyzer: new Analyzer(aigAnalysisData.minCircuits.delay),
@@ -962,6 +974,7 @@ function handleRadioChange(event) {
         }
     }
     if (selectedRadio.id === "radio-3") {
+        toggleAnalyzeAttachButton(false)
         if (appState.analyzer == null) {
             const circuitList = migAnalysisData.minCircuits.delay
 
