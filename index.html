@@ -11,85 +11,90 @@
     <meta property="og:type" content="website">
     <link rel="icon" href="/fcircuit-sim/assets/favicon-BZccqfSO.png" type="image/x-icon">
     <title>fcircuit-sim</title>
-  <script type="module" crossorigin src="/fcircuit-sim/assets/index-BlX2hkSg.js"></script>
-  <link rel="stylesheet" crossorigin href="/fcircuit-sim/assets/index-qKDPVHod.css">
+  <script type="module" crossorigin src="/fcircuit-sim/assets/index-nvKfcdxI.js"></script>
+  <link rel="stylesheet" crossorigin href="/fcircuit-sim/assets/index-lz8t3Kyh.css">
 </head>
 
 <body>
     <header class="header">
-        <div class="container">
-            <button class="btn btn--shortcuts" id="shortcuts-button" title="Show shortcuts"
-                aria-label="Keyboard shortcuts">
-                <svg width="20" height="20" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
-                    <use href="/fcircuit-sim/assets/sprites-j4wa0qYv.svg#icon-keyboard"></use>
-                </svg>
-            </button>
-            <button class="btn btn--file-tip" id="file-tip-button">
-                <svg width="20" height="20" viewBox="0 0 20 20" preserveAspectRatio="xMidYMid meet">
-                    <use href="/fcircuit-sim/assets/sprites-j4wa0qYv.svg#file-question"></use>
-                </svg>
-            </button>
-            <div class="field field--shortcuts hidden" id="shortcuts-field">
-                <ul class="field--shortcuts__list">
-                    <li>Keyboard shortcuts <span class="field--shortcuts__keys">?</span></li>
-                    <li>Attach file <span class="field--shortcuts__keys">F</span></li>
-                    <li>Upload sample file <span class="field--shortcuts__keys">U</span></li>
-                    <li>Visualize <span class="field--shortcuts__keys">V</span></li>
-                    <li>Perform <span class="field--shortcuts__keys">P</span></li>
-                    <div class="field--shortcuts__title">Visualize section</div>
-                    <li>Sign Chains <span class="field--shortcuts__keys">Shift + S</span></li>
-                    <li>Show indexes <span class="field--shortcuts__keys">Shift + I</span></li>
-                    <li>Next circuit <span class="field--shortcuts__keys">Shift + ⇨</span></li>
-                    <li>Prev circuit <span class="field--shortcuts__keys">Shift + ⇦</span></li>
-                    <li>Increase set <span class="field--shortcuts__keys">Shift + ⇧</span></li>
-                    <li>Zero set <span class="field--shortcuts__keys">Shift + Z</span></li>
-                    <li>Decrease set <span class="field--shortcuts__keys">Shift + ⇩</span></li>
-                    <li>Perform circuit <span class="field--shortcuts__keys">Shift + P</span></li>
-                    <li>Start/Stop<span class="field--shortcuts__keys">Shift + Space</span></li>
-                    <li>Duration focus <span class="field--shortcuts__keys">Shift + D</span></li>
-                    <li>Circuit results <span class="field--shortcuts__keys">R</span></li>
-                    <li>Close modal <span class="field--shortcuts__keys">Esc</span></li>
-                    <div class="field--shortcuts__title">Perform section</div>
-                    <li>Save results <span class="field--shortcuts__keys">S</span></li>
-                    <div class="field--shortcuts__title">Analyze section</div>
-                    <li>Analyzation<span class="field--shortcuts__keys">A</span></li>
-                    <li>Attach file<span class="field--shortcuts__keys">Alt + F</span></li>
-                    <li>Current<span class="field--shortcuts__keys">Alt + C</span></li>
-                    <li>AIG<span class="field--shortcuts__keys">Alt + A</span></li>
-                    <li>MIG<span class="field--shortcuts__keys">Alt + M</span></li>
-                    <li>Reset charts<span class="field--shortcuts__keys">Alt + R</span></li>
-                </ul>
-            </div>
-            <div class="shortcuts-wrapper hidden"></div>
-            <div class="header-wrapper">
-                <div class="file-upload-wrapper">
-                    <div class="file-btn-group">
-                        <button class="btn btn--attach" id="attach-file-button">Attach file</button>
-                        <button class="btn btn--sample" id="load-sample-button" title="Upload sample file">
-                            <svg width="30" height="30" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
-                                <use href="/fcircuit-sim/assets/sprites-j4wa0qYv.svg#file-json"></use>
-                            </svg>
-                        </button>
-                    </div>
-                    <input type="file" class="hidden" id="file-upload">
-                    <div class="code-loader hidden" id="code-loader">
-                        <span>{</span><span>}</span>
-                    </div>
-                    <span class="file-name" id="file-name">No file chosen</span>
-                    <svg id="file-error" class="file-error hidden" width="30" height="30" viewBox="0 0 24 24"
-                        preserveAspectRatio="xMidYMid meet">
-                        <use href="/fcircuit-sim/assets/sprites-j4wa0qYv.svg#error"></use>
-                    </svg>
-                </div>
-                <div class="process-btn-group">
-                    <button class="btn" id="visualize-button" disabled>Visualize</button>
-                    <button class="btn" id="perform-button" disabled>Perform</button>
-                </div>
-            </div>
-        </div>
+        <img class="header__icon" src="data:image/png;base64,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" alt="icon">
+        <h1 class="header__title">FCircuit Simulator</h1>
     </header>
 
     <main class="main">
+        <section class="input-config">
+            <div class="container">
+                <button class="btn btn--shortcuts" id="shortcuts-button" title="Show shortcuts"
+                    aria-label="Keyboard shortcuts">
+                    <svg width="20" height="20" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+                        <use href="/fcircuit-sim/assets/sprites-j4wa0qYv.svg#icon-keyboard"></use>
+                    </svg>
+                </button>
+                <button class="btn btn--file-tip" id="file-tip-button">
+                    <svg width="20" height="20" viewBox="0 0 20 20" preserveAspectRatio="xMidYMid meet">
+                        <use href="/fcircuit-sim/assets/sprites-j4wa0qYv.svg#file-question"></use>
+                    </svg>
+                </button>
+                <div class="field field--shortcuts hidden" id="shortcuts-field">
+                    <ul class="field--shortcuts__list">
+                        <li>Keyboard shortcuts <span class="field--shortcuts__keys">?</span></li>
+                        <li>Attach file <span class="field--shortcuts__keys">F</span></li>
+                        <li>Upload sample file <span class="field--shortcuts__keys">U</span></li>
+                        <li>Visualize <span class="field--shortcuts__keys">V</span></li>
+                        <li>Perform <span class="field--shortcuts__keys">P</span></li>
+                        <div class="field--shortcuts__title">Visualize section</div>
+                        <li>Sign Chains <span class="field--shortcuts__keys">Shift + S</span></li>
+                        <li>Show indexes <span class="field--shortcuts__keys">Shift + I</span></li>
+                        <li>Next circuit <span class="field--shortcuts__keys">Shift + ⇨</span></li>
+                        <li>Prev circuit <span class="field--shortcuts__keys">Shift + ⇦</span></li>
+                        <li>Increase set <span class="field--shortcuts__keys">Shift + ⇧</span></li>
+                        <li>Zero set <span class="field--shortcuts__keys">Shift + Z</span></li>
+                        <li>Decrease set <span class="field--shortcuts__keys">Shift + ⇩</span></li>
+                        <li>Perform circuit <span class="field--shortcuts__keys">Shift + P</span></li>
+                        <li>Start/Stop<span class="field--shortcuts__keys">Shift + Space</span></li>
+                        <li>Duration focus <span class="field--shortcuts__keys">Shift + D</span></li>
+                        <li>Circuit results <span class="field--shortcuts__keys">R</span></li>
+                        <li>Close modal <span class="field--shortcuts__keys">Esc</span></li>
+                        <div class="field--shortcuts__title">Perform section</div>
+                        <li>Save results <span class="field--shortcuts__keys">S</span></li>
+                        <div class="field--shortcuts__title">Analyze section</div>
+                        <li>Analyzation<span class="field--shortcuts__keys">A</span></li>
+                        <li>Attach file<span class="field--shortcuts__keys">Alt + F</span></li>
+                        <li>Current<span class="field--shortcuts__keys">Alt + C</span></li>
+                        <li>AIG<span class="field--shortcuts__keys">Alt + A</span></li>
+                        <li>MIG<span class="field--shortcuts__keys">Alt + M</span></li>
+                        <li>Reset charts<span class="field--shortcuts__keys">Alt + R</span></li>
+                    </ul>
+                </div>
+                <div class="shortcuts-wrapper hidden"></div>
+                <div class="input-config__wrapper">
+                    <div class="file-upload-wrapper">
+                        <div class="file-btn-group">
+                            <button class="btn btn--attach" id="attach-file-button">Attach file</button>
+                            <button class="btn btn--sample" id="load-sample-button" title="Upload sample file">
+                                <svg width="30" height="30" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+                                    <use href="/fcircuit-sim/assets/sprites-j4wa0qYv.svg#file-json"></use>
+                                </svg>
+                            </button>
+                        </div>
+                        <input type="file" class="hidden" id="file-upload">
+                        <div class="code-loader hidden" id="code-loader">
+                            <span>{</span><span>}</span>
+                        </div>
+                        <span class="file-name" id="file-name">No file chosen</span>
+                        <svg id="file-error" class="file-error hidden" width="30" height="30" viewBox="0 0 24 24"
+                            preserveAspectRatio="xMidYMid meet">
+                            <use href="/fcircuit-sim/assets/sprites-j4wa0qYv.svg#error"></use>
+                        </svg>
+                    </div>
+                    <div class="process-btn-group">
+                        <button class="btn" id="visualize-button" disabled>Visualize</button>
+                        <button class="btn" id="perform-button" disabled>Perform</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section class="visualization hidden" id="visualization-section">
             <div class="visualization__side-panel visualization__side-panel--left">
                 <div class="binary-input">
