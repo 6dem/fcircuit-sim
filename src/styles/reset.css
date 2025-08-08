@@ -33,6 +33,7 @@ button {
     cursor: pointer;
 }
 
+h1,
 h2,
 h3 {
     color: var(--color-white);
@@ -90,7 +91,7 @@ label {
 
 .container {
     position: relative;
-    max-width: 1000px;
+    width: min(1000px, 93vw);
     margin: 0 auto;
 }
 

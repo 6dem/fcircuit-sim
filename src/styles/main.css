@@ -1,6 +1,230 @@
 .main {
-    padding: 0 10px 35px 10px;
+    padding: 35px 10px 35px 10px;
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    gap: 25px;
+}
+
+.input-config__wrapper {
+    padding: 57px;
+    max-height: 170px;
+    max-width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 44px;
+    background-color: var(--color-blue);
+    box-shadow: 0px 0px 100px 0 rgba(59, 38, 123, 0.7);
+}
+
+.file-upload-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.file-btn-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 138px;
+    height: 58px;
+    border-radius: 30px;
+    background-color: var(--color-purple-dark);
+    color: var(--color-white);
+    font-weight: 700;
+    font-size: 24px;
+}
+
+.btn--attach {
+    padding-left: 8px;
+    text-align: center;
+    width: 92px;
+    border-radius: 30px 0 0 30px;
+}
+
+.btn--sample {
+    width: 34px;
+    border-radius: 0 30px 30px 0;
+}
+
+.code-loader {
+    color: #fff;
+    font-family: Consolas, Menlo, Monaco, monospace;
+    font-weight: bold;
+    font-size: 24px;
+    margin-left: 15px;
+    opacity: 0.8;
+}
+
+.code-loader span {
+    display: inline-block;
+    animation: pulse_414 0.4s alternate infinite ease-in-out;
+}
+
+.code-loader span:nth-child(odd) {
+    animation-delay: 0.4s;
+}
+
+@keyframes pulse_414 {
+    to {
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+}
+
+.file-error {
+    color: var(--color-white);
+    margin-left: 15px;
+}
+
+.file-name {
+    max-width: 155px;
+    max-height: 55px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-left: 15px;
+    font-size: 24px;
+    color: var(--color-white);
+}
+
+.btn--shortcuts {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 5px 4px 10px var(--color-black-25);
+}
+
+.btn--shortcuts svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: white;
+    stroke-width: 2;
+}
+
+.field--shortcuts {
+    position: fixed;
+    padding: 15px;
+    top: 190px;
+    right: max(10px, calc(50vw - 765px));
+    width: 250px;
+    height: 300px;
+    overflow: auto;
+    scrollbar-width: none;
+    color: var(--color-white);
+    font-size: 20px;
+    transition: right 0.3s ease;
+}
+
+.field--shortcuts__list {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    gap: 5px;
+}
+
+.field--shortcuts__list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.field--shortcuts__title {
+    width: 100%;
+    text-align: center;
+}
+
+.field--shortcuts__keys {
+    font-size: 18px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    padding: 1px 1px 0 1px;
+    min-width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    box-shadow: inset 0 0 10px var(--color-blue), 0 0 2px 0 var(--color-white);
+    backdrop-filter: blur(75px);
+}
+
+.btn--file-tip {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 5px 4px 10px var(--color-black-25);
+}
+
+.process-btn-group {
+    display: flex;
+    justify-content: end;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 10px;
+}
+
+@media (max-width: 992px) {
+    .btn--shortcuts {
+        display: none;
+    }
+
+    .field--shortcuts {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        padding: 20px;
+    }
+
+    .header-wrapper {
+        padding: 40px;
+    }
+
+    .file-name {
+        max-width: 100px;
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .header {
+        padding: 10px;
+    }
+
+    .header-wrapper {
+        padding: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-wrapper {
+        padding: 20px;
+    }
+
+    .file-name {
+        display: none;
+    }
 }
 
 .visualization {
@@ -11,6 +235,7 @@
     align-items: center;
     gap: 10px;
 }
+
 .visualization__side-panel {
     flex: 0 1 100%;
     height: auto;
@@ -21,6 +246,7 @@
     justify-content: center;
     align-items: center;
 }
+
 .visualization__side-panel--left {
     flex-wrap: wrap-reverse;
     gap: 60px;
@@ -32,6 +258,7 @@
     justify-content: space-around;
     align-items: center;
 }
+
 .input-set {
     padding: 0 10px 0 10px;
     width: 134px;
@@ -58,17 +285,21 @@
     &:hover {
         cursor: pointer;
     }
+
     &:disabled {
         cursor: not-allowed;
         color: var(--color-purple-light);
     }
+
     &:focus-visible {
         color: var(--color-white);
     }
+
     &:hover:not(:disabled) {
         cursor: pointer;
         color: var(--color-white);
     }
+
     &:active {
         transform: scale(0.95);
         transition: transform 0.1s ease;
@@ -250,12 +481,12 @@ input[type="checkbox"]:disabled {
     filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.4));
 }
 
-.checkbox-wrapper input:disabled + svg {
+.checkbox-wrapper input:disabled+svg {
     cursor: not-allowed;
     opacity: 0.5;
 }
 
-.checkbox-wrapper input:disabled + svg .check {
+.checkbox-wrapper input:disabled+svg .check {
     stroke: var(--color-pink-bg);
 }
 
@@ -263,15 +494,15 @@ input[type="checkbox"]:disabled {
     cursor: pointer;
 }
 
-.checkbox-wrapper input[type="checkbox"]:checked + svg .background {
+.checkbox-wrapper input[type="checkbox"]:checked+svg .background {
     fill: var(--color-purple-light-50);
 }
 
-.checkbox-wrapper input[type="checkbox"]:checked + svg .stroke {
+.checkbox-wrapper input[type="checkbox"]:checked+svg .stroke {
     stroke-dashoffset: 0;
 }
 
-.checkbox-wrapper input[type="checkbox"]:checked + svg .check {
+.checkbox-wrapper input[type="checkbox"]:checked+svg .check {
     stroke-dashoffset: 0;
 }
 
@@ -328,6 +559,7 @@ input[type="checkbox"]:disabled {
     border-radius: 30px;
     width: 100%;
 }
+
 .progress-slider {
     display: flex;
     justify-content: center;
@@ -342,6 +574,7 @@ input[type="checkbox"]:disabled {
     border-radius: 30px;
     transition: left 0.3s ease;
 }
+
 .circuit-number {
     text-align: center;
     color: var(--color-white);
@@ -506,7 +739,6 @@ input[type="checkbox"]:disabled {
 
 .results {
     display: block;
-    padding-top: 35px;
 }
 
 .table-wrapper {
@@ -553,6 +785,7 @@ input[type="checkbox"]:disabled {
 .results-table thead th:first-child {
     border-radius: 44px 0 0 0;
 }
+
 .results-table thead th:last-child {
     border-radius: 0 44px 0 0;
 }
@@ -617,7 +850,6 @@ input[type="checkbox"]:disabled {
 }
 
 .analyzation {
-    padding: 35px 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -690,7 +922,7 @@ input[type="checkbox"]:hover {
     z-index: 100;
 }
 
-.checkbox-arrow:checked + .checkbox-arrow-icon {
+.checkbox-arrow:checked+.checkbox-arrow-icon {
     transform: scaleY(-1);
 }
 
@@ -751,19 +983,19 @@ input[type="checkbox"]:hover {
     transition: color 0.15s ease-in;
 }
 
-.radio__container input[type="radio"]:checked + label {
+.radio__container input[type="radio"]:checked+label {
     color: var(--color-purple-dark);
 }
 
-.radio__container input[id="radio-1"]:checked ~ .radio__glider {
+.radio__container input[id="radio-1"]:checked~.radio__glider {
     transform: translateX(0);
 }
 
-.radio__container input[id="radio-2"]:checked ~ .radio__glider {
+.radio__container input[id="radio-2"]:checked~.radio__glider {
     transform: translateX(100%);
 }
 
-.radio__container input[id="radio-3"]:checked ~ .radio__glider {
+.radio__container input[id="radio-3"]:checked~.radio__glider {
     transform: translateX(200%);
 }
 
@@ -839,11 +1071,11 @@ input[type="checkbox"]:hover {
     user-select: none;
 }
 
-.checkbox-container + label {
+.checkbox-container+label {
     user-select: none;
 }
 
-.checkbox-container + label:hover {
+.checkbox-container+label:hover {
     cursor: pointer;
 }
 
@@ -862,8 +1094,7 @@ input[type="checkbox"]:hover {
     align-items: start;
 }
 
-.metric-checkbox-wrapper {
-}
+.metric-checkbox-wrapper {}
 
 .checkmark {
     position: absolute;
@@ -890,12 +1121,12 @@ input[type="checkbox"]:hover {
     transform: rotate(45deg);
 }
 
-.metric-checkbox:checked ~ .checkmark {
+.metric-checkbox:checked~.checkmark {
     background-color: var(--color-purple-dark);
     box-shadow: 0 3px 7px var(--color-white-25);
 }
 
-.metric-checkbox:checked ~ .checkmark:after {
+.metric-checkbox:checked~.checkmark:after {
     display: block;
 }
 
@@ -909,7 +1140,7 @@ input[type="checkbox"]:hover {
     }
 }
 
-.metric-checkbox:checked ~ .checkmark:after {
+.metric-checkbox:checked~.checkmark:after {
     animation: checkAnim 0.2s forwards;
 }
 
@@ -934,10 +1165,12 @@ input[type="checkbox"]:hover {
 }
 
 @keyframes pulse-shadow {
+
     0%,
     100% {
         box-shadow: inset 1px 1px 1px 0 var(--color-white-25), 5px 4px 5px var(--color-white-50);
     }
+
     50% {
         box-shadow: inset 1px 1px 1px 0 var(--color-white-25), 5px 4px 20px var(--color-white-50);
     }
@@ -1108,6 +1341,7 @@ input[type="checkbox"]:hover {
     box-shadow: 0 0 0 20px var(--color-blue);
     border-radius: 44px 0 0 0;
 }
+
 .statistic-table thead tr:first-child th:last-child {
     box-shadow: 20px 0 0 20px var(--color-blue);
     border-radius: 0 44px 0 0;
@@ -1134,6 +1368,7 @@ input[type="checkbox"]:hover {
         justify-content: center;
         flex-wrap: wrap;
     }
+
     .analyzation-reset {
         right: 0;
     }
@@ -1141,8 +1376,9 @@ input[type="checkbox"]:hover {
 
 @media (max-width: 768px) {
     .main {
-        padding: 0 20px 20px 20px;
+        padding: 20px;
     }
+
     .min-circuits-wrapper,
     .metric-distributions-wrapper,
     .race-line-wrapper,
@@ -1150,9 +1386,11 @@ input[type="checkbox"]:hover {
         justify-content: center;
         flex-wrap: wrap;
     }
+
     .btn--attach-analyze {
         width: 70%;
     }
+
     .analyzation-controls {
         width: 50%;
     }
@@ -1179,9 +1417,11 @@ input[type="checkbox"]:hover {
         height: 38px;
         font-size: 16px;
     }
+
     .duration {
         gap: 5px;
     }
+
     .set-results-wrapper {
         padding: 15px;
     }
@@ -1213,9 +1453,11 @@ input[type="checkbox"]:hover {
     .main {
         padding: 0 10px 10px 10px;
     }
+
     .analyzation-controls {
         width: 60%;
     }
+
     .visualization__side-panel--left {
         gap: 10px;
     }

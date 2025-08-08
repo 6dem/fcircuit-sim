@@ -16,79 +16,84 @@
 
 <body>
     <header class="header">
-        <div class="container">
-            <button class="btn btn--shortcuts" id="shortcuts-button" title="Show shortcuts"
-                aria-label="Keyboard shortcuts">
-                <svg width="20" height="20" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
-                    <use href="./assets/sprites.svg#icon-keyboard"></use>
-                </svg>
-            </button>
-            <button class="btn btn--file-tip" id="file-tip-button">
-                <svg width="20" height="20" viewBox="0 0 20 20" preserveAspectRatio="xMidYMid meet">
-                    <use href="./assets/sprites.svg#file-question"></use>
-                </svg>
-            </button>
-            <div class="field field--shortcuts hidden" id="shortcuts-field">
-                <ul class="field--shortcuts__list">
-                    <li>Keyboard shortcuts <span class="field--shortcuts__keys">?</span></li>
-                    <li>Attach file <span class="field--shortcuts__keys">F</span></li>
-                    <li>Upload sample file <span class="field--shortcuts__keys">U</span></li>
-                    <li>Visualize <span class="field--shortcuts__keys">V</span></li>
-                    <li>Perform <span class="field--shortcuts__keys">P</span></li>
-                    <div class="field--shortcuts__title">Visualize section</div>
-                    <li>Sign Chains <span class="field--shortcuts__keys">Shift + S</span></li>
-                    <li>Show indexes <span class="field--shortcuts__keys">Shift + I</span></li>
-                    <li>Next circuit <span class="field--shortcuts__keys">Shift + ⇨</span></li>
-                    <li>Prev circuit <span class="field--shortcuts__keys">Shift + ⇦</span></li>
-                    <li>Increase set <span class="field--shortcuts__keys">Shift + ⇧</span></li>
-                    <li>Zero set <span class="field--shortcuts__keys">Shift + Z</span></li>
-                    <li>Decrease set <span class="field--shortcuts__keys">Shift + ⇩</span></li>
-                    <li>Perform circuit <span class="field--shortcuts__keys">Shift + P</span></li>
-                    <li>Start/Stop<span class="field--shortcuts__keys">Shift + Space</span></li>
-                    <li>Duration focus <span class="field--shortcuts__keys">Shift + D</span></li>
-                    <li>Circuit results <span class="field--shortcuts__keys">R</span></li>
-                    <li>Close modal <span class="field--shortcuts__keys">Esc</span></li>
-                    <div class="field--shortcuts__title">Perform section</div>
-                    <li>Save results <span class="field--shortcuts__keys">S</span></li>
-                    <div class="field--shortcuts__title">Analyze section</div>
-                    <li>Analyzation<span class="field--shortcuts__keys">A</span></li>
-                    <li>Attach file<span class="field--shortcuts__keys">Alt + F</span></li>
-                    <li>Current<span class="field--shortcuts__keys">Alt + C</span></li>
-                    <li>AIG<span class="field--shortcuts__keys">Alt + A</span></li>
-                    <li>MIG<span class="field--shortcuts__keys">Alt + M</span></li>
-                    <li>Reset charts<span class="field--shortcuts__keys">Alt + R</span></li>
-                </ul>
-            </div>
-            <div class="shortcuts-wrapper hidden"></div>
-            <div class="header-wrapper">
-                <div class="file-upload-wrapper">
-                    <div class="file-btn-group">
-                        <button class="btn btn--attach" id="attach-file-button">Attach file</button>
-                        <button class="btn btn--sample" id="load-sample-button" title="Upload sample file">
-                            <svg width="30" height="30" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
-                                <use href="./assets/sprites.svg#file-json"></use>
-                            </svg>
-                        </button>
-                    </div>
-                    <input type="file" class="hidden" id="file-upload">
-                    <div class="code-loader hidden" id="code-loader">
-                        <span>{</span><span>}</span>
-                    </div>
-                    <span class="file-name" id="file-name">No file chosen</span>
-                    <svg id="file-error" class="file-error hidden" width="30" height="30" viewBox="0 0 24 24"
-                        preserveAspectRatio="xMidYMid meet">
-                        <use href="./assets/sprites.svg#error"></use>
-                    </svg>
-                </div>
-                <div class="process-btn-group">
-                    <button class="btn" id="visualize-button" disabled>Visualize</button>
-                    <button class="btn" id="perform-button" disabled>Perform</button>
-                </div>
-            </div>
-        </div>
+        <img class="header__icon" src="assets/favicon.png" alt="icon">
+        <h1 class="header__title">FCircuit Simulator</h1>
     </header>
 
     <main class="main">
+        <section class="input-config">
+            <div class="container">
+                <button class="btn btn--shortcuts" id="shortcuts-button" title="Show shortcuts"
+                    aria-label="Keyboard shortcuts">
+                    <svg width="20" height="20" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+                        <use href="./assets/sprites.svg#icon-keyboard"></use>
+                    </svg>
+                </button>
+                <button class="btn btn--file-tip" id="file-tip-button">
+                    <svg width="20" height="20" viewBox="0 0 20 20" preserveAspectRatio="xMidYMid meet">
+                        <use href="./assets/sprites.svg#file-question"></use>
+                    </svg>
+                </button>
+                <div class="field field--shortcuts hidden" id="shortcuts-field">
+                    <ul class="field--shortcuts__list">
+                        <li>Keyboard shortcuts <span class="field--shortcuts__keys">?</span></li>
+                        <li>Attach file <span class="field--shortcuts__keys">F</span></li>
+                        <li>Upload sample file <span class="field--shortcuts__keys">U</span></li>
+                        <li>Visualize <span class="field--shortcuts__keys">V</span></li>
+                        <li>Perform <span class="field--shortcuts__keys">P</span></li>
+                        <div class="field--shortcuts__title">Visualize section</div>
+                        <li>Sign Chains <span class="field--shortcuts__keys">Shift + S</span></li>
+                        <li>Show indexes <span class="field--shortcuts__keys">Shift + I</span></li>
+                        <li>Next circuit <span class="field--shortcuts__keys">Shift + ⇨</span></li>
+                        <li>Prev circuit <span class="field--shortcuts__keys">Shift + ⇦</span></li>
+                        <li>Increase set <span class="field--shortcuts__keys">Shift + ⇧</span></li>
+                        <li>Zero set <span class="field--shortcuts__keys">Shift + Z</span></li>
+                        <li>Decrease set <span class="field--shortcuts__keys">Shift + ⇩</span></li>
+                        <li>Perform circuit <span class="field--shortcuts__keys">Shift + P</span></li>
+                        <li>Start/Stop<span class="field--shortcuts__keys">Shift + Space</span></li>
+                        <li>Duration focus <span class="field--shortcuts__keys">Shift + D</span></li>
+                        <li>Circuit results <span class="field--shortcuts__keys">R</span></li>
+                        <li>Close modal <span class="field--shortcuts__keys">Esc</span></li>
+                        <div class="field--shortcuts__title">Perform section</div>
+                        <li>Save results <span class="field--shortcuts__keys">S</span></li>
+                        <div class="field--shortcuts__title">Analyze section</div>
+                        <li>Analyzation<span class="field--shortcuts__keys">A</span></li>
+                        <li>Attach file<span class="field--shortcuts__keys">Alt + F</span></li>
+                        <li>Current<span class="field--shortcuts__keys">Alt + C</span></li>
+                        <li>AIG<span class="field--shortcuts__keys">Alt + A</span></li>
+                        <li>MIG<span class="field--shortcuts__keys">Alt + M</span></li>
+                        <li>Reset charts<span class="field--shortcuts__keys">Alt + R</span></li>
+                    </ul>
+                </div>
+                <div class="shortcuts-wrapper hidden"></div>
+                <div class="input-config__wrapper">
+                    <div class="file-upload-wrapper">
+                        <div class="file-btn-group">
+                            <button class="btn btn--attach" id="attach-file-button">Attach file</button>
+                            <button class="btn btn--sample" id="load-sample-button" title="Upload sample file">
+                                <svg width="30" height="30" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet">
+                                    <use href="./assets/sprites.svg#file-json"></use>
+                                </svg>
+                            </button>
+                        </div>
+                        <input type="file" class="hidden" id="file-upload">
+                        <div class="code-loader hidden" id="code-loader">
+                            <span>{</span><span>}</span>
+                        </div>
+                        <span class="file-name" id="file-name">No file chosen</span>
+                        <svg id="file-error" class="file-error hidden" width="30" height="30" viewBox="0 0 24 24"
+                            preserveAspectRatio="xMidYMid meet">
+                            <use href="./assets/sprites.svg#error"></use>
+                        </svg>
+                    </div>
+                    <div class="process-btn-group">
+                        <button class="btn" id="visualize-button" disabled>Visualize</button>
+                        <button class="btn" id="perform-button" disabled>Perform</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section class="visualization hidden" id="visualization-section">
             <div class="visualization__side-panel visualization__side-panel--left">
                 <div class="binary-input">

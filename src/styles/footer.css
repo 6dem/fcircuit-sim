@@ -5,7 +5,6 @@
     justify-content: end;
     border-top: 2px solid var(--color-blue);
     padding: 20px 10px;
-    /* min-height: 15dvh; */
     color: var(--color-white);
 }
 
