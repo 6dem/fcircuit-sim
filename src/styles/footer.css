@@ -10,12 +10,9 @@
 
 .footer__contacts {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 20px;
+    justify-content: space-evenly;
     padding: 5px;
-    min-height: 80px;
 }
 
 .footer__title {
