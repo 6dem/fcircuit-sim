@@ -33,7 +33,15 @@
     background-clip: text;
     color: transparent;
     animation: flow 4s linear infinite;
+    transition: animation-duration 0.3s ease,
+        transform 0.3s ease;
 }
+
+.text-gradient:hover {
+    animation-duration: 2s;
+    transform: scale(0.95);
+}
+
 
 @keyframes flow {
     0% {
