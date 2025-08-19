@@ -11,6 +11,7 @@ html {
     scroll-behavior: smooth;
     background: var(--color-gradient-grey), var(--color-pink-bg);
     overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 body {
