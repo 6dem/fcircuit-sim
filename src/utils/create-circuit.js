@@ -1,6 +1,4 @@
-import { AIG } from "../classes/aig.js"
-import { Circuit } from "../classes/circuit.js"
-import { MIG } from "../classes/mig.js"
+import { AIG, Circuit, MIG } from "fcircuit-core"
 
 export function createCircuit(format) {
     switch (format) {

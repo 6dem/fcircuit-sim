@@ -41,6 +41,7 @@
   },
   "dependencies": {
     "echarts": "^6.0.0",
+    "fcircuit-core": "^1.1.0",
     "konva": "^9.3.18"
   }
 }
